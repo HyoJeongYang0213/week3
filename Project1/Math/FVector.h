@@ -1,5 +1,7 @@
 #pragma once
 
+#include <DirectXMath.h>
+
 struct FVector
 {
 	float x, y, z;
