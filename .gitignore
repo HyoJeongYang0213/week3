@@ -6,16 +6,6 @@ bin/
 bin-int/
 obj/
 ipch/
-
-# ==========================================
-# Visual Studio Project & Solution Files
-# (Generated automatically via Premake)
-# ==========================================
-*.sln
-*.vcxproj.user
-*.vcxproj.user*
-*.vcxproj.idb
-
 # ==========================================
 # Visual Studio User Specific & Cache Files
 # ==========================================
