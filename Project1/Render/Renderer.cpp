@@ -703,7 +703,16 @@ void Renderer::DrawOutline(AActor *targetActor) {
 
   // 아웃라인 셰이더 유지 상태로 드로우
   mesh->IASet();
-  DeviceContext->Draw(mesh->GetNumVertices(), 0);
+
+  if (mesh->indexbuffer)
+  {
+      mesh->indexbuffer->IASet();
+      DeviceContext->DrawIndexed(mesh->indexbuffer->count, 0, 0);
+  }
+  else
+  {
+      DeviceContext->Draw(mesh->GetNumVertices(), 0);
+  }
 
   SetDefaultDepthState();
 }

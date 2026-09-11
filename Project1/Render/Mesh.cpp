@@ -13,6 +13,11 @@ Mesh::~Mesh()
         delete vertexbuffer;
         vertexbuffer = nullptr;
     }
+	if (indexbuffer)
+	{
+		delete indexbuffer;
+		indexbuffer = nullptr;
+	}
 }
 
 void Mesh::InitVertexBuffer(const void* vertices, UINT stride, UINT inNumVertices)
@@ -31,6 +36,21 @@ void Mesh::InitVertexBuffer(const void* vertices, UINT stride, UINT inNumVertice
 	}
 }
 
+void Mesh::InitIndexBuffer(const uint32* indices, UINT count)
+{
+
+	if (indexbuffer)
+	{
+		delete indexbuffer;
+		indexbuffer = nullptr;
+	}
+
+	if (indices && count > 0)
+	{
+		indexbuffer = new IndexBuffer(indices, count);
+	}
+}
+
 void Mesh::Render()
 {
 	if (vertexbuffer != nullptr && numVertices > 0)
@@ -42,7 +62,16 @@ void Mesh::Render()
 			RENDERER.SetTexture(TextureSRV);
 		}
 		vertexbuffer->IASet();
-		RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+
+		if (indexbuffer != nullptr)
+		{
+			indexbuffer->IASet();
+			RENDERER.GetDeviceContext()->DrawIndexed(indexbuffer->count, 0, 0);
+		}
+		else
+		{
+			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+		}
 	}
 }
 
@@ -63,7 +92,15 @@ void Mesh::Render(D3D11_PRIMITIVE_TOPOLOGY topology)
 			RENDERER.SetTexture(TextureSRV);
 		}
 		vertexbuffer->IASet(topology);
-		RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+		if (indexbuffer != nullptr)
+		{
+			indexbuffer->IASet();
+			RENDERER.GetDeviceContext()->DrawIndexed(indexbuffer->count, 0, 0);
+		}
+		else
+		{
+			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+		}
 	}
 }
 
