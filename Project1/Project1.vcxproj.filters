@@ -331,14 +331,8 @@
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shader\GridShader.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
+    <None Include="Resources\Shader\GridShader.hlsl" />
+    <None Include="Resources\Shader\ShaderW0.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">

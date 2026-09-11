@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Project1;..\Project1\Actor;..\Project1\Actor\Gizmo;..\Project1\App;..\Project1\Core;..\Project1\Library;..\Project1\Library\DirectXTex;..\Project1\Library\ImGui;..\Project1\Library\json;..\Project1\Math;..\Project1\Physics;..\Project1\Render;..\Project1\Render\Buffer;..\Project1\Resources\Geometry;..\Project1\Resources;..\Project1\Resources\Shader;..\Project1\Resources\Textures;..\Project1\Scenes;..\Project1\UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Buffer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -72,7 +72,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Project1\Library\DirectXTex\Debug;..\Project1;..\Project1\Actor;..\Project1\Actor\Gizmo;..\Project1\App;..\Project1\Core;..\Project1\Library;..\Project1\Library\DirectXTex;..\Project1\Library\ImGui;..\Project1\Library\json;..\Project1\Math;..\Project1\Physics;..\Project1\Render;..\Project1\Render\Buffer;..\Project1\Resources\Geometry;..\Project1\Resources;..\Project1\Resources\Shader;..\Project1\Resources\Textures;..\Project1\Scenes;..\Project1\UI;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Buffer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
     </ProjectReference>
@@ -88,7 +88,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Project1;..\Project1\Actor;..\Project1\Actor\Gizmo;..\Project1\App;..\Project1\Core;..\Project1\Library;..\Project1\Library\DirectXTex;..\Project1\Library\ImGui;..\Project1\Library\json;..\Project1\Math;..\Project1\Physics;..\Project1\Render;..\Project1\Render\Buffer;..\Project1\Resources\Geometry;..\Project1\Resources;..\Project1\Resources\Shader;..\Project1\Resources\Textures;..\Project1\Scenes;..\Project1\UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Buffer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -104,7 +104,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Project1\Library\DirectXTex\Release;..\Project1;..\Project1\Actor;..\Project1\Actor\Gizmo;..\Project1\App;..\Project1\Core;..\Project1\Library;..\Project1\Library\DirectXTex;..\Project1\Library\ImGui;..\Project1\Library\json;..\Project1\Math;..\Project1\Physics;..\Project1\Render;..\Project1\Render\Buffer;..\Project1\Resources\Geometry;..\Project1\Resources;..\Project1\Resources\Shader;..\Project1\Resources\Textures;..\Project1\Scenes;..\Project1\UI;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Buffer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
     </ProjectReference>
