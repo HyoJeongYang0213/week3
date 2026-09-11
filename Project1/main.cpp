@@ -16,6 +16,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	bool bIsExit = false;
 	MSG msg;
 
+	FName test1 = "";
+	FName test2 = "Player";
+	FName test3 = "Actor_0";
+	FName test4 = "Actor_5";
+	FName test5 = "My_Actor_5";
+	FName test6 = "Foo_";
+	FName test7 = "Foo_bar";
+	FName test8 = "Foo_007";
+	FName test9 = "Foo_1_2";
+	FName test10 = "_5";
+	FName tetsnull;
+
+	FNamePool::Instance().Debug();
+
 	while (!bIsExit)
 	{
 

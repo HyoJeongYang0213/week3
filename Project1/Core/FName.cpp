@@ -5,30 +5,31 @@ FName::FName(const char* pStr)
 	: FName::FName(FString(pStr))
 {}
 
-FName::FName(const FString name)
+FName::FName(const FString& Name)
 {
-	pair<FString, int32> parceResult = ParceNumber(name);
-	FString DisplayName = parceResult.first;
-	Number = parceResult.second + 1; // 1을 더해서 저장. _0 이면 1 저장
+	pair<FString, int32> ParceResult = ParceNumber(Name);
+	FString DisplayName = ParceResult.first;
+	Number = ParceResult.second + 1; // 1을 더해서 저장. _0 이면 1 저장
 
 	FString ComparisonName = NormalizeToSmall(DisplayName);
 
-	if (FNamePool::Instance().IsContainsComparison(ComparisonName)) 
-	{ // name이 이미 있는 경우
-		ComparisonIndex = FNamePool::Instance().GetComparisonIndex(ComparisonName);
-		DisplayIndex = FNamePool::Instance().AddDisplayName(DisplayName);
-	}
-	else 
-	{ // name이 없는 경우, 새로 등록
-		pair<int32, int32> Indecies = FNamePool::Instance().AddName(ComparisonName, DisplayName);
-		ComparisonIndex = Indecies.first;
-		DisplayIndex = Indecies.second;
-	}
+	pair<int32, int32> Indecies = FNamePool::Instance().AddName(ComparisonName, DisplayName);
+	ComparisonIndex = Indecies.first;
+	DisplayIndex = Indecies.second;
 }
 
 bool FName::operator== (const FName& Other) const
 {
 	if (ComparisonIndex == Other.ComparisonIndex && Number == Other.Number)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool FName::operator!= (const FName& Other) const
+{
+	if (ComparisonIndex != Other.ComparisonIndex || Number != Other.Number)
 	{
 		return true;
 	}
@@ -43,36 +44,36 @@ int32 FName::Compare(const FName& Other) const
 	}
 	else
 	{
-		FString name = FNamePool::Instance().GetComparisonName(ComparisonIndex);
-		FString otherName = FNamePool::Instance().GetComparisonName(Other.ComparisonIndex);
-		for (int32 i = 0; i < name.size() && i < otherName.size(); i++)
+		FString Name = FNamePool::Instance().GetComparisonName(ComparisonIndex);
+		FString OtherName = FNamePool::Instance().GetComparisonName(Other.ComparisonIndex);
+		for (size_t i = 0; i < Name.size() && i < OtherName.size(); i++)
 		{
-			if (name[i] - otherName[i] > 0)
+			if (Name[i] - OtherName[i] > 0)
 			{
 				return 1;
 			}
-			else if (name[i] - otherName[i] < 0)
+			else if (Name[i] - OtherName[i] < 0)
 			{
 				return -1;
 			}
 		}
-		return name.size() - otherName.size();
+		return (int32)Name.size() - (int32)OtherName.size();
 	}
 }
 
-FString FName::ToString()
+FString FName::ToString() const
 {
-	FString name = FNamePool::Instance().GetDisplayName(DisplayIndex);
+	FString Name = FNamePool::Instance().GetDisplayName(DisplayIndex);
 	if (Number)
 	{
-		name = name + '_' + itos(Number - 1);
+		Name = Name + '_' + itos(Number - 1);
 	}
-	return name;
+	return Name;
 }
 
-FString FName::NormalizeToSmall(FString name)
+FString FName::NormalizeToSmall(const FString& Name)
 {
-	FString normalizedName = name;
+	FString normalizedName = Name;
 	for (char& c : normalizedName)
 	{
 		if ('A' <= c && c <= 'Z')
@@ -83,18 +84,18 @@ FString FName::NormalizeToSmall(FString name)
 	return normalizedName;
 }
 
-pair<FString, int32> FName::ParceNumber(FString name)
+pair<FString, int32> FName::ParceNumber(const FString& name) const
 {
 	bool bIsNumber = false;
 	bool bIsUnderbar = false;
-	int32 stoi = 0;
-	TArray<char> numbers = {};
-	FString parcedName = {};
-	for (char& c : name)
+	int32 Number = 0;
+	TArray<char> Numbers = {};
+	FString ParcedName = {};
+	for (char c : name)
 	{
 		if (bIsNumber)
 		{
-			numbers.Add(c);
+			Numbers.Add(c);
 		}
 		if (c == '_')
 		{
@@ -102,40 +103,41 @@ pair<FString, int32> FName::ParceNumber(FString name)
 		}
 		if (c != '_' && bIsUnderbar && '0' <= c && c <= '9')
 		{
-			numbers.Add(c);
+			Numbers.Add(c);
 			bIsUnderbar = false;
 			bIsNumber = true;
 		}
 		if (!bIsNumber && !bIsUnderbar)
 		{
-			parcedName.push_back(c);
+			ParcedName.push_back(c);
 		}
 	}
 	if (bIsNumber) 
 	{
-		for (int32 i = 0; i < numbers.Num(); i++)
+		for (int32 i = 0; i < Numbers.Num(); i++)
 		{
-			stoi = stoi * 10 + (numbers[i] - '0');
+			Number = Number * 10 + (Numbers[i] - '0');
 		}
 	}
-	pair<FString, int32> result(parcedName, stoi);
-	return result;
-
-
+	else
+	{
+		Number = -1;
+	}
+	return { ParcedName, Number };
 }
 
-FString FName::itos(int32 number)
+FString FName::itos(int32 Number) const
 {
 	FString string;
-	if (number == 0)
+	if (Number == 0)
 	{
 		string.push_back('0');
 		return string;
 	}
-	while (number >= 1)
+	while (Number >= 1)
 	{
-		string.push_back((number - '0' % 10) + '0');
-		number /= 10;
+		string.push_back((Number % 10) + '0');
+		Number /= 10;
 	}
 	reverse(string.begin(), string.end());
 
