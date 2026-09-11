@@ -55,7 +55,9 @@ void Mesh::Render()
 {
 	if (vertexbuffer != nullptr && numVertices > 0)
 	{
-		RENDERER.PrepareShader();
+		if (bIsFont) RENDERER.PrepareFontShader();
+		else RENDERER.PrepareShader();
+
 		RENDERER.SetCustomColor(CurrentColor);
 		if (TextureSRV)
 		{
@@ -101,6 +103,7 @@ void Mesh::Render(D3D11_PRIMITIVE_TOPOLOGY topology)
 		{
 			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
 		}
+		if (bIsFont) RENDERER.GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 	}
 }
 
@@ -109,8 +112,6 @@ void Mesh::Render(const FLinearColor& color, D3D11_PRIMITIVE_TOPOLOGY topology)
 	CurrentColor = color;
 	Render(topology);
 }
-
-
 
 void Mesh::IASet(D3D11_PRIMITIVE_TOPOLOGY type)
 {

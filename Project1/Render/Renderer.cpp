@@ -19,11 +19,13 @@ void Renderer::Create(HWND hWindow) {
   CreateShader();
   CreateColorBuffer();
   CreateSamplerState();
+  CreateFontBlendState();
 }
 
 void Renderer::Release() {
   ReleaseTextures();
   ReleaseSamplerState();
+  ReleaseFontBlendState();
   ReleaseColorBuffer();
   ReleaseDepthStencil();
   ReleaseShader();
@@ -68,6 +70,30 @@ void Renderer::ReleaseSamplerState() {
     SamplerState->Release();
     SamplerState = nullptr;
   }
+}
+
+void Renderer::CreateFontBlendState()
+{
+    D3D11_BLEND_DESC blendDesc = {};
+    auto& target = blendDesc.RenderTarget[0];
+    target.BlendEnable = TRUE;
+    target.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    target.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    target.BlendOp = D3D11_BLEND_OP_ADD;
+    target.SrcBlendAlpha = D3D11_BLEND_ONE;
+    target.DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+    target.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    target.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    Device->CreateBlendState(&blendDesc, &BlendState);
+}
+
+void Renderer::ReleaseFontBlendState()
+{
+    if (BlendState)
+    {
+        BlendState->Release();
+        BlendState = nullptr;
+    }
 }
 
 void Renderer::ReleaseTextures() {
@@ -368,6 +394,8 @@ void Renderer::CreateShader() {
   CreatePixelShader(LineshaderPath, "mainPS_Line", &LinePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
   CreatePixelShader(shaderPath, "mainPS_Sky", &SkyPixelShader);
+  CreateVertexShader(L"Resources/Shader/ShaderFont.hlsl", "mainVS", &FontVertexShader);
+  CreatePixelShader(L"Resources/Shader/ShaderFont.hlsl", "mainPS", &FontPixelShader);
 
   // 공용 입력 레이아웃 직접 생성
   CreateInputLayout(FVertexLayouts::Layout, FVertexLayouts::NumElements, vsBlob, &defaultInputLayout);
@@ -487,6 +515,18 @@ void Renderer::PrepareSkyShader() {
   }
   DeviceContext->VSSetShader(SkyVertexShader, nullptr, 0);
   DeviceContext->PSSetShader(SkyPixelShader, nullptr, 0);
+}
+
+void Renderer::PrepareFontShader()
+{
+    if (CurrentInputLayout != defaultInputLayout)
+    {
+        CurrentInputLayout = defaultInputLayout;
+        DeviceContext->IASetInputLayout(defaultInputLayout);
+    }
+    DeviceContext->VSSetShader(FontVertexShader, nullptr, 0);
+    DeviceContext->PSSetShader(FontPixelShader, nullptr, 0);
+    DeviceContext->OMSetBlendState(BlendState, nullptr, 0xffffffff);
 }
 
 void Renderer::UpdateFrameConstant() {

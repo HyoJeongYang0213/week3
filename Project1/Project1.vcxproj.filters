@@ -217,6 +217,12 @@
     <ClInclude Include="UI\UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Render\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="FontMeshGenerator.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
     <ClInclude Include="Core\FName.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -335,23 +341,28 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Render\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="FontMeshGenerator.cpp">
+      <Filter>Resources\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shader\GridShader.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
+    <None Include="Resources\Shader\GridShader.hlsl" />
+    <None Include="Resources\Shader\ShaderW0.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">
       <Filter>Library\DirectXTex</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
