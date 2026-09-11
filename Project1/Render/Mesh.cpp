@@ -59,10 +59,7 @@ void Mesh::Render()
 		else RENDERER.PrepareShader();
 
 		RENDERER.SetCustomColor(CurrentColor);
-		if (TextureSRV)
-		{
-			RENDERER.SetTexture(TextureSRV);
-		}
+		RENDERER.SetTexture(TextureSRV);
 		vertexbuffer->IASet();
 
 		if (indexbuffer != nullptr)
@@ -74,6 +71,8 @@ void Mesh::Render()
 		{
 			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
 		}
+		// 블렌딩 복원
+		if (bIsFont) RENDERER.GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 	}
 }
 
@@ -87,12 +86,10 @@ void Mesh::Render(D3D11_PRIMITIVE_TOPOLOGY topology)
 {
 	if (vertexbuffer != nullptr && numVertices > 0)
 	{
-		RENDERER.PrepareShader();
+		if (bIsFont) RENDERER.PrepareFontShader();
+		else RENDERER.PrepareShader();
 		RENDERER.SetCustomColor(CurrentColor);
-		if (TextureSRV)
-		{
-			RENDERER.SetTexture(TextureSRV);
-		}
+		RENDERER.SetTexture(TextureSRV);
 		vertexbuffer->IASet(topology);
 		if (indexbuffer != nullptr)
 		{
@@ -103,6 +100,7 @@ void Mesh::Render(D3D11_PRIMITIVE_TOPOLOGY topology)
 		{
 			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
 		}
+		// 블렌딩 복원
 		if (bIsFont) RENDERER.GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 	}
 }

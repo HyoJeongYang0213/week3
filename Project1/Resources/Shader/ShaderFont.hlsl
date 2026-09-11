@@ -63,5 +63,9 @@ PS_INPUT mainVS(VS_INPUT input)
 float4 mainPS(PS_INPUT input) : SV_TARGET
 {
     float coverage = MainTexture.Sample(MainSampler, input.uv).r;
+    
+    // 투명한 영역은 픽셀 폐기
+    clip(coverage - 0.01f);
+    
     return float4(input.color.rgb, coverage * input.color.a);
 }

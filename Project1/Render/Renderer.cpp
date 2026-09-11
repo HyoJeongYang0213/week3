@@ -742,6 +742,8 @@ void Renderer::DrawOutline(AActor *targetActor) {
   }
 
   // 아웃라인 셰이더 유지 상태로 드로우
+  // 적용된 텍스처(폰트 등) 삭제
+  SetTexture(nullptr);
   mesh->IASet();
 
   if (mesh->indexbuffer)
