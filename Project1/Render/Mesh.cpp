@@ -1,10 +1,9 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Mesh.h"
 #include "Intersection.h"
 
 Mesh::Mesh()
-{
-}
+{}
 
 Mesh::~Mesh()
 {
@@ -32,7 +31,7 @@ void Mesh::InitVertexBuffer(const void* vertices, UINT stride, UINT inNumVertice
 
 	if (vertices && inNumVertices > 0)
 	{
-		vertexbuffer = new VertexBuffer(vertices, stride, inNumVertices);
+		vertexbuffer = new VertexBufferO(vertices, stride, inNumVertices);
 	}
 }
 
@@ -134,7 +133,7 @@ bool Mesh::bIsPicked(const FRay& worldRay, const Transform& transform, float& ou
 
 		FVector localOrigin = TransformPoint(worldRay.Origin, invWorld);
 		FVector localDir = TransformDirection(worldRay.Direction, invWorld);
-		
+
 
 		float closestDist = FLT_MAX;
 		bool bHit = false;

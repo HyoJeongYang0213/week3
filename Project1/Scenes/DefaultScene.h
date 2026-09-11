@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 #include "ACollider.h"
 #include "AGizmo.h"
@@ -6,6 +6,7 @@
 #include "PickingManager.h"
 #include "ASkySphere.h"
 #include "UGrid.h"
+#include "FGridRenderer.h"
 
 class DefaultScene : public Scene
 {
@@ -26,5 +27,7 @@ public:
 
 	ASkySphere* skysphere;
 
+private:
+	FGridRenderer GridRenderer;
 };
 

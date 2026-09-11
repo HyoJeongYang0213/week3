@@ -55,6 +55,18 @@
     <Filter Include="UI">
       <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render\New">
+      <UniqueIdentifier>{2846d16f-c4ee-4832-a4fa-e8cbfee30c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\New\Core">
+      <UniqueIdentifier>{f07ddf03-05d0-4c23-ad12-78231ad59629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\New\Resource">
+      <UniqueIdentifier>{1efeff81-73a2-4513-9b83-067e93ee00c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\New\Renderer">
+      <UniqueIdentifier>{5dfa7dfc-b2ba-4c79-9816-247163586f8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Project1\Scenes\DefaultScene.h">
@@ -175,9 +187,6 @@
     <ClInclude Include="Render\Buffer\GlobalBuffer.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Buffer\VertexBuffer.h">
-      <Filter>Render\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="Render\Camera.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -217,6 +226,9 @@
     <ClInclude Include="UI\UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Pointers.h">
+      <Filter>Core</Filter>
+    </CIInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
@@ -232,6 +244,54 @@
     <ClInclude Include="Core\FNamePool.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Buffer\VertexBufferO.h">
+      <Filter>Render\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\GraphicsEnums.h">
+      <Filter>Render\New\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Buffer\PipelineCache.h">
+      <Filter>Render\New\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderContext.h">
+      <Filter>Render\New\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderDevice.h">
+      <Filter>Render\New\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderResources.h">
+      <Filter>Render\New\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderSystem.h">
+      <Filter>Render\New\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\ConstantBuffer.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\GraphicsPipeline.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\IndexBuffer.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Material.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderMesh.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Texture.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\VertexBuffer.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\VertexShader.h">
+      <Filter>Render\New\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FGridRenderer.h">
+      <Filter>Render\New\Renderer</Filter>
+    </CIInclude>
     <ClInclude Include="Render\ULineBatch.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -308,9 +368,6 @@
     <ClCompile Include="Render\Buffer\ConstBuffer.cpp">
       <Filter>Render\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Buffer\VertexBuffer.cpp">
-      <Filter>Render\Buffer</Filter>
-    </ClCompile>
     <ClCompile Include="Render\Camera.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -353,13 +410,29 @@
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Render\RenderContext.cpp">
+      <Filter>Render\New\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderDevice.cpp">
+      <Filter>Render\New\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderResources.cpp">
+      <Filter>Render\New\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderSystem.cpp">
+      <Filter>Render\New\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-    <None Include="Resources\Shader\GridShader.hlsl" />
-    <None Include="Resources\Shader\ShaderW0.hlsl" />
+    <None Include="Resources\Shader\ShaderW0.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\GridShader.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">

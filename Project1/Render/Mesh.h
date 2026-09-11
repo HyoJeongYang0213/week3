@@ -1,6 +1,6 @@
-#pragma once
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
+﻿#pragma once
+#include "VertexBufferO.h"
+#include "IndexBufferO.h"
 #include "Renderer.h"
 #include "Containers.h"
 #include "Transform.h"
@@ -109,15 +109,13 @@ public:
 	bool bIsFont = false;
 
 	UINT GetNumVertices() const { return numVertices; }
-	VertexBuffer* GetVertexBuffer() const { return vertexbuffer; }
+	VertexBufferO* GetVertexBuffer() const { return vertexbuffer; }
 
 public:
-	VertexBuffer* vertexbuffer = nullptr;
-	IndexBuffer* indexbuffer = nullptr;
+	VertexBufferO* vertexbuffer = nullptr;
+	IndexBufferO* indexbuffer = nullptr;
 	ID3D11ShaderResourceView* TextureSRV = nullptr;
 	UINT numVertices = 0;
 	FLinearColor CurrentColor = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	TArray<FVector> LocalVertices; // 마우스 피킹용 로컬 정점 데이터
 };
-
-
