@@ -36,9 +36,9 @@ void UGrid::Render() {
       int worldX = (int)round((Location.x + x * CellSize) / CellSize);
 
       if (worldX % interval == 0)
-          lineColor = FLinearColor::Gray;
+          lineColor = FLinearColor::DarkGray;
       else if (worldX % interval != 0)
-          lineColor = FLinearColor::LightGray;
+          lineColor = FLinearColor::Gray;
 
       LINEBATCH.AddLine(
           FVector(Location.x + x * CellSize, 0.01f, Location.z - HalfSize * CellSize),

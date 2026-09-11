@@ -493,7 +493,7 @@ void Renderer::UpdateFrameConstant() {
   Camera &cam = CAMERA;
   cam.vpBuffer->SetMat(cam.GetViewMatrix() *
                            cam.GetProjectionMatrix(wAspectRatio),
-                       cam.GetLocation());
+                       cam.GetLocation(), cam.GetForward());
 }
 
 void Renderer::CreateDepthStencil() {

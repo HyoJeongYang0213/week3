@@ -8,6 +8,8 @@ cbuffer FrameConstants : register(b1)
     matrix VP;
     float3 CameraPos;
     float pad;
+    float3 CameraForward;
+    float pad2;
 };
 
 struct VS_INPUT
@@ -38,12 +40,18 @@ PS_INPUT mainVS_Line(VS_INPUT input)
 
 float4 mainPS_Line(PS_INPUT input) : SV_TARGET
 {
+    // 거리기반
     float distance = length(input.worldPosition - CameraPos);
     
+    // fov 기반
+    float grazing = abs(dot(normalize(CameraForward), float3(0, 1, 0)));
     float fadeStart = 1.0f;
     float fadeEnd = 30.0f;
+    float finalFadeEnd = lerp(5.0f, fadeEnd, grazing);
    
-    float fade = 1.0f - smoothstep(fadeStart, fadeEnd, distance);
+    float fade = 1.0f - smoothstep(fadeStart, finalFadeEnd, distance);
+    
+    clip(fade - 0.01f); // 완전히 투명해야하면 그냥 픽셸 버리기 
     
     float4 finalColor = input.color;
     finalColor.a *= fade;
