@@ -28,8 +28,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	FName test10 = "_5";
 	FName tetsnull;
 
-	FNamePool::Instance().Debug();
-
 	while (!bIsExit)
 	{
 

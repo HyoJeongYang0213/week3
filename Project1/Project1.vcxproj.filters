@@ -335,6 +335,9 @@
     <ClCompile Include="Core\FName.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\FNamePool.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">

@@ -29,11 +29,12 @@ bool FName::operator== (const FName& Other) const
 
 bool FName::operator!= (const FName& Other) const
 {
-	if (ComparisonIndex != Other.ComparisonIndex || Number != Other.Number)
-	{
-		return true;
-	}
-	return false;
+	return !(*this == Other);
+}
+
+bool FName::IsNone() const
+{
+	return ComparisonIndex == 0 && Number == 0;
 }
 
 int32 FName::Compare(const FName& Other) const
@@ -66,9 +67,24 @@ FString FName::ToString() const
 	FString Name = FNamePool::Instance().GetDisplayName(DisplayIndex);
 	if (Number)
 	{
-		Name = Name + '_' + itos(Number - 1);
+		Name += '_' + itos(Number - 1);
 	}
 	return Name;
+}
+
+int32 FName::GetComparisonIndex() const
+{
+	return ComparisonIndex;
+}
+
+int32 FName::GetDisplayIndex() const
+{
+	return DisplayIndex;
+}
+
+int32 FName::GetNumber() const
+{
+	return Number;
 }
 
 FString FName::NormalizeToSmall(const FString& Name)
@@ -128,18 +144,18 @@ pair<FString, int32> FName::ParceNumber(const FString& name) const
 
 FString FName::itos(int32 Number) const
 {
-	FString string;
+	FString result;
 	if (Number == 0)
 	{
-		string.push_back('0');
-		return string;
+		result.push_back('0');
+		return result;
 	}
 	while (Number >= 1)
 	{
-		string.push_back((Number % 10) + '0');
+		result.push_back((Number % 10) + '0');
 		Number /= 10;
 	}
-	reverse(string.begin(), string.end());
+	reverse(result.begin(), result.end());
 
-	return string;
+	return result;
 }

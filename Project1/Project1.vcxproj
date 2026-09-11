@@ -184,6 +184,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="App\ConsoleWindow.cpp" />
     <ClCompile Include="App\GameManager.cpp" />
     <ClCompile Include="Core\FName.cpp" />
+    <ClCompile Include="Core\FNamePool.cpp" />
     <ClCompile Include="Core\ObjectManager.cpp" />
     <ClCompile Include="Core\UObject.cpp" />
     <ClCompile Include="Library\ImGui\imgui.cpp">
