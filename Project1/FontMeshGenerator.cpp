@@ -55,7 +55,8 @@ Mesh* FontMeshGenerator::Generate(const std::wstring& text, float glyphAdvance)
 		float v0 = row / 128.0f;
 		float v1 = (row + 1) / 128.0f;
 
-		float xOffset = static_cast<float>(i) * glyphAdvance;
+		float textCenter = (text.size() - 1) * glyphAdvance * 0.5f;
+		float xOffset = static_cast<float>(i) * glyphAdvance - textCenter;
 
 		for (int j = 0; j < 4; ++j)
 		{
