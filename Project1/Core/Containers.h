@@ -4,6 +4,11 @@
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
+#include <string>
+
+typedef int int32;
+typedef unsigned int uint32;
+typedef std::string FString;
 
 ///////////////////////////////////////
 /////////////// TArray ////////////////

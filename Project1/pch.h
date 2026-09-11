@@ -82,15 +82,10 @@ using namespace std;
 
 #define IMGUI UIManager::GetInstance()
 #define SAVELOAD SaveLoadManager::GetInstance()
-
 #define LINEBATCH ULineBatch::GetInstance()
 
 #define WIN_WIDTH 1920	
 #define WIN_HEIGHT 1080
-
-typedef int int32;
-typedef unsigned int uint32;
-typedef string FString;
 
 #include "Containers.h"
 

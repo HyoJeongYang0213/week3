@@ -217,6 +217,12 @@
     <ClInclude Include="UI\UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Core\FName.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FNamePool.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Render\ULineBatch.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -329,23 +335,19 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-    <None Include="Resources\Shader\GridShader.hlsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\GridShader.hlsl">
       <Filter>Resources\Shader</Filter>
-    </None>
-    <None Include="Resources\Shader\ShaderW0.hlsl">
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\ShaderW0.hlsl">
       <Filter>Resources\Shader</Filter>
-    </None>
-    <None Include="Resources\Shader\ShaderLine.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">
