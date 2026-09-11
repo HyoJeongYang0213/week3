@@ -67,6 +67,12 @@ public:
 		}
 	}
 
+	bool bIsPicked(const FRay& Ray, float& OutDistance) override
+	{
+		if (bIsUUIDLabel) return false;
+		return AActor::bIsPicked(Ray, OutDistance);
+	}
+
 private:
 	std::wstring Text;
 
