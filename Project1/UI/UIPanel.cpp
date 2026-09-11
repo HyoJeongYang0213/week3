@@ -129,7 +129,7 @@ void UIPanel_Spawn::Render()
             {
                 // 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
                 ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
-                label->SetColor(FLinearColor::White);
+                label->SetScale(FVector(0.25f, 0.25f, 0.25f));
                 label->SetTarget(spawnedActor);
                 label->SetText(std::to_wstring(spawnedActor->GetID()));
             }
@@ -137,7 +137,12 @@ void UIPanel_Spawn::Render()
 			
 	}
 
-    ImGui::Checkbox("Show UUID", &ATextActor::bShowUUID);
+    bool bShowUUID = RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText);
+
+    if (ImGui::Checkbox("Show UUID", &bShowUUID))
+    {
+        RENDERER.SetShowFlag(EEngineShowFlags::SF_BillboardText, bShowUUID);
+    }
 
     ImGui::End();
 }

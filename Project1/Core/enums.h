@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Containers.h"
+
 enum class EPrimitive
 {
 	Sphere,
@@ -30,4 +32,10 @@ enum class EGridType
 {
 	Line,
 	Triangle
+};
+
+enum class EEngineShowFlags : uint32
+{
+	SF_Primitives = 1ull << 0,
+	SF_BillboardText = 1ull << 1,
 };

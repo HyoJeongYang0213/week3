@@ -14,6 +14,11 @@ struct ClassInfo;
 
 class Renderer {
 public:
+    // enums.h에 정의된 비트마스킹 ShowFlag 조작 함수
+    bool IsShowFlagEnabled(EEngineShowFlags flag) const;
+    void SetShowFlag(EEngineShowFlags flag, bool enabled);
+    void ToggleShowFlag(EEngineShowFlags flag);
+
   static Renderer &GetInstance() {
     static Renderer instance;
     return instance;
@@ -170,6 +175,10 @@ public:
   void Resize(UINT width, UINT height);
 
 private:
+    uint32 ShowFlags =
+        static_cast<uint32>(EEngineShowFlags::SF_Primitives) |
+        static_cast<uint32>(EEngineShowFlags::SF_BillboardText);
+
   // 현재 파이프라인에 바인딩된 입력 레이아웃 캐시
   ID3D11InputLayout *CurrentInputLayout = nullptr;
 

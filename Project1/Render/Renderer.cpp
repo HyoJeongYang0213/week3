@@ -10,6 +10,25 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
+// enums.h에 정의된 비트마스킹 ShowFlag 조작 함수
+bool Renderer::IsShowFlagEnabled(EEngineShowFlags flag) const
+{
+    return (ShowFlags & static_cast<uint32>(flag)) != 0;
+}
+
+void Renderer::SetShowFlag(EEngineShowFlags flag, bool enabled)
+{
+    uint32 mask = static_cast<uint32>(flag);
+
+    if (enabled) ShowFlags |= mask;
+    else ShowFlags &= ~mask;
+}
+
+void Renderer::ToggleShowFlag(EEngineShowFlags flag)
+{
+    ShowFlags ^= static_cast<uint32>(flag);
+}
+
 void Renderer::Create(HWND hWindow) {
   CreateDeviceAndSwapChain(hWindow);
   CreateFrameBuffer();

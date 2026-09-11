@@ -8,8 +8,7 @@ class ATextActor : public AActor
 	DECLARE_CLASS(ATextActor, AActor);
 
 public:
-	inline static bool bShowUUID = true;
-	ATextActor() = default;
+	bool bIsUUIDLabel = false;
 
 	ATextActor()
 	{
@@ -20,21 +19,25 @@ public:
 
 	virtual void Update(float deltaTime) override
 	{
-		if (!OBJECT.IsValidObject(TargetActor, TargetUUID))
+		if (bIsUUIDLabel)
 		{
-			TargetActor = nullptr;
-			DeActive();
-			return;
+			if (!OBJECT.IsValidObject(TargetActor, TargetUUID))
+			{
+				TargetActor = nullptr;
+				DeActive();
+				return;
+			}
 			UpdateLabelTransform();
 		}
-		SetLocation(TargetActor->GetLocation() + FVector(0.0f, 1.0f, 0.0f));
+
+		// 일반 TextActor든 UUID든 공통:
 		SetRotation(CAMERA.GetRotation());
 		AActor::Update(deltaTime);
 	}
 
 	virtual void Render() override
 	{
-		if (!bShowUUID) return;
+		if (bIsUUIDLabel && !RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText)) return;
 		AActor::Render();
 	}
 
@@ -56,6 +59,7 @@ public:
 		if (TargetActor) 
 		{
 			Active();
+			bIsUUIDLabel = true;
 			UpdateLabelTransform();
 		}
 		else
