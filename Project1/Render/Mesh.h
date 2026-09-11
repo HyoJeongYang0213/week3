@@ -106,6 +106,8 @@ public:
 
 	bool bIsPicked(const FRay& worldRay, const Transform& transform, float& outDistance);
 
+	bool bIsFont = false;
+
 	UINT GetNumVertices() const { return numVertices; }
 	VertexBuffer* GetVertexBuffer() const { return vertexbuffer; }
 

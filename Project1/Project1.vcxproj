@@ -124,6 +124,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
     <ClInclude Include="App\ConsoleWindow.h" />
     <ClInclude Include="App\GameManager.h" />
+    <ClInclude Include="ATextActor.h" />
     <ClInclude Include="Core\Containers.h" />
     <ClInclude Include="Core\enums.h" />
     <ClInclude Include="Core\FName.h" />
