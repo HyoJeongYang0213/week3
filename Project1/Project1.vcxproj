@@ -161,6 +161,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Render\PickingManager.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\UGrid.h" />
+    <ClInclude Include="Render\ULineBatch.h" />
     <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
     <ClInclude Include="Resources\Geometry\Sphere.h" />
     <ClInclude Include="Scenes\SaveLoadManager.h" />
@@ -218,6 +219,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Render\PickingManager.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\UGrid.cpp" />
+    <ClCompile Include="Render\ULineBatch.cpp" />
     <ClCompile Include="Resources\Geometry\CircleGenerator.cpp" />
     <ClCompile Include="Scenes\SaveLoadManager.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -234,6 +236,12 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
   <ItemGroup>
     <None Include="Resources\Shader\GridShader.hlsl" />
     <None Include="Resources\Shader\ShaderW0.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shader\ShaderLine.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -217,6 +217,9 @@
     <ClInclude Include="UI\UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Render\ULineBatch.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">
@@ -326,19 +329,23 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shader\GridShader.hlsl">
+    <None Include="Resources\Shader\GridShader.hlsl">
       <Filter>Resources\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\ShaderW0.hlsl">
+    </None>
+    <None Include="Resources\Shader\ShaderW0.hlsl">
       <Filter>Resources\Shader</Filter>
-    </FxCompile>
+    </None>
+    <None Include="Resources\Shader\ShaderLine.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">

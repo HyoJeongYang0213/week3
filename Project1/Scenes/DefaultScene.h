@@ -6,6 +6,7 @@
 #include "PickingManager.h"
 #include "ASkySphere.h"
 #include "UGrid.h"
+#include "ULineBatch.h"
 
 class DefaultScene : public Scene
 {
@@ -17,12 +18,14 @@ public:
 	virtual void Update(float deltatime) override;
 	virtual void Render() override;
 
-	
+
 	AGizmo* gizmo = nullptr;
 
 	AWorldAxises* worldAxises;
 
 	UGrid Ugrid;
+
+	ULineBatch Uline;
 
 	ASkySphere* skysphere;
 

@@ -332,6 +332,7 @@ bool Renderer::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
 void Renderer::CreateShader() {
   LPCWSTR shaderPath = L"Resources/Shader/ShaderW0.hlsl";
   LPCWSTR GridshaderPath = L"Resources/Shader/GridShader.hlsl";
+  LPCWSTR LineshaderPath = L"Resources/Shader/ShaderLine.hlsl";
 
   // Vertex & Pixel Shader 컴파일 및 생성
   ID3DBlob *vsBlob = nullptr;
@@ -341,6 +342,8 @@ void Renderer::CreateShader() {
   CreateVertexShader(shaderPath, "mainVS_Outline", &OutlineVertexShader);
   CreateVertexShader(GridshaderPath, "mainVS_Grid", &GridVertexShader);
   CreatePixelShader(GridshaderPath, "mainPS_Grid", &GridPixelShader);
+  CreateVertexShader(LineshaderPath, "mainVS_Line", &LineVertexShader);
+  CreatePixelShader(LineshaderPath, "mainPS_Line", &LinePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
   CreatePixelShader(shaderPath, "mainPS_Sky", &SkyPixelShader);
 
@@ -371,6 +374,16 @@ void Renderer::ReleaseShader() {
   if (GridPixelShader) {
     GridPixelShader->Release();
     GridPixelShader = nullptr;
+  }
+
+  if (LinePixelShader) {
+      LinePixelShader->Release();
+      LinePixelShader = nullptr;
+  }
+
+  if (LineVertexShader) {
+      LineVertexShader->Release();
+      LineVertexShader = nullptr;
   }
 
   if (GridVertexShader) {
@@ -453,6 +466,17 @@ void Renderer::PrepareGridShader() {
   // 그리드 셰이더 설정
   DeviceContext->VSSetShader(GridVertexShader, nullptr, 0);
   DeviceContext->PSSetShader(GridPixelShader, nullptr, 0);
+}
+
+void Renderer::PrepareLineShader()
+{
+    if (CurrentInputLayout != defaultInputLayout) {
+        CurrentInputLayout = defaultInputLayout;
+        DeviceContext->IASetInputLayout(defaultInputLayout);
+    }
+
+    DeviceContext->VSSetShader(LineVertexShader, nullptr, 0);
+    DeviceContext->PSSetShader(LinePixelShader, nullptr, 0);
 }
 
 void Renderer::PrepareSkyShader() {

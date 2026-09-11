@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "PickingManager.h"
 #include "SaveLoadManager.h"
-
+#include "ULineBatch.h"
 
 
 
@@ -18,6 +18,8 @@ DefaultScene::DefaultScene()
 
 	// Sky 생성
 	skysphere = FObjectFactory::SpawnActor<ASkySphere>();
+
+	
 }
 
 DefaultScene::~DefaultScene()
@@ -38,6 +40,8 @@ void DefaultScene::Initialize()
 
 	// Grid 초기화
 	Ugrid.Initialize();
+
+	Uline.Initialize();
 }
 
 void DefaultScene::Update(float deltatime)
@@ -63,6 +67,9 @@ void DefaultScene::Render()
 	{
 		gizmo->Render();
 	}
+
+	Uline.AddLine(FVector(0.0f, 1.0f, 0.0f), FVector(5.0f, 1.0f, 0.0f), FLinearColor::Red);
+	Uline.Render();
 
 	IMGUI.RenderAll();
 }

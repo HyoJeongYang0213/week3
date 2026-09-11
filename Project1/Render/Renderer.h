@@ -46,6 +46,9 @@ public:
   ID3D11VertexShader *GridVertexShader = nullptr;
   ID3D11PixelShader *GridPixelShader = nullptr;
 
+  ID3D11VertexShader* LineVertexShader = nullptr;
+  ID3D11PixelShader* LinePixelShader = nullptr;
+
   // Direct2D & WIC Management
   ID2D1Factory *D2DFactory = nullptr;
   ID2D1RenderTarget *D2DRenderTarget = nullptr;
@@ -142,6 +145,7 @@ public:
   }
 
   void PrepareGridShader();
+  void PrepareLineShader();
   void PrepareOutlineShader();
   void PrepareSkyShader();
 
