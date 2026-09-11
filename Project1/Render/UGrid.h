@@ -14,9 +14,9 @@ public:
     void CreateVertices();
 
 private:
-    float GridSize = 100.0f;
-    float CellSize = 1.0f;
-
+    float GridSize = 2000.0f;
+    float CellSize = 0.05f;
+    int interval = 10;
 
     FVector Location = FVector(0, 0, 0);
     MatrixBuffer* WorldBuffer = nullptr;

@@ -68,7 +68,6 @@ void DefaultScene::Render()
 		gizmo->Render();
 	}
 
-	LINEBATCH.AddLine(FVector(0.0f, 1.0f, 0.0f), FVector(5.0f, 1.0f, 0.0f), FLinearColor::Red);
 	LINEBATCH.Render();
 
 	IMGUI.RenderAll();

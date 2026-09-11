@@ -19,7 +19,9 @@ struct FLinearColor
 	static const FLinearColor Yellow;
 	static const FLinearColor Cyan;
 	static const FLinearColor Magenta;
+	static const FLinearColor LightGray;
 	static const FLinearColor Gray;
+	static const FLinearColor DarkGray;
 };
 
 inline constexpr FLinearColor FLinearColor::Red     { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -30,4 +32,6 @@ inline constexpr FLinearColor FLinearColor::Black   { 0.0f, 0.0f, 0.0f, 1.0f };
 inline constexpr FLinearColor FLinearColor::Yellow  { 1.0f, 1.0f, 0.0f, 1.0f };
 inline constexpr FLinearColor FLinearColor::Cyan    { 0.0f, 1.0f, 1.0f, 1.0f };
 inline constexpr FLinearColor FLinearColor::Magenta { 1.0f, 0.0f, 1.0f, 1.0f };
+inline constexpr FLinearColor FLinearColor::LightGray { 0.7f, 0.7f, 0.7f, 1.0f };
 inline constexpr FLinearColor FLinearColor::Gray    { 0.5f, 0.5f, 0.5f, 1.0f };
+inline constexpr FLinearColor FLinearColor::DarkGray{ 0.3f, 0.3f, 0.3f, 1.0f };
