@@ -98,6 +98,7 @@ void Camera::Update()
 void Camera::SetVPBuffer()
 {
 	vpBuffer->SetVSBuffer(1);
+	vpBuffer->SetPSBuffer(1);
 }
 
 

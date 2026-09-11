@@ -15,7 +15,7 @@ public:
 
 private:
     float GridSize = 2000.0f;
-    float CellSize = 0.05f;
+    float CellSize = 0.3f;
     int interval = 10;
 
     FVector Location = FVector(0, 0, 0);

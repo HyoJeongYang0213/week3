@@ -76,8 +76,9 @@ void ULineBatch::Render()
 	DC->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	
-
+	DC->OMSetBlendState(RENDERER.AlphaBlendState, nullptr, 0xffffffff);
 	DC->Draw(Vertices.size(), 0);
+	DC->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 
 	Vertices.clear();
 }

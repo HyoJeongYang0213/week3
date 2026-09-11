@@ -34,6 +34,7 @@ public:
 
   // CreateRasterizerState
   ID3D11RasterizerState *RasterizerState = nullptr;
+  ID3D11BlendState* AlphaBlendState = nullptr;
 
   // CreateShader
   ID3D11VertexShader *SimpleVertexShader = nullptr;
@@ -96,6 +97,9 @@ public:
 
   void CreateRasterizerState();
   void ReleaseRasterizerState();
+
+  void CreateBlendState();
+  void ReleaseBlendState();
 
   // CreateShader 헬퍼 함수들
   bool CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,

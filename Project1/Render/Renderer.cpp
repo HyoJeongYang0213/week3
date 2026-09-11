@@ -15,6 +15,7 @@ void Renderer::Create(HWND hWindow) {
   CreateFrameBuffer();
   CreateDepthStencil();
   CreateRasterizerState();
+  CreateBlendState();
   CreateShader();
   CreateColorBuffer();
   CreateSamplerState();
@@ -26,6 +27,7 @@ void Renderer::Release() {
   ReleaseColorBuffer();
   ReleaseDepthStencil();
   ReleaseShader();
+  ReleaseBlendState();
   ReleaseRasterizerState();
   ReleaseFrameBuffer();
   ReleaseDeviceAndSwapChain();
@@ -236,6 +238,29 @@ void Renderer::ReleaseRasterizerState() {
     RasterizerState->Release();
     RasterizerState = nullptr;
   }
+}
+
+void Renderer::CreateBlendState()
+{
+    D3D11_BLEND_DESC blendDesc = {};
+    blendDesc.RenderTarget[0].BlendEnable = TRUE;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    Device->CreateBlendState(&blendDesc, &AlphaBlendState);
+}
+
+void Renderer::ReleaseBlendState()
+{
+    if (AlphaBlendState) {
+        AlphaBlendState->Release();
+        AlphaBlendState = nullptr;
+    }
 }
 
 bool Renderer::CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,
