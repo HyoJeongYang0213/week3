@@ -43,9 +43,6 @@ public:
   ID3D11VertexShader *SkyVertexShader = nullptr;
   ID3D11PixelShader *SkyPixelShader = nullptr;
 
-  ID3D11VertexShader *GridVertexShader = nullptr;
-  ID3D11PixelShader *GridPixelShader = nullptr;
-
   ID3D11VertexShader* LineVertexShader = nullptr;
   ID3D11PixelShader* LinePixelShader = nullptr;
 

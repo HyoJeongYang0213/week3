@@ -41,7 +41,7 @@ void DefaultScene::Initialize()
 	// Grid 초기화
 	Ugrid.Initialize();
 
-	Uline.Initialize();
+	LINEBATCH.Initialize();
 }
 
 void DefaultScene::Update(float deltatime)
@@ -68,8 +68,8 @@ void DefaultScene::Render()
 		gizmo->Render();
 	}
 
-	Uline.AddLine(FVector(0.0f, 1.0f, 0.0f), FVector(5.0f, 1.0f, 0.0f), FLinearColor::Red);
-	Uline.Render();
+	LINEBATCH.AddLine(FVector(0.0f, 1.0f, 0.0f), FVector(5.0f, 1.0f, 0.0f), FLinearColor::Red);
+	LINEBATCH.Render();
 
 	IMGUI.RenderAll();
 }

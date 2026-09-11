@@ -6,7 +6,6 @@
 #include "PickingManager.h"
 #include "ASkySphere.h"
 #include "UGrid.h"
-#include "ULineBatch.h"
 
 class DefaultScene : public Scene
 {
@@ -24,8 +23,6 @@ public:
 	AWorldAxises* worldAxises;
 
 	UGrid Ugrid;
-
-	ULineBatch Uline;
 
 	ASkySphere* skysphere;
 

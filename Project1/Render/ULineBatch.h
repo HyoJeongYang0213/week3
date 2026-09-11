@@ -6,6 +6,11 @@ public:
 	ULineBatch();
 	~ULineBatch();
 
+	static ULineBatch & GetInstance() {
+		static ULineBatch instance;
+		return instance;
+	}
+
 	void Initialize();
 
 	void AddLine(const FVector & start, const FVector & end, const FLinearColor &Color);
