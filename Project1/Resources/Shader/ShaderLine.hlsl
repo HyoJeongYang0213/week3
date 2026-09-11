@@ -44,12 +44,11 @@ float4 mainPS_Line(PS_INPUT input) : SV_TARGET
     float distance = length(input.worldPosition - CameraPos);
     
     // fov 기반
-    float grazing = abs(dot(normalize(CameraForward), float3(0, 1, 0)));
-    float fadeStart = 1.0f;
-    float fadeEnd = 30.0f;
-    float finalFadeEnd = lerp(5.0f, fadeEnd, grazing);
-   
-    float fade = 1.0f - smoothstep(fadeStart, finalFadeEnd, distance);
+    float h = abs(CameraPos.y - input.worldPosition.y);
+    float fadeEnd = min(10.0f * sqrt(h), 40.0f);
+    float fadeStart = fadeEnd * 0.3f;
+
+    float fade = 1.0f - smoothstep(fadeStart, fadeEnd, distance);
     
     clip(fade - 0.01f); // 완전히 투명해야하면 그냥 픽셸 버리기 
     
