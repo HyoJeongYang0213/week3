@@ -126,6 +126,8 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="App\GameManager.h" />
     <ClInclude Include="Core\Containers.h" />
     <ClInclude Include="Core\enums.h" />
+    <ClInclude Include="Core\FName.h" />
+    <ClInclude Include="Core\FNamePool.h" />
     <ClInclude Include="Core\Global.h" />
     <ClInclude Include="Core\ObjectManager.h" />
     <ClInclude Include="Core\TemplateLibrary.h" />
@@ -181,6 +183,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
     <ClCompile Include="App\ConsoleWindow.cpp" />
     <ClCompile Include="App\GameManager.cpp" />
+    <ClCompile Include="Core\FName.cpp" />
     <ClCompile Include="Core\ObjectManager.cpp" />
     <ClCompile Include="Core\UObject.cpp" />
     <ClCompile Include="Library\ImGui\imgui.cpp">
