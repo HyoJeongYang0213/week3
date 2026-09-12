@@ -24,6 +24,7 @@ struct PS_INPUT
     float4 position : SV_POSITION;
     float4 color : COLOR;
     float3 worldPosition : TEXCOORD0;
+    float overlay : TEXCOORD1;
 };
 
 PS_INPUT mainVS_Line(VS_INPUT input)
@@ -34,16 +35,19 @@ PS_INPUT mainVS_Line(VS_INPUT input)
     output.position = mul(worldPos, VP);
     
     if(input.uv.x > 0.5f)
-        output.position.z = 0.0f;
+        output.position.z -= 0.0005f * output.position.w;
     
     output.color = input.color;
     output.worldPosition = worldPos.xyz;
+    output.overlay = input.uv.x;
 
     return output;
 }
 
 float4 mainPS_Line(PS_INPUT input) : SV_TARGET
 {
+    if(input.overlay > 0.5f) return input.color;
+    
     // 거리기반
     float distance = length(input.worldPosition - CameraPos);
     

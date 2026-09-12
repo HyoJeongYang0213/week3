@@ -42,6 +42,10 @@ void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinear
 	v1.x = end.x; v1.y = end.y; v1.z = end.z;
 	v1.r = Color.r; v1.g = Color.g; v1.b = Color.b; v1.a = Color.a;
 
+	float overlayFlag = bOverlay ? 1.0f : 0.0f;
+	v0.u = overlayFlag;
+	v1.u = overlayFlag;
+
 	Vertices.Add(v0);
 	Vertices.Add(v1);
 
