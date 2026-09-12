@@ -32,15 +32,15 @@ public:
 		AllMeshMap.clear();
 	}
 
-	TArray<UObject*> AllObjects;
+	TArray<UObject*> GUObjectArray;
 
 	void AddObject(UObject* Obj)
 	{
-		auto it = std::upper_bound(AllObjects.begin(), AllObjects.end(), Obj,
+		auto it = std::upper_bound(GUObjectArray.begin(), GUObjectArray.end(), Obj,
 			[](const UObject* a, const UObject* b) {
 				return a->GetRenderPriority() < b->GetRenderPriority();
 			});
-		AllObjects.insert(it, Obj);
+		GUObjectArray.insert(it, Obj);
 	}
 	TMap<string_view, ClassInfo*> AllClassInfoMap;
 
@@ -91,7 +91,7 @@ public:
 
 	UObject* Find(uint32 ID)
 	{
-		for (UObject* Obj : AllObjects)
+		for (UObject* Obj : GUObjectArray)
 		{
 			if (Obj->GetID() == ID)
 				return Obj;

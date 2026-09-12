@@ -353,6 +353,10 @@
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp" />
+    <ClCompile Include="Core\FName.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
@@ -360,6 +364,7 @@
     </None>
     <None Include="Resources\Shader\GridShader.hlsl" />
     <None Include="Resources\Shader\ShaderW0.hlsl" />
+    <None Include="Resources\Shader\ShaderLine.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">

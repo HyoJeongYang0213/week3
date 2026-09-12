@@ -13,6 +13,7 @@ public:
 	ATextActor()
 	{
 		SetColor(FLinearColor(0.0f, 0.0f, 0.0f, 1.0f));
+		Primitive == EPrimitive::None;
 	}
 
 	virtual ~ATextActor() = default;

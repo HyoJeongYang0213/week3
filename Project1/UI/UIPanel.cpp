@@ -2,6 +2,7 @@
 #include "UIPanel.h"
 #include "Global.h"
 #include "ATextActor.h"
+#include "AActor.h"
 #include <random>
 
 void UIPanel_Memory::Render()
@@ -202,10 +203,10 @@ void UIPanel_Picking::Render()
     	if (pickedActor)
     	{
     		string uid = std::to_string(pickedActor->GetID());
-    		string cid = string(pickedActor->GetClass()->Name);
+    		//string cid = string(pickedActor->GetClass()->Name);
     		// 디버그 정보 표시
     		ImGui::Text("UUID: %s", uid.c_str());
-    		ImGui::Text("ClassName: %s", cid.c_str());
+    		//ImGui::Text("ClassName: %s", cid.c_str());
     
     		// 선형 색상 편집
     		FLinearColor color = pickedActor->GetColor();
@@ -314,5 +315,44 @@ void UIPanel_FPS::Render()
     ImGui::Begin("Engine Main Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Text("DirectX 11 & ImGui Active");
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+    ImGui::End();
+}
+
+void UIPanel_ScenceManager::Render()
+{
+    
+    ImGui::Begin("Sence Manager");
+    if (ImGui::TreeNode("Primitives"))
+    {
+        int32 Selected = -1;
+        int32 i = 0;
+        bool On = false;
+        for (UObject* Object : OBJECT.GUObjectArray)
+        {
+            AActor* Actor = Cast<AActor, UObject>(Object);
+            if (Actor->Primitive != EPrimitive::None && Actor->Primitive != EPrimitive::Gizmo)
+            {
+                if (ImGui::Selectable(Object->GetName().c_str(), Selected == i))
+                {
+                    if (!On)
+                    {
+                        Selected = i;
+                        PICK.pickedObjcect = Cast<AActor, UObject>(Object);
+                        AGizmo::MainGizmo->SetTargetActor(PICK.pickedObjcect);
+                        On = true;
+                    }
+                    else
+                    {
+                        Selected = -1;
+                        PICK.pickedObjcect = nullptr;
+                        AGizmo::MainGizmo->SetTargetActor(nullptr);
+                        On = false;
+                    }
+                }
+                i++;
+            }
+        }
+        ImGui::TreePop();
+    }
     ImGui::End();
 }

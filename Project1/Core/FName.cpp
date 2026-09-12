@@ -16,7 +16,7 @@ FName::FName(const FString& Name, bool bIsClassName)
 	}
 	else
 	{
-		DisplayName = FString(Name);
+		DisplayName = Name.substr(1, Name.size() - 1);
 	}
 	FString ComparisonName = NormalizeToSmall(DisplayName);
 
