@@ -30,7 +30,7 @@ void ULineBatch::Initialize()
 	WorldBuffer = new MatrixBuffer();
 }
 
-void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinearColor& Color)
+void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinearColor& Color, bool bOverlay)
 {
 	if (Vertices.size() + 2 > MaxVertexCount) return;
 

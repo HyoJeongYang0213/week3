@@ -16,6 +16,7 @@ struct VS_INPUT
 {
     float3 position : POSITION;
     float4 color : COLOR;
+    float2 uv : TEXCOORD0;
 };
 
 struct PS_INPUT
@@ -30,8 +31,11 @@ PS_INPUT mainVS_Line(VS_INPUT input)
     PS_INPUT output = (PS_INPUT) 0;
 
     float4 worldPos = mul(float4(input.position, 1.0f), World);
-
     output.position = mul(worldPos, VP);
+    
+    if(input.uv.x > 0.5f)
+        output.position.z = 0.0f;
+    
     output.color = input.color;
     output.worldPosition = worldPos.xyz;
 

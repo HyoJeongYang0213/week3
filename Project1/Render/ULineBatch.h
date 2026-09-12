@@ -13,7 +13,7 @@ public:
 
 	void Initialize();
 
-	void AddLine(const FVector & start, const FVector & end, const FLinearColor &Color);
+	void AddLine(const FVector & start, const FVector & end, const FLinearColor &Color, bool bOverlay = false);
 	void Render();
 
 

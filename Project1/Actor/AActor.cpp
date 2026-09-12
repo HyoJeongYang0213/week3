@@ -89,18 +89,18 @@ void AActor::DrawingBox()
 
 
     FLinearColor color = FLinearColor::White;
-    LINEBATCH.AddLine(edges[0], edges[1], color);
-    LINEBATCH.AddLine(edges[0], edges[2], color);
-    LINEBATCH.AddLine(edges[0], edges[4], color);
-    LINEBATCH.AddLine(edges[1], edges[3], color);
-    LINEBATCH.AddLine(edges[1], edges[5], color);
-    LINEBATCH.AddLine(edges[3], edges[7], color);
-    LINEBATCH.AddLine(edges[4], edges[5], color);
-    LINEBATCH.AddLine(edges[4], edges[6], color);
-    LINEBATCH.AddLine(edges[5], edges[7], color);
-    LINEBATCH.AddLine(edges[6], edges[7], color);
-    LINEBATCH.AddLine(edges[2], edges[3], color);
-    LINEBATCH.AddLine(edges[2], edges[6], color);
+    LINEBATCH.AddLine(edges[0], edges[1], color, true);
+    LINEBATCH.AddLine(edges[0], edges[2], color, true);
+    LINEBATCH.AddLine(edges[0], edges[4], color, true);
+    LINEBATCH.AddLine(edges[1], edges[3], color, true);
+    LINEBATCH.AddLine(edges[1], edges[5], color, true);
+    LINEBATCH.AddLine(edges[3], edges[7], color, true);
+    LINEBATCH.AddLine(edges[4], edges[5], color, true);
+    LINEBATCH.AddLine(edges[4], edges[6], color, true);
+    LINEBATCH.AddLine(edges[5], edges[7], color, true);
+    LINEBATCH.AddLine(edges[6], edges[7], color, true);
+    LINEBATCH.AddLine(edges[2], edges[3], color, true);
+    LINEBATCH.AddLine(edges[2], edges[6], color, true);
 }
 
 void AActor::Render() {

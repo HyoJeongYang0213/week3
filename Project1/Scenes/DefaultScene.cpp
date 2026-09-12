@@ -63,12 +63,13 @@ void DefaultScene::Render()
 	Ugrid.Render();
 	Scene::Render();
 
+	LINEBATCH.Render();
+
 	if (gizmo)
 	{
 		gizmo->Render();
 	}
 
-	LINEBATCH.Render();
 
 	IMGUI.RenderAll();
 }
