@@ -23,6 +23,13 @@ public:
     void Render() override;
 };
 
+// 그리드 관련 창
+class UIPanel_Grid : public IUIPanel
+{
+public:
+    void Render() override;
+};
+
 // 스폰 창
 class UIPanel_Spawn : public IUIPanel
 {

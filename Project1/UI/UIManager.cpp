@@ -18,6 +18,8 @@ void UIManager::Initialize()
     RegisterPanel(new UIPanel_SaveLoad);
     RegisterPanel(new UIPanel_Picking);
     RegisterPanel(new UIPanel_FPS);
+    RegisterPanel(new UIPanel_Grid);
+
 }
 
 // panel 등록
