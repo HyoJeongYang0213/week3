@@ -350,6 +350,9 @@
     <ClCompile Include="FontMeshGenerator.cpp">
       <Filter>Resources\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="Core\FNamePool.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">

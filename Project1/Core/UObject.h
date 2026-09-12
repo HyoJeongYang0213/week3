@@ -84,7 +84,7 @@ public:
 
 private:
   uint32 UUID = 0;
-  FName Name = {};
+  FName Name;
   bool bIsActive = true;
   const ClassInfo *classinfo; // 포인터 1개만
 };
