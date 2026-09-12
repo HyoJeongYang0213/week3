@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "UIPanel.h"
 #include "Global.h"
+#include "ATextActor.h"
+#include "AActor.h"
 #include <random>
 #include <DefaultScene.h>
 
@@ -104,29 +106,45 @@ void UIPanel_Spawn::Render()
 	{
 		for (int i=0; i<spawnCount; i++)
 		{	
+            AActor* spawnedActor = nullptr;
 			switch(selected_item)
 			{
 				case 0 :
-					FObjectFactory::SpawnColider<ASphere>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ASphere>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 1 :
-					FObjectFactory::SpawnColider<ACube>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ACube>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 2 :
-					FObjectFactory::SpawnColider<ACircle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ACircle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 3 : 
-					FObjectFactory::SpawnColider<ARectangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ARectangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 4 :
-					FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				default :
 					break;
 			}
+            if (spawnedActor)
+            {
+                // 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
+                ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
+                label->SetScale(FVector(0.25f, 0.25f, 0.25f));
+                label->SetTarget(spawnedActor);
+                label->SetText(std::to_wstring(spawnedActor->GetID()));
+            }
 		}
 			
 	}
+
+    bool bShowUUID = RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText);
+
+    if (ImGui::Checkbox("Show UUID", &bShowUUID))
+    {
+        RENDERER.SetShowFlag(EEngineShowFlags::SF_BillboardText, bShowUUID);
+    }
 
     ImGui::End();
 }
@@ -186,10 +204,10 @@ void UIPanel_Picking::Render()
     	if (pickedActor)
     	{
     		string uid = std::to_string(pickedActor->GetID());
-    		string cid = string(pickedActor->GetClass()->Name);
+    		//string cid = string(pickedActor->GetClass()->Name);
     		// 디버그 정보 표시
     		ImGui::Text("UUID: %s", uid.c_str());
-    		ImGui::Text("ClassName: %s", cid.c_str());
+    		//ImGui::Text("ClassName: %s", cid.c_str());
     
     		// 선형 색상 편집
     		FLinearColor color = pickedActor->GetColor();
@@ -315,6 +333,44 @@ void UIPanel_Grid::Render()
         // ----------------------------
         // editor.ini 저장 추가!!
         // ----------------------------
+    }
+    ImGui::End();
+}
+void UIPanel_ScenceManager::Render()
+{
+    
+    ImGui::Begin("Sence Manager");
+    if (ImGui::TreeNode("Primitives"))
+    {
+        int32 Selected = -1;
+        int32 i = 0;
+        bool On = false;
+        for (UObject* Object : OBJECT.GUObjectArray)
+        {
+            AActor* Actor = Cast<AActor, UObject>(Object);
+            if (Actor->Primitive != EPrimitive::None && Actor->Primitive != EPrimitive::Gizmo)
+            {
+                if (ImGui::Selectable(Object->GetName().c_str(), Selected == i))
+                {
+                    if (!On)
+                    {
+                        Selected = i;
+                        PICK.pickedObjcect = Cast<AActor, UObject>(Object);
+                        AGizmo::MainGizmo->SetTargetActor(PICK.pickedObjcect);
+                        On = true;
+                    }
+                    else
+                    {
+                        Selected = -1;
+                        PICK.pickedObjcect = nullptr;
+                        AGizmo::MainGizmo->SetTargetActor(nullptr);
+                        On = false;
+                    }
+                }
+                i++;
+            }
+        }
+        ImGui::TreePop();
     }
     ImGui::End();
 }

@@ -4,6 +4,11 @@
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
+#include <string>
+
+typedef int int32;
+typedef unsigned int uint32;
+typedef std::string FString;
 
 ///////////////////////////////////////
 /////////////// TArray ////////////////
@@ -70,6 +75,9 @@ public:
         ArrayData.clear();
     }                    
     void clear() { ArrayData.clear(); }
+
+    // TArray 내부 저장 공간 맞바꿈
+    void Swap(TArray& Other) { ArrayData.swap(Other.ArrayData); }
     
     // Index 접근 조회
     T& operator[](int index)

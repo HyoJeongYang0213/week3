@@ -28,7 +28,7 @@ public:
     
     virtual void Update(float deltaTime)
     {
-        auto& objects = OBJECT.AllObjects;
+        auto& objects = OBJECT.GUObjectArray;
         for (size_t i = 0; i < objects.size(); ++i)
         {
             if (objects[i] && objects[i]->GetIsActive())
@@ -38,11 +38,14 @@ public:
         }
 
         PICK.Update();//pickmanager
+
+        // 삭제 예약 된 객체 정리
+        OBJECT.ProcessPendingDestroy();
     }
 
     virtual void Render()
     {
-        auto& objects = OBJECT.AllObjects;
+        auto& objects = OBJECT.GUObjectArray;
         for (size_t i = 0; i < objects.size(); ++i)
         {
             if (objects[i] && objects[i]->GetIsActive())
@@ -54,6 +57,24 @@ public:
                 objects[i]->Render();
             }
         }
+
+        if (PICK.pickedObjcect)
+        {
+            RENDERER.DrawOutline(PICK.pickedObjcect);
+            PICK.pickedObjcect->Render();
+        }
+
+        if (AGizmo::MainGizmo) {
+            AActor* selected = AGizmo::MainGizmo->GetTargetActor();
+            if (selected) {
+                RENDERER.DrawOutline(selected);
+            }
+            // 기즈모를 항상 최상단에 렌더링
+            AGizmo::MainGizmo->Render();
+        }
+
+        // 기본 깊이 상태 복원
+        RENDERER.SetDefaultDepthState();
     }
 
     FFadeOverlay& GetFadeOverlay() { return m_fadeOverlay; }

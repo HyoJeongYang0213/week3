@@ -44,6 +44,13 @@ public:
     void Render() override;
 };
 
+// 씬 메니져 창 
+class UIPanel_ScenceManager : public IUIPanel
+{
+public:
+    void Render() override;
+};
+
 // picking actor 속성창
 class UIPanel_Picking : public IUIPanel
 {

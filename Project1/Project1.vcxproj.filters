@@ -217,6 +217,21 @@
     <ClInclude Include="UI\UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Render\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="FontMeshGenerator.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="ATextActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FName.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FNamePool.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Render\ULineBatch.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -329,27 +344,36 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp">
-      <Filter>Render</Filter>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Render\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="FontMeshGenerator.cpp">
+      <Filter>Resources\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FNamePool.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp" />
+    <ClCompile Include="Core\FName.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-    <None Include="Resources\Shader\GridShader.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </None>
-    <None Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </None>
-    <None Include="Resources\Shader\ShaderLine.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </None>
+    <None Include="Resources\Shader\GridShader.hlsl" />
+    <None Include="Resources\Shader\ShaderW0.hlsl" />
+    <None Include="Resources\Shader\ShaderLine.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">
       <Filter>Library\DirectXTex</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

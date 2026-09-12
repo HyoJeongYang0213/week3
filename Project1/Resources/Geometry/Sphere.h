@@ -85,11 +85,26 @@ inline std::vector<FVertexData> CreateSphereVertices(float radius = 0.5f, int sl
 	return vertices;
 }
 
+inline const FVertexData font_quad_vertices[] =
+{
+	// Position              Color          UV                   Normal
+	{ -0.5f,  0.5f, 0,      1,1,1,1,       33.0f / 128, 0,         -1,  1, 0 }, // 좌상
+	{ 0.5f,  0.5f, 0,      1,1,1,1,       34.0f / 128, 0,          1,  1, 0 }, // 우상
+	{ -0.5f, -0.5f, 0,      1,1,1,1,       33.0f / 128, 1.0f / 128,  -1, -1, 0 }, // 좌하
+	{ 0.5f, -0.5f, 0,      1,1,1,1,       34.0f / 128, 1.0f / 128,   1, -1, 0 }, // 우하
+};
+
+inline const uint32 font_quad_indices[] = { 0, 1, 2, 2, 1, 3 };
+
 inline FVertexData triangle_vertices[] =
 {
 	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
 	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
-	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f } // Bottom-right vertex (green)
+	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+	{ 1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
+	{ 0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f } // Top vertex (red)
+	
 };
 
 inline FVertexData cube_vertices[] =
@@ -2737,14 +2752,25 @@ inline FVertexData arrow_vertices[] =
 inline FVertexData rectangle_vertices[] =
 {
     // Triangle A
-    { -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-left (green)
+    { -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
     {  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
     { -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
 
     // Triangle B
     {  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-    {  1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-right (blue)
+    {  1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
     { -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+
+	// Triangle -A
+	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+	{ -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
+
+	// Triangle -B
+	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+	{ 1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
+	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+	
 };
 
 

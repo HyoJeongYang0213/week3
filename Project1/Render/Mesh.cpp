@@ -13,6 +13,11 @@ Mesh::~Mesh()
         delete vertexbuffer;
         vertexbuffer = nullptr;
     }
+	if (indexbuffer)
+	{
+		delete indexbuffer;
+		indexbuffer = nullptr;
+	}
 }
 
 void Mesh::InitVertexBuffer(const void* vertices, UINT stride, UINT inNumVertices)
@@ -31,18 +36,43 @@ void Mesh::InitVertexBuffer(const void* vertices, UINT stride, UINT inNumVertice
 	}
 }
 
+void Mesh::InitIndexBuffer(const uint32* indices, UINT count)
+{
+
+	if (indexbuffer)
+	{
+		delete indexbuffer;
+		indexbuffer = nullptr;
+	}
+
+	if (indices && count > 0)
+	{
+		indexbuffer = new IndexBuffer(indices, count);
+	}
+}
+
 void Mesh::Render()
 {
 	if (vertexbuffer != nullptr && numVertices > 0)
 	{
-		RENDERER.PrepareShader();
+		if (bIsFont) RENDERER.PrepareFontShader();
+		else RENDERER.PrepareShader();
+
 		RENDERER.SetCustomColor(CurrentColor);
-		if (TextureSRV)
-		{
-			RENDERER.SetTexture(TextureSRV);
-		}
+		RENDERER.SetTexture(TextureSRV);
 		vertexbuffer->IASet();
-		RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+
+		if (indexbuffer != nullptr)
+		{
+			indexbuffer->IASet();
+			RENDERER.GetDeviceContext()->DrawIndexed(indexbuffer->count, 0, 0);
+		}
+		else
+		{
+			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+		}
+		// 블렌딩 복원
+		if (bIsFont) RENDERER.GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 	}
 }
 
@@ -56,14 +86,22 @@ void Mesh::Render(D3D11_PRIMITIVE_TOPOLOGY topology)
 {
 	if (vertexbuffer != nullptr && numVertices > 0)
 	{
-		RENDERER.PrepareShader();
+		if (bIsFont) RENDERER.PrepareFontShader();
+		else RENDERER.PrepareShader();
 		RENDERER.SetCustomColor(CurrentColor);
-		if (TextureSRV)
-		{
-			RENDERER.SetTexture(TextureSRV);
-		}
+		RENDERER.SetTexture(TextureSRV);
 		vertexbuffer->IASet(topology);
-		RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+		if (indexbuffer != nullptr)
+		{
+			indexbuffer->IASet();
+			RENDERER.GetDeviceContext()->DrawIndexed(indexbuffer->count, 0, 0);
+		}
+		else
+		{
+			RENDERER.GetDeviceContext()->Draw(numVertices, 0);
+		}
+		// 블렌딩 복원
+		if (bIsFont) RENDERER.GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 	}
 }
 
@@ -72,8 +110,6 @@ void Mesh::Render(const FLinearColor& color, D3D11_PRIMITIVE_TOPOLOGY topology)
 	CurrentColor = color;
 	Render(topology);
 }
-
-
 
 void Mesh::IASet(D3D11_PRIMITIVE_TOPOLOGY type)
 {

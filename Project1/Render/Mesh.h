@@ -1,5 +1,6 @@
 #pragma once
 #include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include "Renderer.h"
 #include "Containers.h"
 #include "Transform.h"
@@ -37,6 +38,9 @@ public:
 
 	// 커스텀 정점 버퍼 초기화 함수
 	void InitVertexBuffer(const void* vertices, UINT stride, UINT inNumVertices);
+
+	// 인덱스 버퍼 초기화 함수
+	void InitIndexBuffer(const uint32* indices, UINT count);
 
 	// 정점 배열을 넘기면 타입(VertexType), 정점 개수 자동 추론 및 저장
 	template <typename VertexType, size_t N>
@@ -111,11 +115,14 @@ public:
 	FBoundingBox GetBoundingBox() const { return BoundingBox; };
 	void ComputeLocalBoundingBox();
 
+	bool bIsFont = false;
+
 	UINT GetNumVertices() const { return numVertices; }
 	VertexBuffer* GetVertexBuffer() const { return vertexbuffer; }
 
 public:
 	VertexBuffer* vertexbuffer = nullptr;
+	IndexBuffer* indexbuffer = nullptr;
 	ID3D11ShaderResourceView* TextureSRV = nullptr;
 	UINT numVertices = 0;
 	FLinearColor CurrentColor = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f);

@@ -14,6 +14,11 @@ struct ClassInfo;
 
 class Renderer {
 public:
+    // enums.h에 정의된 비트마스킹 ShowFlag 조작 함수
+    bool IsShowFlagEnabled(EEngineShowFlags flag) const;
+    void SetShowFlag(EEngineShowFlags flag, bool enabled);
+    void ToggleShowFlag(EEngineShowFlags flag);
+
   static Renderer &GetInstance() {
     static Renderer instance;
     return instance;
@@ -43,6 +48,8 @@ public:
   ID3D11VertexShader *OutlineVertexShader = nullptr;
   ID3D11VertexShader *SkyVertexShader = nullptr;
   ID3D11PixelShader *SkyPixelShader = nullptr;
+  ID3D11VertexShader* FontVertexShader = nullptr;
+  ID3D11PixelShader* FontPixelShader = nullptr;
 
   ID3D11VertexShader* LineVertexShader = nullptr;
   ID3D11PixelShader* LinePixelShader = nullptr;
@@ -122,6 +129,8 @@ public:
   // 텍스처 및 샘플러 관리
   void CreateSamplerState();
   void ReleaseSamplerState();
+  void CreateFontBlendState();
+  void ReleaseFontBlendState();
   void ReleaseTextures();
   ID3D11ShaderResourceView *LoadTexture(const std::wstring &filePath);
   void SetTexture(ID3D11ShaderResourceView *srv);
@@ -149,6 +158,7 @@ public:
   void PrepareLineShader();
   void PrepareOutlineShader();
   void PrepareSkyShader();
+  void PrepareFontShader();
 
   // 공용 입력 레이아웃 반환
   ID3D11InputLayout *GetInputLayout() { return defaultInputLayout; }
@@ -165,6 +175,10 @@ public:
   void Resize(UINT width, UINT height);
 
 private:
+    uint32 ShowFlags =
+        static_cast<uint32>(EEngineShowFlags::SF_Primitives) |
+        static_cast<uint32>(EEngineShowFlags::SF_BillboardText);
+
   // 현재 파이프라인에 바인딩된 입력 레이아웃 캐시
   ID3D11InputLayout *CurrentInputLayout = nullptr;
 
@@ -172,4 +186,7 @@ private:
   ID3D11SamplerState *SamplerState = nullptr;
   TMap<std::wstring, ID3D11ShaderResourceView *> TextureMap;
   ID3D11ShaderResourceView *CurrentTextureSRV = nullptr;
+
+
+  ID3D11BlendState* BlendState = nullptr;
 };

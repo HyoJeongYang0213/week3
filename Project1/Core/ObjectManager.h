@@ -32,15 +32,15 @@ public:
 		AllMeshMap.clear();
 	}
 
-	TArray<UObject*> AllObjects;
+	TArray<UObject*> GUObjectArray;
 
 	void AddObject(UObject* Obj)
 	{
-		auto it = std::upper_bound(AllObjects.begin(), AllObjects.end(), Obj,
+		auto it = std::upper_bound(GUObjectArray.begin(), GUObjectArray.end(), Obj,
 			[](const UObject* a, const UObject* b) {
 				return a->GetRenderPriority() < b->GetRenderPriority();
 			});
-		AllObjects.insert(it, Obj);
+		GUObjectArray.insert(it, Obj);
 	}
 	TMap<string_view, ClassInfo*> AllClassInfoMap;
 
@@ -86,9 +86,12 @@ public:
 	void DestroyAllActors();
 	void DestroyAllActor() { DestroyAllActors(); }
 
+	void ReserveDestroy(UObject* target);
+	void ProcessPendingDestroy();
+
 	UObject* Find(uint32 ID)
 	{
-		for (UObject* Obj : AllObjects)
+		for (UObject* Obj : GUObjectArray)
 		{
 			if (Obj->GetID() == ID)
 				return Obj;
@@ -179,6 +182,12 @@ public:
 private:
 	ObjectManager(){}
 
+	struct PendingDestroyEntry
+	{
+		UObject* Target = nullptr;
+		uint32 UUID = 0;
+	};
 
+	TArray<PendingDestroyEntry> PendingDestroyObjects;
 
 };

@@ -20,6 +20,7 @@ void UIManager::Initialize()
     RegisterPanel(new UIPanel_FPS);
     RegisterPanel(new UIPanel_Grid);
 
+    RegisterPanel(new UIPanel_ScenceManager);
 }
 
 // panel 등록
