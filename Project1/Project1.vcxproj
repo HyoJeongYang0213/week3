@@ -214,7 +214,6 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Physics\ACollider.cpp" />
     <ClCompile Include="Physics\CollisionManager.cpp" />
     <ClCompile Include="Render\Buffer\ConstBuffer.cpp" />
-    <ClCompile Include="Render\Buffer\FBoundingBox.cpp" />
     <ClCompile Include="Render\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Mesh.cpp" />
