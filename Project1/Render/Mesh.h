@@ -51,6 +51,8 @@ public:
 		{
 			LocalVertices.push_back(FVector(vertices[i].x, vertices[i].y, vertices[i].z));
 		}
+
+		ComputeLocalBoundingBox();
 	}
 
 	// std::vector 정점 배열 초기화
@@ -68,6 +70,8 @@ public:
 		{
 			LocalVertices.push_back(FVector(vertices[i].x, vertices[i].y, vertices[i].z));
 		}
+
+		ComputeLocalBoundingBox();
 	}
 
 	// TArray 정점 배열 초기화
@@ -85,6 +89,8 @@ public:
 		{
 			LocalVertices.push_back(FVector(vertices[i].x, vertices[i].y, vertices[i].z));
 		}
+
+		ComputeLocalBoundingBox();
 	}
 
 	void SetColor(const FLinearColor& inColor) { CurrentColor = inColor; }
