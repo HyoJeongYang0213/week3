@@ -3,6 +3,7 @@
 #include "FMatrix.h"
 #include "FVector.h"
 #include "FLinearColor.h"
+#include "Containers.h"
 #include "GraphicsEnums.h"
 #include "ConstantBuffer.h"
 #include "RenderMesh.h"
@@ -50,7 +51,7 @@ private:
 	struct ColorConstants
 	{
 		FLinearColor CustomColor;
-		bool UseTexture = false;
+		int32 UseTexture = false;
 		float Padding[3];
 	};
 	static_assert(sizeof(ColorConstants) % 16 == 0);
