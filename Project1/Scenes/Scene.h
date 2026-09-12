@@ -28,7 +28,7 @@ public:
     
     virtual void Update(float deltaTime)
     {
-        auto& objects = OBJECT.AllObjects;
+        auto& objects = OBJECT.GUObjectArray;
         for (size_t i = 0; i < objects.size(); ++i)
         {
             if (objects[i] && objects[i]->GetIsActive())
@@ -45,7 +45,7 @@ public:
 
     virtual void Render()
     {
-        auto& objects = OBJECT.AllObjects;
+        auto& objects = OBJECT.GUObjectArray;
         for (size_t i = 0; i < objects.size(); ++i)
         {
             if (objects[i] && objects[i]->GetIsActive())
@@ -56,6 +56,12 @@ public:
 
                 objects[i]->Render();
             }
+        }
+
+        if (PICK.pickedObjcect)
+        {
+            RENDERER.DrawOutline(PICK.pickedObjcect);
+            PICK.pickedObjcect->Render();
         }
 
         if (AGizmo::MainGizmo) {
