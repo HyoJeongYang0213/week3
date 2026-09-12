@@ -61,6 +61,8 @@ public:
         FMatrix matrix;
         FVector CameraPos;
         float pad;
+        FVector CameraForward;
+        float pad2;
     };
 
 private:
@@ -74,10 +76,11 @@ public:
         data.pad = 0.0f;
     }
 
-    void SetMat(FMatrix mat, const FVector& cameraPos)
+    void SetMat(FMatrix mat, const FVector& cameraPos, const FVector & cameraForward)
     {
         data.matrix = mat.Transpose();
         data.CameraPos = cameraPos;
+        data.CameraForward = cameraForward;
     }
 
     void SetMat(FMatrix mat)

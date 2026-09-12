@@ -10,22 +10,45 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
+// enums.h에 정의된 비트마스킹 ShowFlag 조작 함수
+bool Renderer::IsShowFlagEnabled(EEngineShowFlags flag) const
+{
+    return (ShowFlags & static_cast<uint32>(flag)) != 0;
+}
+
+void Renderer::SetShowFlag(EEngineShowFlags flag, bool enabled)
+{
+    uint32 mask = static_cast<uint32>(flag);
+
+    if (enabled) ShowFlags |= mask;
+    else ShowFlags &= ~mask;
+}
+
+void Renderer::ToggleShowFlag(EEngineShowFlags flag)
+{
+    ShowFlags ^= static_cast<uint32>(flag);
+}
+
 void Renderer::Create(HWND hWindow) {
   CreateDeviceAndSwapChain(hWindow);
   CreateFrameBuffer();
   CreateDepthStencil();
   CreateRasterizerState();
+  CreateBlendState();
   CreateShader();
   CreateColorBuffer();
   CreateSamplerState();
+  CreateFontBlendState();
 }
 
 void Renderer::Release() {
   ReleaseTextures();
   ReleaseSamplerState();
+  ReleaseFontBlendState();
   ReleaseColorBuffer();
   ReleaseDepthStencil();
   ReleaseShader();
+  ReleaseBlendState();
   ReleaseRasterizerState();
   ReleaseFrameBuffer();
   ReleaseDeviceAndSwapChain();
@@ -66,6 +89,30 @@ void Renderer::ReleaseSamplerState() {
     SamplerState->Release();
     SamplerState = nullptr;
   }
+}
+
+void Renderer::CreateFontBlendState()
+{
+    D3D11_BLEND_DESC blendDesc = {};
+    auto& target = blendDesc.RenderTarget[0];
+    target.BlendEnable = TRUE;
+    target.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    target.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    target.BlendOp = D3D11_BLEND_OP_ADD;
+    target.SrcBlendAlpha = D3D11_BLEND_ONE;
+    target.DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+    target.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    target.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    Device->CreateBlendState(&blendDesc, &BlendState);
+}
+
+void Renderer::ReleaseFontBlendState()
+{
+    if (BlendState)
+    {
+        BlendState->Release();
+        BlendState = nullptr;
+    }
 }
 
 void Renderer::ReleaseTextures() {
@@ -238,6 +285,29 @@ void Renderer::ReleaseRasterizerState() {
   }
 }
 
+void Renderer::CreateBlendState()
+{
+    D3D11_BLEND_DESC blendDesc = {};
+    blendDesc.RenderTarget[0].BlendEnable = TRUE;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    Device->CreateBlendState(&blendDesc, &AlphaBlendState);
+}
+
+void Renderer::ReleaseBlendState()
+{
+    if (AlphaBlendState) {
+        AlphaBlendState->Release();
+        AlphaBlendState = nullptr;
+    }
+}
+
 bool Renderer::CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,
                                   ID3D11VertexShader **outVS,
                                   ID3DBlob **outBlob) {
@@ -331,7 +401,7 @@ bool Renderer::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
 
 void Renderer::CreateShader() {
   LPCWSTR shaderPath = L"Resources/Shader/ShaderW0.hlsl";
-  LPCWSTR GridshaderPath = L"Resources/Shader/GridShader.hlsl";
+  LPCWSTR LineshaderPath = L"Resources/Shader/ShaderLine.hlsl";
 
   // Vertex & Pixel Shader 컴파일 및 생성
   ID3DBlob *vsBlob = nullptr;
@@ -339,10 +409,12 @@ void Renderer::CreateShader() {
   CreateVertexShader(shaderPath, "mainVS", &SimpleVertexShader, &vsBlob);
   CreatePixelShader(shaderPath, "mainPS", &SimplePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Outline", &OutlineVertexShader);
-  CreateVertexShader(GridshaderPath, "mainVS_Grid", &GridVertexShader);
-  CreatePixelShader(GridshaderPath, "mainPS_Grid", &GridPixelShader);
+  CreateVertexShader(LineshaderPath, "mainVS_Line", &LineVertexShader);
+  CreatePixelShader(LineshaderPath, "mainPS_Line", &LinePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
   CreatePixelShader(shaderPath, "mainPS_Sky", &SkyPixelShader);
+  CreateVertexShader(L"Resources/Shader/ShaderFont.hlsl", "mainVS", &FontVertexShader);
+  CreatePixelShader(L"Resources/Shader/ShaderFont.hlsl", "mainPS", &FontPixelShader);
 
   // 공용 입력 레이아웃 직접 생성
   CreateInputLayout(FVertexLayouts::Layout, FVertexLayouts::NumElements, vsBlob, &defaultInputLayout);
@@ -368,14 +440,14 @@ void Renderer::ReleaseShader() {
     SkyVertexShader = nullptr;
   }
 
-  if (GridPixelShader) {
-    GridPixelShader->Release();
-    GridPixelShader = nullptr;
+  if (LinePixelShader) {
+      LinePixelShader->Release();
+      LinePixelShader = nullptr;
   }
 
-  if (GridVertexShader) {
-    GridVertexShader->Release();
-    GridVertexShader = nullptr;
+  if (LineVertexShader) {
+      LineVertexShader->Release();
+      LineVertexShader = nullptr;
   }
 
   if (SimplePixelShader) {
@@ -444,15 +516,15 @@ void Renderer::PrepareOutlineShader() {
   DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
 }
 
-void Renderer::PrepareGridShader() {
-  if (CurrentInputLayout != defaultInputLayout) {
-    CurrentInputLayout = defaultInputLayout;
-    DeviceContext->IASetInputLayout(defaultInputLayout);
-  }
+void Renderer::PrepareLineShader()
+{
+    if (CurrentInputLayout != defaultInputLayout) {
+        CurrentInputLayout = defaultInputLayout;
+        DeviceContext->IASetInputLayout(defaultInputLayout);
+    }
 
-  // 그리드 셰이더 설정
-  DeviceContext->VSSetShader(GridVertexShader, nullptr, 0);
-  DeviceContext->PSSetShader(GridPixelShader, nullptr, 0);
+    DeviceContext->VSSetShader(LineVertexShader, nullptr, 0);
+    DeviceContext->PSSetShader(LinePixelShader, nullptr, 0);
 }
 
 void Renderer::PrepareSkyShader() {
@@ -464,11 +536,23 @@ void Renderer::PrepareSkyShader() {
   DeviceContext->PSSetShader(SkyPixelShader, nullptr, 0);
 }
 
+void Renderer::PrepareFontShader()
+{
+    if (CurrentInputLayout != defaultInputLayout)
+    {
+        CurrentInputLayout = defaultInputLayout;
+        DeviceContext->IASetInputLayout(defaultInputLayout);
+    }
+    DeviceContext->VSSetShader(FontVertexShader, nullptr, 0);
+    DeviceContext->PSSetShader(FontPixelShader, nullptr, 0);
+    DeviceContext->OMSetBlendState(BlendState, nullptr, 0xffffffff);
+}
+
 void Renderer::UpdateFrameConstant() {
   Camera &cam = CAMERA;
   cam.vpBuffer->SetMat(cam.GetViewMatrix() *
                            cam.GetProjectionMatrix(wAspectRatio),
-                       cam.GetLocation());
+                       cam.GetLocation(), cam.GetForward());
 }
 
 void Renderer::CreateDepthStencil() {
@@ -677,8 +761,19 @@ void Renderer::DrawOutline(AActor *targetActor) {
   }
 
   // 아웃라인 셰이더 유지 상태로 드로우
+  // 적용된 텍스처(폰트 등) 삭제
+  SetTexture(nullptr);
   mesh->IASet();
-  DeviceContext->Draw(mesh->GetNumVertices(), 0);
+
+  if (mesh->indexbuffer)
+  {
+      mesh->indexbuffer->IASet();
+      DeviceContext->DrawIndexed(mesh->indexbuffer->count, 0, 0);
+  }
+  else
+  {
+      DeviceContext->Draw(mesh->GetNumVertices(), 0);
+  }
 
   SetDefaultDepthState();
 }

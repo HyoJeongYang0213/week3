@@ -38,6 +38,9 @@ public:
         }
 
         PICK.Update();//pickmanager
+
+        // 삭제 예약 된 객체 정리
+        OBJECT.ProcessPendingDestroy();
     }
 
     virtual void Render()

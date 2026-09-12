@@ -124,14 +124,19 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
     <ClInclude Include="App\ConsoleWindow.h" />
     <ClInclude Include="App\GameManager.h" />
+    <ClInclude Include="ATextActor.h" />
     <ClInclude Include="Core\Containers.h" />
     <ClInclude Include="Core\enums.h" />
+    <ClInclude Include="Core\FName.h" />
+    <ClInclude Include="Core\FNamePool.h" />
     <ClInclude Include="Core\Global.h" />
     <ClInclude Include="Core\ObjectManager.h" />
     <ClInclude Include="Core\TemplateLibrary.h" />
     <ClInclude Include="Core\UEngineStatics.h" />
     <ClInclude Include="Core\UObject.h" />
     <ClInclude Include="Core\WeakObjectPtr.h" />
+    <ClInclude Include="FontMeshGenerator.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Library\DirectXTex\DirectXTex.h" />
     <ClInclude Include="Library\ImGui\imconfig.h" />
     <ClInclude Include="Library\ImGui\imgui.h" />
@@ -161,6 +166,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Render\PickingManager.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\UGrid.h" />
+    <ClInclude Include="Render\ULineBatch.h" />
     <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
     <ClInclude Include="Resources\Geometry\Sphere.h" />
     <ClInclude Include="Scenes\SaveLoadManager.h" />
@@ -181,8 +187,11 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
     <ClCompile Include="App\ConsoleWindow.cpp" />
     <ClCompile Include="App\GameManager.cpp" />
+    <ClCompile Include="Core\FName.cpp" />
     <ClCompile Include="Core\ObjectManager.cpp" />
     <ClCompile Include="Core\UObject.cpp" />
+    <ClCompile Include="FontMeshGenerator.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Library\ImGui\imgui.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -218,6 +227,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Render\PickingManager.cpp" />
     <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\UGrid.cpp" />
+    <ClCompile Include="Render\ULineBatch.cpp" />
     <ClCompile Include="Resources\Geometry\CircleGenerator.cpp" />
     <ClCompile Include="Scenes\SaveLoadManager.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
@@ -234,6 +244,18 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
   <ItemGroup>
     <None Include="Resources\Shader\GridShader.hlsl" />
     <None Include="Resources\Shader\ShaderW0.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shader\ShaderLine.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

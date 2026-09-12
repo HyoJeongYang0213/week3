@@ -17,7 +17,7 @@ public:
 	virtual void Update(float deltatime) override;
 	virtual void Render() override;
 
-	
+
 	AGizmo* gizmo = nullptr;
 
 	AWorldAxises* worldAxises;

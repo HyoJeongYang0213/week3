@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "PickingManager.h"
 #include "SaveLoadManager.h"
-
+#include "ULineBatch.h"
 
 
 
@@ -18,6 +18,8 @@ DefaultScene::DefaultScene()
 
 	// Sky 생성
 	skysphere = FObjectFactory::SpawnActor<ASkySphere>();
+
+	
 }
 
 DefaultScene::~DefaultScene()
@@ -38,6 +40,8 @@ void DefaultScene::Initialize()
 
 	// Grid 초기화
 	Ugrid.Initialize();
+
+	LINEBATCH.Initialize();
 }
 
 void DefaultScene::Update(float deltatime)
@@ -63,6 +67,8 @@ void DefaultScene::Render()
 	{
 		gizmo->Render();
 	}
+
+	LINEBATCH.Render();
 
 	IMGUI.RenderAll();
 }

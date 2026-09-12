@@ -69,3 +69,38 @@ void ObjectManager::DestroyAllColliders() {
   ColliderMap.clear();
 }
 
+void ObjectManager::ReserveDestroy(UObject* target)
+{
+    // 1. target이 nullptr이면 반환
+    if (target == nullptr) return;
+
+    // 2. target의 UUID를 지역변수에 저장
+    uint32 tmpID = target->GetID();
+
+    // 3. PendingDestroyObjects를 순회:
+    //    포인터와 UUID가 모두 같은 항목이 있으면 반환
+    for (const PendingDestroyEntry& entry : PendingDestroyObjects)
+    {
+        if (entry.Target == target && entry.UUID == tmpID) return;
+    }
+
+    // 4. 중복이 없으면 { target, UUID }를 push_back
+    PendingDestroyObjects.push_back( {target, tmpID});
+}
+
+void ObjectManager::ProcessPendingDestroy()
+{
+    TArray<PendingDestroyEntry> pending;
+    pending.Swap(PendingDestroyObjects);
+
+    // pending을 순회
+    // IsValidObject(entry.Target, entry.UUID)가 참이면
+    // entry.Target->Destroy() 호출
+    for (const PendingDestroyEntry& entry : pending)
+    {
+        if (IsValidObject(entry.Target, entry.UUID))
+        {
+            entry.Target->Destroy();
+        }
+    }
+}

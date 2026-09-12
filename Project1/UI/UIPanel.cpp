@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIPanel.h"
 #include "Global.h"
+#include "ATextActor.h"
 #include <random>
 
 void UIPanel_Memory::Render()
@@ -103,29 +104,45 @@ void UIPanel_Spawn::Render()
 	{
 		for (int i=0; i<spawnCount; i++)
 		{	
+            AActor* spawnedActor = nullptr;
 			switch(selected_item)
 			{
 				case 0 :
-					FObjectFactory::SpawnColider<ASphere>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ASphere>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 1 :
-					FObjectFactory::SpawnColider<ACube>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ACube>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 2 :
-					FObjectFactory::SpawnColider<ACircle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ACircle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 3 : 
-					FObjectFactory::SpawnColider<ARectangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ARectangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				case 4 :
-					FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+                    spawnedActor = FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
 				default :
 					break;
 			}
+            if (spawnedActor)
+            {
+                // 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
+                ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
+                label->SetScale(FVector(0.25f, 0.25f, 0.25f));
+                label->SetTarget(spawnedActor);
+                label->SetText(std::to_wstring(spawnedActor->GetID()));
+            }
 		}
 			
 	}
+
+    bool bShowUUID = RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText);
+
+    if (ImGui::Checkbox("Show UUID", &bShowUUID))
+    {
+        RENDERER.SetShowFlag(EEngineShowFlags::SF_BillboardText, bShowUUID);
+    }
 
     ImGui::End();
 }

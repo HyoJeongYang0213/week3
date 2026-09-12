@@ -86,6 +86,9 @@ public:
 	void DestroyAllActors();
 	void DestroyAllActor() { DestroyAllActors(); }
 
+	void ReserveDestroy(UObject* target);
+	void ProcessPendingDestroy();
+
 	UObject* Find(uint32 ID)
 	{
 		for (UObject* Obj : AllObjects)
@@ -179,6 +182,12 @@ public:
 private:
 	ObjectManager(){}
 
+	struct PendingDestroyEntry
+	{
+		UObject* Target = nullptr;
+		uint32 UUID = 0;
+	};
 
+	TArray<PendingDestroyEntry> PendingDestroyObjects;
 
 };
