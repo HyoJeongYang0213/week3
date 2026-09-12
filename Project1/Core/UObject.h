@@ -39,12 +39,15 @@ struct ClassInfo // 클래스 정보를 담는 메타 데이터 클래스
 
 class UObject {
 public:
-  // 고유 식별자 기본 발급
-  UObject() : UUID(UEngineStatics::GetUUID()) {}
+  UObject() : UUID(UEngineStatics::GetUUID()) {};
   virtual ~UObject() {}
 
   uint32 GetID() const { return UUID; }
   void SetUUID(uint32 inUUID) { UUID = inUUID; }
+
+  FName GetFName() const { return Name; }
+  FString GetName() const { return Name.ToString(); }
+  void SetName(FString inputName, bool bIsClassName = false) { Name = FName(inputName, bIsClassName); }
 
   virtual string_view GetObjClassName() const {
     return "UObject";
@@ -84,7 +87,7 @@ public:
 
 private:
   uint32 UUID = 0;
-  FName Name;
+  FName Name = NAME_None;
   bool bIsActive = true;
-  const ClassInfo *classinfo; // 포인터 1개만
+  const ClassInfo *classinfo = nullptr; // 포인터 1개만
 };

@@ -4,7 +4,6 @@
 class UEngineStatics
 {
 public:
-public:
     // 인스턴스 생성 차단 (순수 유틸리티 클래스화)
     UEngineStatics() = delete;
 

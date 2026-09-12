@@ -12,8 +12,8 @@ private:
 
 public:
 	constexpr FName() = default;
-	FName(const char* pStr);
-	FName(const FString& str);
+	FName(const char* pStr, bool bIsClassName = false);
+	FName(const FString& Name, bool bIsClassName = false);
 
 	bool operator== (const FName& Other) const;
 	bool operator!= (const FName& Other) const;
@@ -21,7 +21,7 @@ public:
 	bool IsNone() const;
 	int32 Compare(const FName& Other) const;
 	FString ToString() const;
-
+	
 	int32 GetComparisonIndex() const;
 	int32 GetDisplayIndex() const;
 	int32 GetNumber() const;
@@ -29,7 +29,7 @@ public:
 private:
 	FString NormalizeToSmall(const FString& str);
 	pair<FString, int32> ParceNumber(const FString& name) const;
-	FString itos(int32 number) const; 
+	FString itos(int32 number) const;
 }; 
 
 inline constexpr FName NAME_None;

@@ -1,21 +1,33 @@
 #include "pch.h"
 #include "FName.h"
 
-FName::FName(const char* pStr)
-	: FName::FName(FString(pStr))
+FName::FName(const char* pStr, bool bIsClassName)
+	: FName::FName(FString(pStr), bIsClassName)
 {}
 
-FName::FName(const FString& Name)
+FName::FName(const FString& Name, bool bIsClassName)
 {
-	pair<FString, int32> ParceResult = ParceNumber(Name);
-	FString DisplayName = ParceResult.first;
-	Number = ParceResult.second + 1; // 1을 더해서 저장. _0 이면 1 저장
-
+	FString DisplayName;
+	if (!bIsClassName)
+	{
+		pair<FString, int32> ParceResult = ParceNumber(Name);
+		DisplayName = ParceResult.first;
+		Number = ParceResult.second + 1; // 1을 더해서 저장. _0 이면 1 저장
+	}
+	else
+	{
+		DisplayName = FString(Name);
+	}
 	FString ComparisonName = NormalizeToSmall(DisplayName);
 
-	pair<int32, int32> Indecies = FNamePool::Instance().AddName(ComparisonName, DisplayName);
+	pair<int32, int32> Indecies = NAMEPOOL.AddName(ComparisonName, DisplayName);
 	ComparisonIndex = Indecies.first;
 	DisplayIndex = Indecies.second;
+
+	if (bIsClassName)
+	{
+		Number = NAMEPOOL.ClaimNextIndex(ComparisonName) + 1;
+	}
 }
 
 bool FName::operator== (const FName& Other) const
@@ -45,8 +57,8 @@ int32 FName::Compare(const FName& Other) const
 	}
 	else
 	{
-		FString Name = FNamePool::Instance().GetComparisonName(ComparisonIndex);
-		FString OtherName = FNamePool::Instance().GetComparisonName(Other.ComparisonIndex);
+		FString Name = NAMEPOOL.GetComparisonName(ComparisonIndex);
+		FString OtherName = NAMEPOOL.GetComparisonName(Other.ComparisonIndex);
 		for (size_t i = 0; i < Name.size() && i < OtherName.size(); i++)
 		{
 			if (Name[i] - OtherName[i] > 0)
@@ -64,7 +76,7 @@ int32 FName::Compare(const FName& Other) const
 
 FString FName::ToString() const
 {
-	FString Name = FNamePool::Instance().GetDisplayName(DisplayIndex);
+	FString Name = NAMEPOOL.GetDisplayName(DisplayIndex);
 	if (Number)
 	{
 		Name += '_' + itos(Number - 1);
@@ -100,46 +112,50 @@ FString FName::NormalizeToSmall(const FString& Name)
 	return normalizedName;
 }
 
-pair<FString, int32> FName::ParceNumber(const FString& name) const
+pair<FString, int32> FName::ParceNumber(const FString& Name) const
 {
-	bool bIsNumber = false;
-	bool bIsUnderbar = false;
-	int32 Number = 0;
-	TArray<char> Numbers = {};
-	FString ParcedName = {};
-	for (char c : name)
+	constexpr int32 NO_NUMBER = -1;
+	const int32 Len = Name.size();
+
+	auto IsDigit = [](char c) { return '0' <= c && c <= '9'; };
+
+	if (Len == 0 || !IsDigit(Name[Len - 1]))
 	{
-		if (bIsNumber)
-		{
-			Numbers.Add(c);
-		}
-		if (c == '_')
-		{
-			bIsUnderbar = true;
-		}
-		if (c != '_' && bIsUnderbar && '0' <= c && c <= '9')
-		{
-			Numbers.Add(c);
-			bIsUnderbar = false;
-			bIsNumber = true;
-		}
-		if (!bIsNumber && !bIsUnderbar)
-		{
-			ParcedName.push_back(c);
-		}
+		return { Name, NO_NUMBER };
 	}
-	if (bIsNumber) 
+
+	int32 Seperator = Len - 1;
+
+	while (Seperator >= 0 && IsDigit(Name[Seperator]))
 	{
-		for (int32 i = 0; i < Numbers.Num(); i++)
-		{
-			Number = Number * 10 + (Numbers[i] - '0');
-		}
+		--Seperator;
 	}
-	else
+
+	if (Seperator <= 0 || Name[Seperator] != '_')
 	{
-		Number = -1;
+		return { Name, NO_NUMBER };
 	}
-	return { ParcedName, Number };
+
+	const int32 DigitStart = Seperator + 1;
+	const int32 DigitLen = Len - DigitStart;
+
+	if (DigitLen >= 2 && Name[DigitStart] == '0')
+	{
+		return { Name, NO_NUMBER };
+	}
+
+	if (DigitLen > 10)
+	{
+		return { Name, NO_NUMBER };
+	}
+
+	int32 Value = 0;
+	for (int32 i = DigitStart; i < Len; ++i)
+	{
+		Value = Value * 10 + (Name[i] - '0');
+	}
+
+	return { Name.substr(0, Seperator) , Value};
 }
 
 FString FName::itos(int32 Number) const
