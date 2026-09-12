@@ -4,6 +4,7 @@
 #include "GameManager.h"
 #include "UEngineStatics.h"
 #include "enums.h"
+#include "FName.h"
 #include <cstdint>
 #include <string_view>
 #include <typeinfo>
@@ -83,6 +84,7 @@ public:
 
 private:
   uint32 UUID = 0;
+  FName Name;
   bool bIsActive = true;
   const ClassInfo *classinfo; // 포인터 1개만
 };

@@ -217,6 +217,12 @@
     <ClInclude Include="UI\UIPanel.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Core\FName.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FNamePool.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">
@@ -326,19 +332,19 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Core\FName.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FNamePool.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Resources\Shader\GridShader.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
+    <None Include="Resources\Shader\GridShader.hlsl" />
+    <None Include="Resources\Shader\ShaderW0.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">
