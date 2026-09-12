@@ -1,13 +1,13 @@
-#pragma once
+﻿#pragma once
 
 #include "FVertexSimple.h"
 #include <vector>
 #include <cmath>
 
 // 구체 정점 동적 계산 생성 함수 (bInward: true면 안쪽(하늘), false면 바깥쪽(일반 구체))
-inline std::vector<FVertexData> CreateSphereVertices(float radius = 0.5f, int slices = 20, int stacks = 20, bool bInward = false)
+inline TArray<FVertexData> CreateSphereVertices(float radius = 0.5f, int slices = 20, int stacks = 20, bool bInward = false)
 {
-	std::vector<FVertexData> vertices;
+	TArray<FVertexData> vertices;
 	vertices.reserve(stacks * slices * 6);
 
 	const float pi = 3.14159265358979323846f;
@@ -96,7 +96,7 @@ inline const FVertexData font_quad_vertices[] =
 
 inline const uint32 font_quad_indices[] = { 0, 1, 2, 2, 1, 3 };
 
-inline FVertexData triangle_vertices[] =
+inline TArray<FVertexData> triangle_vertices =
 {
 	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
 	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
@@ -107,7 +107,7 @@ inline FVertexData triangle_vertices[] =
 	
 };
 
-inline FVertexData cube_vertices[] =
+inline const TArray<FVertexData> cube_vertices =
 {
 	// Front face (Z+) - 빨강 (Red)
 	{ -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f },
@@ -2749,7 +2749,7 @@ inline FVertexData arrow_vertices[] =
 	{  0.0900f, 0.70f,  0.0000f }
 };
 
-inline FVertexData rectangle_vertices[] =
+inline TArray<FVertexData> rectangle_vertices =
 {
     // Triangle A
     { -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
@@ -2775,7 +2775,7 @@ inline FVertexData rectangle_vertices[] =
 
 
 const float INF_DIST = 10000.0f; // 우주 끝까지 거리
-inline FVertexData worldAxisVertices[] =
+inline TArray<FVertexData> worldAxisVertices =
 {
 	// X축 (빨간색 선: -10000 ~ +10000)
 	{ 0, 0.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f },

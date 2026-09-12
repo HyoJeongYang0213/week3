@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "AActor.h"
 #include "CircleGenerator.h"
@@ -44,6 +44,28 @@ public:
     bSleeping = false;
     SleepTimer = 0.0f;
   }
+
+    FString GetMeshName() const
+    {
+		switch (Primitive)
+		{
+		case EPrimitive::Sphere:
+			return "Sphere";
+		case EPrimitive::Cube:
+			return "Cube";
+		case EPrimitive::Circle:
+			return "Circle";
+		case EPrimitive::Rectangle:
+			return "Rectangle";
+		case EPrimitive::Triangle:
+			return "Triangle";
+		case EPrimitive::Gizmo:
+			return "Gizmo";
+		case EPrimitive::None:
+			return "None";
+		}
+		return "None";
+    }
 
   virtual void Pressed() override;
   virtual void Released() override;

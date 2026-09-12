@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "UObject.h"
 #include "CollisionManager.h"
@@ -108,11 +108,11 @@ public:
 		static ObjectManager Manager;
 		return Manager;
 	}
-	
-	
-	
 
-	TMap<FString, Mesh*> AllMeshMap; 
+
+
+
+	TMap<FString, Mesh*> AllMeshMap;
 	//같은 메쉬는 저장해서 사용
 
 	Mesh* GetMesh(const FString& name)
@@ -168,7 +168,7 @@ public:
 		AllMeshMap[name] = inMesh;
 		return inMesh;
 	}
-	
+
 	ObjectManager(const ObjectManager&) = delete;
 	ObjectManager& operator=(const ObjectManager&) = delete;
 
@@ -180,7 +180,7 @@ public:
 	uint32 TotalAllocationCount = 0;
 
 private:
-	ObjectManager(){}
+	ObjectManager() {}
 
 	struct PendingDestroyEntry
 	{
