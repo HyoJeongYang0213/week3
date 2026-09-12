@@ -57,7 +57,7 @@ public:
 		static_assert(is_base_of_v<UObject, T>);
 
 		T* Obj = new T(std::forward<Args>(args)...);
-		Obj->SetUUID(UEngineStatics::GetUUID());
+		//Obj->SetUUID(UEngineStatics::GetUUID());
 		OBJECT.AddObject(Obj);
 
 		ClassInfo* info = GetStaticClassInfo<T>();

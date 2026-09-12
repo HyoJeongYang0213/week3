@@ -12,8 +12,8 @@ private:
 
 public:
 	constexpr FName() = default;
-	FName(const char* pStr, bool bIsClassName);
-	FName(const FString& Name, bool bIsClassName);
+	FName(const char* pStr, bool bIsClassName = false);
+	FName(const FString& Name, bool bIsClassName = false);
 
 	bool operator== (const FName& Other) const;
 	bool operator!= (const FName& Other) const;
