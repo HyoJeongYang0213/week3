@@ -9,7 +9,7 @@ FNamePool::FNamePool()
 	DisplayMap.Add("", 0);
 }
 
-FNamePool& FNamePool::Instance()
+FNamePool& FNamePool::GetInstance()
 {
 	static FNamePool instance;
 	return instance;
@@ -79,4 +79,9 @@ int32 FNamePool::GetDisplayIndex(const FString& DisplayName) // O(1)
 const FString& FNamePool::GetDisplayName(int32 index) const // O(1)
 {
 	return DisplayList[index];
+}
+
+int32 FNamePool::ClaimNextIndex(const FString& ClassName)
+{
+	return ClassCountMap[ClassName]++;
 }

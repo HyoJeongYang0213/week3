@@ -63,6 +63,8 @@ public:
 		ClassInfo* info = GetStaticClassInfo<T>();
 		Obj->SetClassInfo(info);
 
+		Obj->SetName(FString(info->Name), true);
+
 		return static_cast<T*>(Obj);
 	}
 
