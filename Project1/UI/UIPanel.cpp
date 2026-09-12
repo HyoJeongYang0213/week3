@@ -4,6 +4,7 @@
 #include "ATextActor.h"
 #include "AActor.h"
 #include <random>
+#include <DefaultScene.h>
 
 void UIPanel_Memory::Render()
 {
@@ -318,6 +319,23 @@ void UIPanel_FPS::Render()
     ImGui::End();
 }
 
+void UIPanel_Grid::Render()
+{
+    ImGui::Begin("Grid", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    
+    Scene* scene = SCENE.GetCurrentScene();
+    DefaultScene* defaultScene = dynamic_cast<DefaultScene*>(scene);
+
+    float cellSize = defaultScene->Ugrid.GetCellSize();
+    if (ImGui::SliderFloat("Grid Interval", &cellSize, 0.15f, 2.0f))
+    {
+        defaultScene->Ugrid.SetCellSize(cellSize);
+        // ----------------------------
+        // editor.ini 저장 추가!!
+        // ----------------------------
+    }
+    ImGui::End();
+}
 void UIPanel_ScenceManager::Render()
 {
     

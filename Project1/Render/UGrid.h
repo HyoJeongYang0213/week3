@@ -11,6 +11,9 @@ public:
     void Update(const FVector& CameraLocation);
     void Render();
 
+    void SetCellSize(float inSize) { CellSize = inSize; }
+    float GetCellSize() { return CellSize; }
+
     void CreateVertices();
 
 private:

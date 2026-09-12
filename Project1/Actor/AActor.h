@@ -59,6 +59,8 @@ public:
   }
   bool IsSelected() const;
 
+  void DrawingBox();
+
   virtual void Pressed() {}
   virtual void Released() {}
 

@@ -166,3 +166,21 @@ bool Mesh::bIsPicked(const FRay& worldRay, const Transform& transform, float& ou
 
 	return false;
 }
+
+void Mesh::ComputeLocalBoundingBox()
+{
+	if (LocalVertices.empty()) return;
+
+	BoundingBox.minX = BoundingBox.maxX = LocalVertices[0].x;
+	BoundingBox.minY = BoundingBox.maxY = LocalVertices[0].y;
+	BoundingBox.minZ = BoundingBox.maxZ = LocalVertices[0].z;
+
+	for (auto vertice : LocalVertices) {
+		BoundingBox.minX = min(BoundingBox.minX, vertice.x);
+		BoundingBox.maxX = max(BoundingBox.maxX, vertice.x);
+		BoundingBox.minY = min(BoundingBox.minY, vertice.y);
+		BoundingBox.maxY = max(BoundingBox.maxY, vertice.y);
+		BoundingBox.minZ = min(BoundingBox.minZ, vertice.z);
+		BoundingBox.maxZ = max(BoundingBox.maxZ, vertice.z);
+	}
+}

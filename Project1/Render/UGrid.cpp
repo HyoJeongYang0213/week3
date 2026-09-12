@@ -21,28 +21,30 @@ void UGrid::Render() {
       FLinearColor lineColor;
       int worldZ = (int)round((Location.z + z * CellSize) / CellSize);
 
+      if (worldZ == 0) continue;
       if (worldZ % interval == 0)
           lineColor = FLinearColor::DarkGray;
       else if (worldZ % interval != 0)
           lineColor = FLinearColor::Gray;
       
       LINEBATCH.AddLine(
-          FVector(Location.x - HalfSize * CellSize, 0.01f, Location.z + z * CellSize),
-          FVector(Location.x + HalfSize * CellSize, 0.01f, Location.z + z * CellSize),
+          FVector(Location.x - HalfSize * CellSize, 0.0f, Location.z + z * CellSize),
+          FVector(Location.x + HalfSize * CellSize, 0.0f, Location.z + z * CellSize),
           lineColor);
   }
   for (int x = -HalfSize; x <= HalfSize; ++x) {
       FLinearColor lineColor;
       int worldX = (int)round((Location.x + x * CellSize) / CellSize);
 
+      if (worldX == 0) continue;
       if (worldX % interval == 0)
           lineColor = FLinearColor::DarkGray;
       else if (worldX % interval != 0)
           lineColor = FLinearColor::Gray;
 
       LINEBATCH.AddLine(
-          FVector(Location.x + x * CellSize, 0.01f, Location.z - HalfSize * CellSize),
-          FVector(Location.x + x * CellSize, 0.01f, Location.z + HalfSize * CellSize),
+          FVector(Location.x + x * CellSize, 0.0f, Location.z - HalfSize * CellSize),
+          FVector(Location.x + x * CellSize, 0.0f, Location.z + HalfSize * CellSize),
           lineColor);
   }
 }
