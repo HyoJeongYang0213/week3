@@ -38,9 +38,6 @@ void DefaultScene::Initialize()
 	// ImGUI UI 생성
 	IMGUI.Initialize();
 
-	// Grid 초기화
-	Ugrid.Initialize();
-
 	LINEBATCH.Initialize();
 }
 
@@ -60,7 +57,7 @@ void DefaultScene::Update(float deltatime)
 
 void DefaultScene::Render()
 {
-	GridRenderer.Render({ CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT)), CAMERA.GetLocation(), static_cast<float>(WIN_WIDTH), static_cast<float>(WIN_HEIGHT) }, Ugrid.GetRenderData());
+	//GridRenderer.Render({ CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT)), CAMERA.GetLocation(), static_cast<float>(WIN_WIDTH), static_cast<float>(WIN_HEIGHT) }, Ugrid.GetRenderData());
 	Scene::Render();
 
 	if (gizmo)

@@ -137,7 +137,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Core\UObject.h" />
     <ClInclude Include="Core\WeakObjectPtr.h" />
     <ClInclude Include="FontMeshGenerator.h" />
-    <ClInclude Include="IndexBuffer.h" />
+    <ClInclude Include="IndexBufferO.h" />
     <ClInclude Include="Library\DirectXTex\DirectXTex.h" />
     <ClInclude Include="Library\ImGui\imconfig.h" />
     <ClInclude Include="Library\ImGui\imgui.h" />
@@ -208,7 +208,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Core\ObjectManager.cpp" />
     <ClCompile Include="Core\UObject.cpp" />
     <ClCompile Include="FontMeshGenerator.cpp" />
-    <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="IndexBufferO.cpp" />
     <ClCompile Include="Library\ImGui\imgui.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>

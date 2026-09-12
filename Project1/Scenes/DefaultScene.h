@@ -26,8 +26,5 @@ public:
 	UGrid Ugrid;
 
 	ASkySphere* skysphere;
-
-private:
-	FGridRenderer GridRenderer;
 };
 

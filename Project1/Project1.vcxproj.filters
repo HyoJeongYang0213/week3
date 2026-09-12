@@ -228,7 +228,7 @@
     </ClInclude>
     <ClInclude Include="Core\Pointers.h">
       <Filter>Core</Filter>
-    </CIInclude>
+    </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
@@ -291,7 +291,7 @@
     </ClInclude>
     <ClInclude Include="Render\FGridRenderer.h">
       <Filter>Render\New\Renderer</Filter>
-    </CIInclude>
+    </ClInclude>
     <ClInclude Include="Render\ULineBatch.h">
       <Filter>Render</Filter>
     </ClInclude>

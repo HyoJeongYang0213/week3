@@ -46,7 +46,7 @@ void Mesh::InitIndexBuffer(const uint32* indices, UINT count)
 
 	if (indices && count > 0)
 	{
-		indexbuffer = new IndexBuffer(indices, count);
+		indexbuffer = new IndexBufferO(indices, count);
 	}
 }
 
