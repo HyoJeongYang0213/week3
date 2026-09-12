@@ -150,6 +150,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Physics\ACollider.h" />
     <ClInclude Include="Physics\CollisionManager.h" />
     <ClInclude Include="Render\Buffer\ConstBuffer.h" />
+    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
     <ClInclude Include="Render\Buffer\FConstants.h" />
     <ClInclude Include="Render\Buffer\FLinearColor.h" />
     <ClInclude Include="Render\Buffer\FPixelConstant.h" />
@@ -213,6 +214,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Physics\ACollider.cpp" />
     <ClCompile Include="Physics\CollisionManager.cpp" />
     <ClCompile Include="Render\Buffer\ConstBuffer.cpp" />
+    <ClCompile Include="Render\Buffer\FBoundingBox.cpp" />
     <ClCompile Include="Render\Buffer\VertexBuffer.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Mesh.cpp" />

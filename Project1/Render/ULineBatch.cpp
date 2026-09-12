@@ -49,6 +49,8 @@ void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinear
 
 void ULineBatch::Render()
 {
+	if (!VertexBuffer) return;
+
 	if (Vertices.size() > MaxVertexCount) {
 		VertexBuffer->Release();
 		MaxVertexCount = Vertices.size() * 2;
@@ -60,6 +62,8 @@ void ULineBatch::Render()
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		DEVICE->CreateBuffer(&desc, nullptr, &VertexBuffer);
+
+		if (!VertexBuffer) return;
 	}
 
 	FMatrix World = FMatrix::Identity();
