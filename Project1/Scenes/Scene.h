@@ -54,18 +54,6 @@ public:
                 objects[i]->Render();
             }
         }
-
-        if (AGizmo::MainGizmo) {
-            AActor* selected = AGizmo::MainGizmo->GetTargetActor();
-            if (selected) {
-                RENDERER.DrawOutline(selected);
-            }
-            // 기즈모를 항상 최상단에 렌더링
-            AGizmo::MainGizmo->Render();
-        }
-
-        // 기본 깊이 상태 복원
-        RENDERER.SetDefaultDepthState();
     }
 
     FFadeOverlay& GetFadeOverlay() { return m_fadeOverlay; }
