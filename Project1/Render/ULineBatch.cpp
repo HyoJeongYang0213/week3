@@ -30,7 +30,7 @@ void ULineBatch::Initialize()
 	WorldBuffer = new MatrixBuffer();
 }
 
-void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinearColor& Color)
+void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinearColor& Color, bool bOverlay)
 {
 	if (Vertices.size() + 2 > MaxVertexCount) return;
 
@@ -42,6 +42,10 @@ void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinear
 	v1.x = end.x; v1.y = end.y; v1.z = end.z;
 	v1.r = Color.r; v1.g = Color.g; v1.b = Color.b; v1.a = Color.a;
 
+	float overlayFlag = bOverlay ? 1.0f : 0.0f;
+	v0.u = overlayFlag;
+	v1.u = overlayFlag;
+
 	Vertices.Add(v0);
 	Vertices.Add(v1);
 
@@ -49,6 +53,8 @@ void ULineBatch::AddLine(const FVector& start, const FVector& end, const FLinear
 
 void ULineBatch::Render()
 {
+	if (!VertexBuffer) return;
+
 	if (Vertices.size() > MaxVertexCount) {
 		VertexBuffer->Release();
 		MaxVertexCount = Vertices.size() * 2;
@@ -60,6 +66,8 @@ void ULineBatch::Render()
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 		DEVICE->CreateBuffer(&desc, nullptr, &VertexBuffer);
+
+		if (!VertexBuffer) return;
 	}
 
 	FMatrix World = FMatrix::Identity();

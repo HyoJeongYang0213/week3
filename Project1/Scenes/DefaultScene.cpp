@@ -61,12 +61,24 @@ void DefaultScene::Render()
 	//GridRenderer.Render({ CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT)), CAMERA.GetLocation(), static_cast<float>(WIN_WIDTH), static_cast<float>(WIN_HEIGHT) }, Ugrid.GetRenderData());
 	Scene::Render();
 
+	if (AGizmo::MainGizmo) {
+		AActor* selected = AGizmo::MainGizmo->GetTargetActor();
+		if (selected) {
+			RENDERER.DrawOutline(selected);
+		}
+		// 기즈모를 항상 최상단에 렌더링
+		AGizmo::MainGizmo->Render();
+	}
+
+	LINEBATCH.Render();
+
 	if (gizmo)
 	{
 		gizmo->Render();
 	}
 
-	LINEBATCH.Render();
+	// 기본 깊이 상태 복원
+	RENDERER.SetDefaultDepthState();
 
 	IMGUI.RenderAll();
 }

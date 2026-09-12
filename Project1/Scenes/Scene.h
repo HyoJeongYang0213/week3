@@ -29,7 +29,7 @@ public:
     
     virtual void Update(float deltaTime)
     {
-        auto& objects = OBJECT.AllObjects;
+        auto& objects = OBJECT.GUObjectArray;
         for (size_t i = 0; i < objects.size(); ++i)
         {
             if (objects[i] && objects[i]->GetIsActive())
@@ -46,8 +46,8 @@ public:
 
     virtual void Render()
     {
-        auto& objects = OBJECT.AllObjects;
-		TArray<FMeshRenderData> MeshRenderData;
+        auto& objects = OBJECT.GUObjectArray;
+        TArray<FMeshRenderData> MeshRenderData;
         for (size_t i = 0; i < objects.size(); ++i)
         {
             if (objects[i] && objects[i]->GetIsActive())
@@ -76,6 +76,12 @@ public:
 			CAMERA.GetLocation(), 
 			MeshRenderData,
 			CAMERA.ViewMode == EViewMode::Wireframe);
+
+        if (PICK.pickedObjcect)
+        {
+            RENDERER.DrawOutline(PICK.pickedObjcect);
+            PICK.pickedObjcect->Render();
+        }
 
         if (AGizmo::MainGizmo) {
             AActor* selected = AGizmo::MainGizmo->GetTargetActor();

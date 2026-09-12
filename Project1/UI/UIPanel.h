@@ -23,6 +23,13 @@ public:
     void Render() override;
 };
 
+// 그리드 관련 창
+class UIPanel_Grid : public IUIPanel
+{
+public:
+    void Render() override;
+};
+
 // 스폰 창
 class UIPanel_Spawn : public IUIPanel
 {
@@ -32,6 +39,13 @@ public:
 
 // 세이브/로드창
 class UIPanel_SaveLoad : public IUIPanel
+{
+public:
+    void Render() override;
+};
+
+// 씬 메니져 창 
+class UIPanel_ScenceManager : public IUIPanel
 {
 public:
     void Render() override;

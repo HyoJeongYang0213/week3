@@ -5,6 +5,7 @@
 #include "Containers.h"
 #include "Transform.h"
 #include "FLinearColor.h"
+#include "FBoundingBox.h"
 
 struct FRay;
 
@@ -54,6 +55,8 @@ public:
 		{
 			LocalVertices.push_back(FVector(vertices[i].x, vertices[i].y, vertices[i].z));
 		}
+
+		ComputeLocalBoundingBox();
 	}
 
 	// std::vector 정점 배열 초기화
@@ -71,6 +74,8 @@ public:
 		{
 			LocalVertices.push_back(FVector(vertices[i].x, vertices[i].y, vertices[i].z));
 		}
+
+		ComputeLocalBoundingBox();
 	}
 
 	// TArray 정점 배열 초기화
@@ -88,6 +93,8 @@ public:
 		{
 			LocalVertices.push_back(FVector(vertices[i].x, vertices[i].y, vertices[i].z));
 		}
+
+		ComputeLocalBoundingBox();
 	}
 
 	void SetColor(const FLinearColor& inColor) { CurrentColor = inColor; }
@@ -105,6 +112,8 @@ public:
 	void IASet(D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	bool bIsPicked(const FRay& worldRay, const Transform& transform, float& outDistance);
+	FBoundingBox GetBoundingBox() const { return BoundingBox; };
+	void ComputeLocalBoundingBox();
 
 	bool bIsFont = false;
 
@@ -118,4 +127,9 @@ public:
 	UINT numVertices = 0;
 	FLinearColor CurrentColor = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	TArray<FVector> LocalVertices; // 마우스 피킹용 로컬 정점 데이터
+
+private:
+	FBoundingBox BoundingBox{};
 };
+
+

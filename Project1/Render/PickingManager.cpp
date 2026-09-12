@@ -71,7 +71,7 @@ AActor* PickingManager::Pick()
 	AActor* closest = nullptr;
 	float closestDist = FLT_MAX;
 
-	for (auto object : OBJECT.AllObjects) {
+	for (auto object : OBJECT.GUObjectArray) {
 		AActor* actor = Cast<AActor>(object);
 		if (actor == nullptr || Cast<AGizmo>(actor) || Cast<AWorldAxises>(actor)) continue;
 

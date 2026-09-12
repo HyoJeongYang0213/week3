@@ -100,7 +100,11 @@ inline TArray<FVertexData> triangle_vertices =
 {
 	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
 	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
-	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f } // Bottom-right vertex (green)
+	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+	{ 1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
+	{ 0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f } // Top vertex (red)
+	
 };
 
 inline const TArray<FVertexData> cube_vertices =
@@ -2748,14 +2752,25 @@ inline FVertexData arrow_vertices[] =
 inline TArray<FVertexData> rectangle_vertices =
 {
     // Triangle A
-    { -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-left (green)
+    { -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
     {  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
     { -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
 
     // Triangle B
     {  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-    {  1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-right (blue)
+    {  1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
     { -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+
+	// Triangle -A
+	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+	{ -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
+
+	// Triangle -B
+	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+	{ 1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
+	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+	
 };
 
 

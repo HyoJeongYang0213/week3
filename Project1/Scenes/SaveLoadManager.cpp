@@ -114,7 +114,7 @@ void SaveLoadManager::SaveScene(const FString& path)
     
     int index = 0;
 
-    for (UObject* obj : OBJECT.AllObjects)
+    for (UObject* obj : OBJECT.GUObjectArray)
     {
         AActor* actor = dynamic_cast<ACollider*>(obj);
         if (!actor) continue;

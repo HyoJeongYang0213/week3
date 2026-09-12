@@ -15,6 +15,12 @@ public:
 	void Render();
 	void Update(const FVector& CameraLocation);
 
+    void Initialize();
+
+    void SetCellSize(float inSize) { CellSize = inSize; }
+    float GetCellSize() { return CellSize; }
+
+    void CreateVertices();
 
 private:
 	FVector Location = FVector(0, 0, 0);

@@ -59,6 +59,8 @@ public:
   }
   bool IsSelected() const;
 
+  void DrawingBox();
+
   virtual void Pressed() {}
   virtual void Released() {}
 
@@ -68,7 +70,7 @@ public:
 
 public:
   Transform transform;
-  EPrimitive Primitive = EPrimitive::Cube;
+  EPrimitive Primitive = EPrimitive::None;
   MatrixBuffer *worldBuffer = nullptr;
   FLinearColor Color = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f);
   Mesh *mesh = nullptr;

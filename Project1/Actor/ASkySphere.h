@@ -18,6 +18,7 @@ public:
 
 		// 카메라를 둘러싸는 기본 크기 설정
 		SetScale(FVector(500.0f, 500.0f, 500.0f));
+		SetPrimitive(EPrimitive::None);
 	}
 
 	virtual ~ASkySphere() = default;
