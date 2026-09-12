@@ -27,8 +27,8 @@ void UGrid::Render() {
           lineColor = FLinearColor::Gray;
       
       LINEBATCH.AddLine(
-          FVector(Location.x - HalfSize * CellSize, 0.01f, Location.z + z * CellSize),
-          FVector(Location.x + HalfSize * CellSize, 0.01f, Location.z + z * CellSize),
+          FVector(Location.x - HalfSize * CellSize, 0.0f, Location.z + z * CellSize),
+          FVector(Location.x + HalfSize * CellSize, 0.0f, Location.z + z * CellSize),
           lineColor);
   }
   for (int x = -HalfSize; x <= HalfSize; ++x) {
@@ -41,8 +41,8 @@ void UGrid::Render() {
           lineColor = FLinearColor::Gray;
 
       LINEBATCH.AddLine(
-          FVector(Location.x + x * CellSize, 0.01f, Location.z - HalfSize * CellSize),
-          FVector(Location.x + x * CellSize, 0.01f, Location.z + HalfSize * CellSize),
+          FVector(Location.x + x * CellSize, 0.0f, Location.z - HalfSize * CellSize),
+          FVector(Location.x + x * CellSize, 0.0f, Location.z + HalfSize * CellSize),
           lineColor);
   }
 }
