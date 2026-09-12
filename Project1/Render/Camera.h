@@ -1,11 +1,19 @@
-#pragma once
+﻿#pragma once
+
 #include "Transform.h"
+#include "Containers.h"
 
 class CameraBuffer;
 
 enum {
 	Perspective,
 	Orthographic,
+};
+
+enum class EViewMode : uint8
+{
+	Unlit,
+	Wireframe,
 };
 
 class Camera
@@ -67,10 +75,12 @@ public:
 	void SetVPBuffer();
 
 	CameraBuffer* vpBuffer;
+	EViewMode ViewMode = EViewMode::Unlit;
 private:
 	Transform transform;
 
 	int ProjectionMode = Perspective;
+	
 	float OrthoWidth = 10.0f;
 
 	float fov = 60.0f;

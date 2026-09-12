@@ -229,9 +229,6 @@
     <ClInclude Include="Core\Pointers.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="IndexBuffer.h">
-      <Filter>Render\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="FontMeshGenerator.h">
       <Filter>Resources\Geometry</Filter>
     </ClInclude>
@@ -289,11 +286,14 @@
     <ClInclude Include="Render\VertexShader.h">
       <Filter>Render\New\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Render\FGridRenderer.h">
-      <Filter>Render\New\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Render\ULineBatch.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FMeshRenderer.h">
+      <Filter>Render\New\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBufferO.h">
+      <Filter>Render\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,9 +401,6 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Render\Buffer</Filter>
-    </ClCompile>
     <ClCompile Include="FontMeshGenerator.cpp">
       <Filter>Resources\Geometry</Filter>
     </ClCompile>
@@ -422,6 +419,15 @@
     <ClCompile Include="Render\RenderSystem.cpp">
       <Filter>Render\New\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBufferO.cpp">
+      <Filter>Render\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FName.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
@@ -431,6 +437,9 @@
       <Filter>Resources\Shader</Filter>
     </None>
     <None Include="Resources\Shader\GridShader.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\ShaderLine.hlsl">
       <Filter>Resources\Shader</Filter>
     </None>
   </ItemGroup>

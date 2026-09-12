@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ACollider.h"
 #include "Global.h"
 
@@ -46,24 +46,32 @@ void ACollider::Released() {}
 ACube::ACube(const FLinearColor &inColor) : ACollider(inColor) {
   SetMesh(OBJECT.GetOrCreateMesh("Cube", cube_vertices));
   Primitive = EPrimitive::Cube;
+	
+	RESOURCES.CreateMesh("Cube", cube_vertices);
 }
 
 ASphere::ASphere(const FLinearColor &inColor) : ACollider(inColor) {
   // 구체 정점 최초 계산 후 캐시
-  static const std::vector<FVertexData> sphereVertices =
+  static const TArray<FVertexData> sphereVertices =
       CreateSphereVertices(0.5f, 20, 20, false);
   SetMesh(OBJECT.GetOrCreateMesh("Sphere", sphereVertices));
   Primitive = EPrimitive::Sphere;
+
+	RESOURCES.CreateMesh("Sphere", sphereVertices);
 }
 
 ATriangle::ATriangle(const FLinearColor &inColor) : ACollider(inColor) {
   SetMesh(OBJECT.GetOrCreateMesh("Triangle", triangle_vertices));
   Primitive = EPrimitive::Triangle;
+
+    RESOURCES.CreateMesh("Triangle", triangle_vertices);
 }
 
 ARectangle::ARectangle(const FLinearColor &inColor) : ACollider(inColor) {
   SetMesh(OBJECT.GetOrCreateMesh("Rectangle", rectangle_vertices));
   Primitive = EPrimitive::Rectangle;
+
+    RESOURCES.CreateMesh("Rectangle", rectangle_vertices);
 }
 
 ACircle::ACircle(const FLinearColor &inColor) : ACollider(inColor) {
@@ -71,4 +79,6 @@ ACircle::ACircle(const FLinearColor &inColor) : ACollider(inColor) {
       CircleGenerator::MakeCircle(32, 1.0f, 1.0f, 0.0f, 1.0f);
   SetMesh(OBJECT.GetOrCreateMesh("Circle", circle_vertices));
   Primitive = EPrimitive::Circle;
+	
+	RESOURCES.CreateMesh("Circle", circle_vertices);
 }

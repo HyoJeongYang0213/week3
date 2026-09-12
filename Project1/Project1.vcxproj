@@ -165,8 +165,8 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Render\Buffer\VertexBufferO.h" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\ConstantBuffer.h" />
+    <ClInclude Include="Render\FMeshRenderer.h" />
     <ClInclude Include="Render\GraphicsPipeline.h" />
-    <ClInclude Include="Render\FGridRenderer.h" />
     <ClInclude Include="Render\IndexBuffer.h" />
     <ClInclude Include="Render\Material.h" />
     <ClInclude Include="Render\Mesh.h" />

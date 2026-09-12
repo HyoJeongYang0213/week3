@@ -27,6 +27,7 @@ public:
 	RenderContext& GetContext() { return Context; }
 	RenderResources& GetResources() { return Resources; }
 	PipelineCache& GetPipelines() { return Pipelines; }
+	const GraphicsPipeline& GetOrCreatePipeline(const GraphicsPipelineDesc& Desc) { return Pipelines.GetOrCreate(Desc); }
 
 	ID3D11RenderTargetView& GetBackBufferRTV() const { return *BackBufferRTV.Get(); }
 	ID3D11DepthStencilView& GetDepthStencilView() const { return *DepthStencilView.Get(); }

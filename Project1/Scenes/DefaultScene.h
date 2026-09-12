@@ -6,7 +6,6 @@
 #include "PickingManager.h"
 #include "ASkySphere.h"
 #include "UGrid.h"
-#include "FGridRenderer.h"
 
 class DefaultScene : public Scene
 {

@@ -13,7 +13,9 @@ void RenderResources::RegisterDefaultResources()
 	PixelShaders.Resize(static_cast<int>(PixelShaderType::Count));
 	SamplerStates.Resize(static_cast<int>(Sampler::Count));
 
+	CreateVertexShader(VertexShaderType::Object, L"Resources/Shader/ShaderW0.hlsl", "mainVS");
 	CreateVertexShader(VertexShaderType::Grid, L"Resources/Shader/GridShader.hlsl", "mainVS_Grid");
+	CreatePixelShader(PixelShaderType::Object, L"Resources/Shader/ShaderW0.hlsl", "mainPS");
 	CreatePixelShader(PixelShaderType::Grid, L"Resources/Shader/GridShader.hlsl", "mainPS_Grid");
 }
 

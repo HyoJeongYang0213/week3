@@ -57,6 +57,7 @@ void DefaultScene::Update(float deltatime)
 
 void DefaultScene::Render()
 {
+	Ugrid.Render();
 	//GridRenderer.Render({ CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT)), CAMERA.GetLocation(), static_cast<float>(WIN_WIDTH), static_cast<float>(WIN_HEIGHT) }, Ugrid.GetRenderData());
 	Scene::Render();
 
