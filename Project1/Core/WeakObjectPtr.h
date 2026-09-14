@@ -64,6 +64,3 @@ public:
 	bool IsValid() const { return Get() != nullptr; }
 	void Reset() { RawPtr = nullptr; ObjectUUID = 0; }
 };
-
-template<typename T>
-using TWeakPtr = TWeakObjectPtr<T>;

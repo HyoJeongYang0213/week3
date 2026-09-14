@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "UIPanel.h"
 #include "Global.h"
 #include "ATextActor.h"
@@ -33,6 +33,12 @@ void UIPanel_Camera::Render()
     if (ImGui::Checkbox("Orthgraphic", &isOrtho)) {
         cam.SetProjectionMode(isOrtho ? Orthographic : Perspective);
     }
+
+	int ViewMode = static_cast<int>(cam.ViewMode);
+	if (ImGui::Combo("View Mode", &ViewMode, "Unlit\0Wireframe\0"))
+	{
+		cam.ViewMode = static_cast<EViewMode>(ViewMode);
+	}
 
     float fov = cam.GetFOV();
     if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))

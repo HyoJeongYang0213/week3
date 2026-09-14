@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene.h"
 #include "ACollider.h"
 #include "AGizmo.h"
@@ -25,6 +25,5 @@ public:
 	UGrid Ugrid;
 
 	ASkySphere* skysphere;
-
 };
 

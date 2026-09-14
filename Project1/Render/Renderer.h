@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Containers.h"
 #include "FConstants.h"
@@ -26,6 +26,7 @@ public:
 
   ID3D11Device *GetDevice() { return Device; }
   ID3D11DeviceContext *GetDeviceContext() { return DeviceContext; }
+  IDXGISwapChain* GetSwapChain() { return SwapChain; }
 
 public:
   // CreateDeviceAndSwapChain

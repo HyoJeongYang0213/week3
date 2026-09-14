@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameManager.h"
 #include "Scenes/DefaultScene.h"
 #include "SceneManager.h"
@@ -57,6 +57,8 @@ void GameManager::Init(HINSTANCE hInstance)
 	Renderer& renderer = RENDERER;
 	renderer.Create(m_mainWindow);
 	renderer.CreateShader();
+
+	RENDER.Initialize(m_mainWindow);
 
 	InitImgui();
 
