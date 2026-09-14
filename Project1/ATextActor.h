@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "AActor.h"
 #include "FontMeshGenerator.h"
@@ -13,7 +13,7 @@ public:
 	ATextActor()
 	{
 		SetColor(FLinearColor(0.0f, 0.0f, 0.0f, 1.0f));
-		Primitive == EPrimitive::None;
+		Primitive = EPrimitive::None;
 	}
 
 	virtual ~ATextActor() = default;
@@ -36,19 +36,26 @@ public:
 		AActor::Update(deltaTime);
 	}
 
-	virtual void Render() override
-	{
-		if (bIsUUIDLabel && !RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText)) return;
-		AActor::Render();
-	}
-
 	// 텍스트마다 메쉬 개별 생성
 	void SetText(const std::wstring& text)
 	{
 		if (Text == text && mesh != nullptr) return;
+		
 		Text = text;
-		Mesh* newMesh = FontMeshGenerator::Generate(Text, GlyphAdvance);
-		SetMesh(newMesh, true);
+		Geometry = FontMeshGenerator::Generate(Text, GlyphAdvance);
+
+		TArray<FVector> Vertices;
+		Vertices.Reserve(Geometry.Indices.Num());
+		for (uint32 Index : Geometry.Indices)
+		{
+			if (Index < Geometry.Vertices.Num())
+			{
+				const FVertexData& Vertex = Geometry.Vertices[static_cast<size_t>(Index)];
+				Vertices.Add(FVector(Vertex.x, Vertex.y, Vertex.z));
+			}
+		}
+
+		SetMesh(new Mesh(Vertices), true);
 	}
 
 	const std::wstring& GetText() const { return Text; }
@@ -68,7 +75,6 @@ public:
 			TargetActor = nullptr;
 			DeActive();
 			OBJECT.ReserveDestroy(this);
-			return;
 		}
 	}
 
@@ -78,6 +84,13 @@ public:
 		return AActor::bIsPicked(Ray, OutDistance);
 	}
 
+	FString GetRenderMeshName() const override
+	{
+		return "Text/" + GetID();
+	}
+
+	const FontGeometry& GetGeometry() const { return Geometry; }
+
 private:
 	std::wstring Text;
 
@@ -86,6 +99,8 @@ private:
 
 	AActor* TargetActor = nullptr;
 	uint32 TargetUUID = 0;
+
+	FontGeometry Geometry;
 
 	void UpdateLabelTransform()
 	{

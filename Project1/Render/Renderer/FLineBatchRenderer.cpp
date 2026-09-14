@@ -21,7 +21,7 @@ void FLineBatchRenderer::AddLine(const FVector& Start, const FVector& End, const
 	Vertices.Add(v1);
 }
 
-void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer)
+void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer, bool bDepthEnable)
 {
 	bool bResized = false;
 	while (Vertices.size() > MaxVertexCount) {
@@ -29,7 +29,7 @@ void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer)
 		bResized = true;
 	}
 	if (bResized) {
-		VertexBuffer = DEVICEN.CreateVertexBuffer(nullptr, sizeof(FVertexData), MaxVertexCount);
+		VertexBuffer = DEVICE.CreateVertexBuffer(nullptr, sizeof(FVertexData), MaxVertexCount);
 	}
 
 	GraphicsPipelineDesc PipelineDesc{
@@ -41,11 +41,7 @@ void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer)
 			.CullMode = D3D11_CULL_NONE,
 		},
 		.Blend = BlendMode::AlphaBlend,
-		.Depth = {
-			.bEnable = true,
-			.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
-			.DepthFunc = D3D11_COMPARISON_LESS_EQUAL
-		}
+		.Depth = bDepthEnable ? DepthDesc{} : DepthDesc{.bEnable = false },
 	};
 	auto& Pipeline = RENDER.GetOrCreatePipeline(PipelineDesc);
 	CONTEXT.SetPipeline(Pipeline);

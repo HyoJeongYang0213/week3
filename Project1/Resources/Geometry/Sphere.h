@@ -96,7 +96,7 @@ inline const FVertexData font_quad_vertices[] =
 
 inline const uint32 font_quad_indices[] = { 0, 1, 2, 2, 1, 3 };
 
-inline TArray<FVertexData> triangle_vertices =
+inline const TArray<FVertexData> triangle_vertices =
 {
 	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
 	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
@@ -159,7 +159,7 @@ inline const TArray<FVertexData> cube_vertices =
 };
 
 // 안쪽을 바라보는 스카이스피어용 정점 배열
-inline FVertexData skysphere_vertices[] = {
+inline const TArray<FVertexData> skysphere_vertices = {
 	{ 0.000000f, 0.500000f, 0.000000f, 0.500000f, 1.000000f, 0.500000f, 1.000000f },
 	{ 0.078217f, 0.493844f, 0.000000f, 0.578217f, 0.993844f, 0.500000f, 1.000000f },
 	{ 0.074389f, 0.493844f, 0.024171f, 0.574389f, 0.993844f, 0.524170f, 1.000000f },
@@ -2566,7 +2566,7 @@ inline FVertexData skysphere_vertices[] = {
 inline auto& sphere_vertices = skysphere_vertices;
 
 // 3D 입체 화살표 (원통 기둥 + 원뿔 머리) - 순수 Position 3D 좌표 (FVertexData)
-inline FVertexData arrow_vertices[] =
+inline const TArray<FVertexData> arrow_vertices =
 {
 	// ==========================================
 	// 1. 원통 바닥 뚜껑 (y = 0.0f) - 아래를 향함 (시계 반대 방향)
@@ -2749,7 +2749,7 @@ inline FVertexData arrow_vertices[] =
 	{  0.0900f, 0.70f,  0.0000f }
 };
 
-inline TArray<FVertexData> rectangle_vertices =
+inline const TArray<FVertexData> rectangle_vertices =
 {
     // Triangle A
     { -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
@@ -2789,7 +2789,7 @@ inline TArray<FVertexData> worldAxisVertices =
 };
 
 // 3D Scale 기즈모 축 (원통 기둥 + 상단 정육면체 큐브 머리 - Unreal 스타일)
-inline FVertexData scale_axis_vertices[] =
+inline const TArray<FVertexData> scale_axis_vertices =
 
 {
     // 원통 밑면 (y = 0.0f)
@@ -2839,7 +2839,7 @@ inline FVertexData scale_axis_vertices[] =
 };
 
 // 3D Rotate 기즈모 원형 링 (언리얼 스타일 3D 튜브 링, XZ 평면 중심반지름 1.0f)
-inline FVertexData rotate_ring_vertices[] =
+inline const TArray<FVertexData> rotate_ring_vertices =
 {
     // Segment 0 - Top
     { 0.9750f, 0.0125f, 0.0000f }, { 1.0250f, 0.0125f, 0.0000f }, { 1.0094f, 0.0125f, 0.1780f },

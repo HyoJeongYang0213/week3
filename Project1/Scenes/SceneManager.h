@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 //#include "UScene.h"
 class Scene;
 class Renderer;
@@ -9,7 +9,6 @@ public:
     static SceneManager& GetInstance();
     Scene* GetCurrentScene() { return m_currentScene; }
     FString GetCurrentSceneName() { return m_currentSceneName; }
-    void Initialize();
 
     void AddScene(const FString& name, Scene* scene);
     void RequestChangeScene(const FString& name);

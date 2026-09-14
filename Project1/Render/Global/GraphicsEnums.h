@@ -8,6 +8,8 @@ enum class VertexShaderType : uint8
 	Mesh,
 	Line,
 	Outline,
+	Sky,
+	Font,
 
 	Count,
 	None = 0xFF,
@@ -17,6 +19,8 @@ enum class PixelShaderType : uint8
 {
 	Mesh,
 	Line,
+	Sky,
+	Font,
 
 	Count,
 	None = 0xFF,

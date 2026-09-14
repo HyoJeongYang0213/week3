@@ -14,12 +14,12 @@ public:
 	}
 
 	void AddLine(const FVector & Start, const FVector& End, const FLinearColor& Color, bool bOverlay = false);
-	void Render(const ConstantBuffer& FrameBuffer);
+	void Render(const ConstantBuffer& FrameBuffer, bool bDepthEnable = true);
 
 private:
 	FLineBatchRenderer() :
-		VertexBuffer(DEVICEN.CreateVertexBuffer(nullptr, sizeof(FVertexData), 10000)),
-		ObjectBuffer(DEVICEN.CreateConstantBuffer(sizeof(ObjectConstants))) {};
+		VertexBuffer(DEVICE.CreateVertexBuffer(nullptr, sizeof(FVertexData), 10000)),
+		ObjectBuffer(DEVICE.CreateConstantBuffer(sizeof(ObjectConstants))) {};
 
 	VertexBuffer VertexBuffer;
 	ConstantBuffer ObjectBuffer;

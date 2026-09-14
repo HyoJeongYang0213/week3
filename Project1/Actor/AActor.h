@@ -2,11 +2,11 @@
 
 #include "FLinearColor.h"
 #include "FVertexSimple.h"
-#include "GlobalBuffer.h"
 #include "Mesh.h"
+#include "RenderMesh.h"
+#include "Material.h"
 #include "Transform.h"
 #include "UObject.h"
-#include "VertexBuffer.h"
 #include "enums.h"
 
 
@@ -20,7 +20,6 @@ class AActor : public UObject {
 public:
   AActor(const FLinearColor &inColor = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f));
   virtual ~AActor();
-  virtual void Render() override;
   virtual void Update(float Deltatime) override;
   virtual void Destroy() override;
 
@@ -66,14 +65,11 @@ public:
   virtual void Pressed() {}
   virtual void Released() {}
 
-  void SetWorldBuffer();
-
   bool isInvalid = false;
 
 public:
   Transform transform;
   EPrimitive Primitive = EPrimitive::None;
-  MatrixBuffer *worldBuffer = nullptr;
   FLinearColor Color = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f);
   Mesh *mesh = nullptr;
   bool bOwnsMesh = false;

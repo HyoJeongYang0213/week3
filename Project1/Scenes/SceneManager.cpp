@@ -1,21 +1,11 @@
 ﻿#include "pch.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "Renderer.h"
-
 
 SceneManager& SceneManager::GetInstance()
 {
-    static SceneManager instance;
-    return instance;
-}
-
-void SceneManager::Initialize()
-{
-	for (auto& it : m_scenes)
-	{
-		it.second->Initialize();
-	}
+	static SceneManager instance;
+	return instance;
 }
 
 void SceneManager::AddScene(const FString& name, Scene* scene)
@@ -35,37 +25,12 @@ void SceneManager::RequestChangeScene(const FString& name)
 
 void  SceneManager::ChangeScene(const FString& name) 
 {
-	if (m_currentScene != nullptr) 
-	{
-		m_currentScene->Exit();
-	}
 	m_currentScene = m_scenes[name];
 	m_currentSceneName = name;
-	if (m_currentScene != nullptr) 
-	{
-		m_currentScene->Enter();
-	}
 }
 
 void SceneManager::Update(float deltaTime)
 {
-	//if (m_currentScene)
-	//{
-	//	m_currentScene->GetFadeOverlay().Update(deltaTime);
-	//}
-
-	//if (m_hasPendingSceneChange && (m_currentScene == nullptr || !m_currentScene->GetFadeOverlay().IsFading()))
-	//{
-	//	m_hasPendingSceneChange = false;
-	//	string nextScene = m_pendingSceneName;
-	//	ChangeScene(nextScene);
-	//	if (m_currentScene)
-	//	{
-	//		m_currentScene->GetFadeOverlay().StartFadeIn(1.0f);
-	//	}
-	//}
-
-
 	if (m_currentScene)
 	{
 		m_currentScene->Update(deltaTime);

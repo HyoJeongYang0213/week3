@@ -47,6 +47,9 @@ private:
 	friend class RenderSystem;
 
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> Context;
+	
+	const GraphicsPipeline* BoundPipeline = nullptr;
+	UINT8 BoundStencilRef = 0u;
 };
 
 template <typename T>

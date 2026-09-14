@@ -13,6 +13,16 @@ void RenderResources::RegisterDefaultResources()
 	GetModuleFileNameW(nullptr, Buffer, 256);
 	FWString ExecutableDirectory = filesystem::path(Buffer).parent_path();
 
+	CreateMesh("Cube", cube_vertices);
+	CreateMesh("Sphere", CreateSphereVertices(0.5f, 20, 20, false));
+	CreateMesh("Triangle", triangle_vertices);
+	CreateMesh("Rectangle", rectangle_vertices);
+	CreateMesh("Circle", CircleGenerator::MakeCircle(32, 1.0f, 1.0f, 0.0f, 1.0f));
+	CreateMesh("GizmoLocation", arrow_vertices);
+	CreateMesh("GizmoRotate", rotate_ring_vertices);
+	CreateMesh("GizmoScale", scale_axis_vertices);
+	CreateMesh("SkySphere", skysphere_vertices);
+
 	VertexShaders.Resize(static_cast<int>(VertexShaderType::Count));
 	PixelShaders.Resize(static_cast<int>(PixelShaderType::Count));
 	SamplerStates.Resize(static_cast<int>(Sampler::Count));
@@ -20,8 +30,18 @@ void RenderResources::RegisterDefaultResources()
 	CreateVertexShader(VertexShaderType::Mesh, ExecutableDirectory +L"\\Shader\\MeshVS.cso");
 	CreateVertexShader(VertexShaderType::Line, ExecutableDirectory + L"\\Shader\\LineVS.cso");
 	CreateVertexShader(VertexShaderType::Outline, ExecutableDirectory + L"\\Shader\\OutlineVS.cso");
+	CreateVertexShader(VertexShaderType::Sky, ExecutableDirectory + L"\\Shader\\SkyVS.cso");
+	CreateVertexShader(VertexShaderType::Font, ExecutableDirectory + L"\\Shader\\FontVS.cso");
+
 	CreatePixelShader(PixelShaderType::Mesh, ExecutableDirectory + L"\\Shader\\MeshPS.cso");
 	CreatePixelShader(PixelShaderType::Line, ExecutableDirectory + L"\\Shader\\LinePS.cso");
+	CreatePixelShader(PixelShaderType::Sky, ExecutableDirectory + L"\\Shader\\SkyPS.cso");
+	CreatePixelShader(PixelShaderType::Font, ExecutableDirectory + L"\\Shader\\FontPS.cso");
+
+	CreateTexture("SkyTexture", L"Resources\\Textures\\Sky.jpg"); // TODO: 릴리즈 시 수정
+	CreateTexture("FontAtlas", L"Resources\\Textures\\Pretendard-Regular.dds"); // TODO: 릴리즈 시 수정
+
+	SamplerStates[static_cast<uint8>(Sampler::LinearWrap)] = Device.CreateSamplerState(Sampler::LinearWrap);
 }
 
 const RenderMesh* RenderResources::GetMesh(const FString& Name)
@@ -105,8 +125,17 @@ const Texture* RenderResources::GetTexture(const FString& Name)
 
 const Texture& RenderResources::CreateTexture(const FString& Name, const FWString& FileName)
 {
+	const bool bDDS = std::filesystem::path(FileName).extension() == L".dds";
+
 	DirectX::ScratchImage Image;
-	assert(SUCCEEDED(DirectX::LoadFromWICFile(FileName.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, Image)));
+	if (bDDS)
+	{
+		DirectX::LoadFromDDSFile(FileName.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, Image);
+	}
+	else
+	{
+		DirectX::LoadFromWICFile(FileName.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, Image);
+	}
 
 	Textures[Name] = Texture{};
 	DirectX::CreateShaderResourceView(&Device.GetNativeDevice(), Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &Textures[Name]->SRV);

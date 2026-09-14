@@ -123,38 +123,24 @@ public:
 		return nullptr;
 	}
 
-	template <typename VertexType, size_t N>
-	Mesh* GetOrCreateMesh(const FString& name, const VertexType(&vertices)[N])
+	Mesh* GetOrCreateMesh(const FString& name, const std::span<const FVector>& Vertices)
 	{
 		auto it = AllMeshMap.find(name);
 		if (it != AllMeshMap.end())
 			return it->second;
 
-		Mesh* newMesh = new Mesh(vertices);
+		Mesh* newMesh = new Mesh(Vertices);
 		AllMeshMap[name] = newMesh;
 		return newMesh;
 	}
 
-	template <typename VertexType>
-	Mesh* GetOrCreateMesh(const FString& name, const TArray<VertexType>& vertices)
+	Mesh* GetOrCreateMesh(const FString& name, const std::span<const FVertexData>& Vertices)
 	{
 		auto it = AllMeshMap.find(name);
 		if (it != AllMeshMap.end())
 			return it->second;
 
-		Mesh* newMesh = new Mesh(vertices);
-		AllMeshMap[name] = newMesh;
-		return newMesh;
-	}
-
-	template <typename VertexType>
-	Mesh* GetOrCreateMesh(const FString& name, const std::vector<VertexType>& vertices)
-	{
-		auto it = AllMeshMap.find(name);
-		if (it != AllMeshMap.end())
-			return it->second;
-
-		Mesh* newMesh = new Mesh(vertices);
+		Mesh* newMesh = new Mesh(Vertices);
 		AllMeshMap[name] = newMesh;
 		return newMesh;
 	}

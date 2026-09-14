@@ -8,6 +8,7 @@ struct Material
 {
 	VertexShaderType VertexShader;
 	PixelShaderType PixelShader;
+	VertexLayout Layout;
 
 	FString Texture; // TODO: FName으로 변경
 	Sampler Sampler;
@@ -21,8 +22,7 @@ struct Material
 	const void* GetConstantData() const { return ConstantData.GetData(); }
 	UINT GetConstantSize() const { return static_cast<UINT>(ConstantData.Num()); }
 
-private:
-	TArray<uint8> ConstantData;
+	TArray<uint8> ConstantData{};
 };
 
 template <typename T> requires std::is_trivially_copyable_v<T>

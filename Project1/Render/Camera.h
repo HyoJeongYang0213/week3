@@ -20,7 +20,6 @@ class Camera
 {
 public:
 	Camera();
-	~Camera();
 
 	static Camera& GetInstance() {
 		static Camera instance;
@@ -72,10 +71,12 @@ public:
 	float GetOrthWidth() { return OrthoWidth; }
 
 	void Update();
-	void SetVPBuffer();
 
-	CameraBuffer* vpBuffer;
 	EViewMode ViewMode = EViewMode::Unlit;
+
+	EEngineShowFlags ShowFlags =
+		EEngineShowFlags::SF_Primitives |
+		EEngineShowFlags::SF_BillboardText;
 private:
 	Transform transform;
 

@@ -29,12 +29,10 @@ public:
 	PipelineCache& GetPipelines() { return Pipelines; }
 	const GraphicsPipeline& GetOrCreatePipeline(const GraphicsPipelineDesc& Desc) { return Pipelines.GetOrCreate(Desc); }
 
-	//const D3D11_VIEWPORT& GetViewport() const { return Viewport; }
-	const D3D11_VIEWPORT& GetViewport() const { return RENDERER.ViewportInfo; }
-	//ID3D11RenderTargetView& GetBackBufferRTV() const { return *BackBufferRTV.Get(); }
-	ID3D11RenderTargetView& GetBackBufferRTV() const { return *RENDERER.FrameBufferRTV; }
-	//ID3D11DepthStencilView& GetDepthStencilView() const { return *DepthStencilView.Get(); }
-	ID3D11DepthStencilView& GetDepthStencilView() const { return *RENDERER.depthStencilView; }
+	const D3D11_VIEWPORT& GetViewport() const { return Viewport; }
+	ID3D11RenderTargetView& GetBackBufferRTV() const { return *BackBufferRTV.Get(); }
+	ID3D11DepthStencilView& GetDepthStencilView() const { return *DepthStencilView.Get(); }
+	void SwapBuffer() { SwapChain->Present(0, 0); }
 
 	RenderSystem(const RenderSystem&) = delete;
 	RenderSystem& operator=(const RenderSystem&) = delete;

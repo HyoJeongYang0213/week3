@@ -24,9 +24,9 @@ public:
 	void Render(const ConstantBuffer& FrameBuffer, const FOutlineRenderData& Data);
 
 	FOutlineRenderer() :
-		ObjectBuffer(DEVICEN.CreateConstantBuffer(sizeof(ObjectConstants))),
-		FrameBuffer(DEVICEN.CreateConstantBuffer(sizeof(FrameConstants))),
-		ColorBuffer(DEVICEN.CreateConstantBuffer(sizeof(ColorConstants))) {}
+		ObjectBuffer(DEVICE.CreateConstantBuffer(sizeof(ObjectConstants))),
+		FrameBuffer(DEVICE.CreateConstantBuffer(sizeof(FrameConstants))),
+		ColorBuffer(DEVICE.CreateConstantBuffer(sizeof(ColorConstants))) {}
 
 private:
 	// ShaderW0.hlsl

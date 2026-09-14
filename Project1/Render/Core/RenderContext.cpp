@@ -114,6 +114,13 @@ void RenderContext::SetSampler(UINT Slot, ID3D11SamplerState& SamplerState)
 
 void RenderContext::SetPipeline(const GraphicsPipeline& Pipeline, UINT8 StencilRef)
 {
+	if (BoundPipeline == &Pipeline && StencilRef == BoundStencilRef)
+	{
+		return;
+	}
+	BoundPipeline = &Pipeline;
+	BoundStencilRef = StencilRef;
+
 	Context->IASetInputLayout(Pipeline.GetInputLayout());
 	Context->VSSetShader(&Pipeline.GetVertexShader(), nullptr, 0u);
 	Context->PSSetShader(Pipeline.GetPixelShader(), nullptr, 0u);

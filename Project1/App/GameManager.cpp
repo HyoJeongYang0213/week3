@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "GameManager.h"
-#include "Scenes/DefaultScene.h"
+#include "Scene.h"
 #include "SceneManager.h"
 #include "Camera.h"
 #include "ConsoleWindow.h"
@@ -25,8 +25,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			UINT width = LOWORD(lParam);
 			UINT height = HIWORD(lParam);
 
-			RENDERER.Resize(width, height);
-			//RENDER.Resize(width, height);
+			RENDER.Resize(width, height);
 			ConsoleWindow::GetInstance().RequestResize();
 		}
 		break;
@@ -54,18 +53,13 @@ GameManager::~GameManager()
 void GameManager::Init(HINSTANCE hInstance)
 {
 	Initwindow(hInstance);
-
-	Renderer& renderer = RENDERER;
-	renderer.Create(m_mainWindow);
-	renderer.CreateShader();
-
 	RENDER.Initialize(m_mainWindow);
 
 	InitImgui();
+	IMGUI.Initialize();
 
-	SCENE.AddScene("Default", new DefaultScene());
+	SCENE.AddScene("Default", new Scene());
 	SCENE.ChangeScene("Default");
-	SCENE.Initialize();
 }
 
 void GameManager::Initwindow(HINSTANCE hInstance)
@@ -94,7 +88,7 @@ void GameManager::InitImgui()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init((void*)m_mainWindow);
-	ImGui_ImplDX11_Init(RENDERER.Device, RENDERER.DeviceContext);
+	ImGui_ImplDX11_Init(&DEVICE.GetNativeDevice(), &CONTEXT.GetNativeContext());
 }
 
 void GameManager::mainLoop()
@@ -119,8 +113,6 @@ void GameManager::Update()
 
 void GameManager::Render()
 {
-	Renderer& renderer = RENDERER;
-
 	// 프레임 버퍼 클리어 및 뷰포트 설정
 	constexpr float ClearColor[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	CONTEXT.SetRenderTarget(RENDER.GetBackBufferRTV(), &RENDER.GetDepthStencilView());
@@ -130,13 +122,11 @@ void GameManager::Render()
 
 	ConsoleWindow::GetInstance().DrawConsole();
 
-	renderer.UpdateFrameConstant();
-	CAMERA.SetVPBuffer();
-
 	// 씬 오브젝트 렌더링
 	SCENE.Render();
 
 	// 임구이 렌더링
+	IMGUI.RenderAll();
 	ImGui::Render();
 
 	ImDrawData* drawData = ImGui::GetDrawData();
@@ -146,7 +136,7 @@ void GameManager::Render()
 	}
 
 	// 스왑체인 버퍼 교체
-	renderer.SwapBuffer();
+	RENDER.SwapBuffer();
 }
 
 void GameManager::ReleaseAll()
@@ -162,9 +152,6 @@ void GameManager::ReleaseAll()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-
-	// 렌더러 리소스 해제
-	Renderer& renderer = RENDERER;
-	renderer.ReleaseShader();
-	renderer.Release();
+	
+	RENDER.Shutdown();
 }

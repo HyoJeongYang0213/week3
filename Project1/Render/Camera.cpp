@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Camera.h"
 #include "Global.h"
 #include "Transform.h"
@@ -9,14 +9,6 @@ Camera::Camera()
 	//기본 카메라 위치 및 회전 설정
 	transform.SetLocation(FVector(3.336f, 3.282f, -4.715f));
 	transform.SetRotation(FQuaternion::FromEuler(0.391f, -0.468f, 0.0f));
-
-	vpBuffer = new CameraBuffer();
-}
-
-
-Camera::~Camera()
-{
-	delete vpBuffer;
 }
 
 void Camera::Rotate(float deltaYaw, float deltaPitch)
@@ -94,11 +86,3 @@ void Camera::Update()
 		Rotate(delta.x * 0.2f, delta.y * 0.2f);
 	}
 }
-
-void Camera::SetVPBuffer()
-{
-	vpBuffer->SetVSBuffer(1);
-	vpBuffer->SetPSBuffer(1);
-}
-
-

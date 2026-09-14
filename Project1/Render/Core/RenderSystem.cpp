@@ -30,32 +30,26 @@ void RenderSystem::Initialize(HWND Window)
 	CreateDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	//D3D11CreateDeviceAndSwapChain(
-	//	nullptr,
-	//	D3D_DRIVER_TYPE_HARDWARE,
-	//	nullptr,
-	//	CreateDeviceFlags,
-	//	FeatureLevels,
-	//	ARRAYSIZE(FeatureLevels),
-	//	D3D11_SDK_VERSION,
-	//	&SwapChainDesc,
-	//	&SwapChain,
-	//	&Device.Device,
-	//	nullptr,
-	//	&Context.Context
-	//);
-
-	Device.Device = DEVICE;
-	Context.Context = DC;
-	SwapChain = RENDERER.GetSwapChain();
+	D3D11CreateDeviceAndSwapChain(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		CreateDeviceFlags,
+		FeatureLevels,
+		ARRAYSIZE(FeatureLevels),
+		D3D11_SDK_VERSION,
+		&SwapChainDesc,
+		&SwapChain,
+		&Device.Device,
+		nullptr,
+		&Context.Context);
 
 	RECT ClientRect{};
 	GetClientRect(Window, &ClientRect);
 
-	//CreateSwapChainResources(
-	//	static_cast<UINT>(ClientRect.right - ClientRect.left),
-	//	static_cast<UINT>(ClientRect.bottom - ClientRect.top)
-	//);
+	CreateSwapChainResources(
+		static_cast<UINT>(ClientRect.right - ClientRect.left),
+		static_cast<UINT>(ClientRect.bottom - ClientRect.top));
 
 	Resources.RegisterDefaultResources();
 }
@@ -73,7 +67,6 @@ void RenderSystem::Present(bool bVsync)
 
 void RenderSystem::Resize(UINT Width, UINT Height)
 {
-	// TODO: 애초에 SwapChain이 nullptr인 경우에는 Resize가 호출되지 않아야함
 	if (!SwapChain || Width == 0u || Height == 0u)
 	{
 		return;
@@ -88,7 +81,7 @@ void RenderSystem::Resize(UINT Width, UINT Height)
 
 	SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0u);
 
-	//CreateSwapChainResources(Width, Height);
+	CreateSwapChainResources(Width, Height);
 }
 
 void RenderSystem::CreateSwapChainResources(UINT Width, UINT Height)

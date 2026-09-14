@@ -3,8 +3,10 @@
 #include "Global.h"
 #include "ATextActor.h"
 #include "AActor.h"
+#include "Scene.h"
+#include "AGizmo.h"
+#include "TemplateLibrary.h"
 #include <random>
-#include <DefaultScene.h>
 
 void UIPanel_Memory::Render()
 {
@@ -145,11 +147,10 @@ void UIPanel_Spawn::Render()
 			
 	}
 
-    bool bShowUUID = RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText);
-
+    bool bShowUUID = (CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None;
     if (ImGui::Checkbox("Show UUID", &bShowUUID))
     {
-        RENDERER.SetShowFlag(EEngineShowFlags::SF_BillboardText, bShowUUID);
+		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
     }
 
     ImGui::End();
@@ -229,10 +230,6 @@ void UIPanel_Picking::Render()
     				color.a = 1.0f;
     			}
     			pickedActor->SetColor(color);
-    			if (pickedActor->GetMesh())
-    			{
-    				pickedActor->GetMesh()->SetColor(color);
-    			}
     			if (PICK.pickedObjcect && !dynamic_cast<AGizmoAxis*>(PICK.pickedObjcect.Get()))
     			{
     				PICK.pickedObjcect->SetColor(color);
@@ -330,13 +327,12 @@ void UIPanel_Grid::Render()
     ImGui::Begin("Grid", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     
     Scene* scene = SCENE.GetCurrentScene();
-    DefaultScene* defaultScene = dynamic_cast<DefaultScene*>(scene);
 
 
-    float CellSize = defaultScene->Grid.CellSize;
+    float CellSize = scene->GetGrid().CellSize;
     if (ImGui::SliderFloat("Grid Interval", &CellSize, 0.15f, 2.0f))
     {
-        defaultScene->Grid.CellSize = CellSize;
+        scene->GetGrid().CellSize = CellSize;
         // ----------------------------
         // editor.ini 저장 추가!!
         // ----------------------------

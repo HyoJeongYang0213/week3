@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "AGizmo.h"
-#include "Renderer.h"
 #include "PickingManager.h"
 #include "ObjectManager.h"
 
@@ -9,10 +8,10 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 	: Axis(inAxis), mode(&mode)
 {
 	Primitive = EPrimitive::Gizmo;
-	// ObjectManager를 통해 기즈모 화살표 메시 공유 및 LocalVertices 재활용
+	// ObjectManager를 통해 기즈모 화살표 메시 공유 및 Vertices 재활용
 	SetMesh(OBJECT.GetOrCreateMesh("GizmoLocation", arrow_vertices));
-	SetMesh(OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices));
-	SetMesh(OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices));
+	OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices);
+	OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices);
 
 
 	transform.SetScale({ 0.7f, 0.7f, 0.7f });
@@ -38,11 +37,6 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 	}
 
 	srcColor = Color;
-}
-
-AGizmoAxis::~AGizmoAxis()
-{
-	// 공유 메시는 ObjectManager가 관리하며 worldBuffer는 AActor::~AActor()가 해제함
 }
 
 void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
@@ -82,55 +76,8 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 		transform.SetWorldMatrix(localMat * parentTrans);
 	}
 
-	worldBuffer->SetMat(transform.WorldMat);
-
 	AActor::Update(DeltaTime);
-
-	if (bSelected || bHovered)
-	{
-		HighlightAxe();
-	}
-	else
-	{
-		SetColor(srcColor);
-	}
 }
-
-void AGizmoAxis::Render()
-{
-	if (!mesh)
-		return;
-
-	// 깊이 판정 비활성화 (물체에 가려지지 않고 항상 최상단 렌더링)
-	RENDERER.SetGizmoDepthState();
-
-	worldBuffer->SetVSBuffer(0);
-
-	switch (*mode)
-	{
-	case EGizmoMode::Translation:
-		SetMesh(OBJECT.GetOrCreateMesh("GizmoLocation", arrow_vertices));
-
-		break;
-	case EGizmoMode::Rotation:
-		SetMesh(OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices));
-
-		break;
-	case EGizmoMode::Scale:
-		SetMesh(OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices));
-
-		break;
-	default:
-		break;
-	}
-
-	mesh->SetColor(Color);
-	mesh->Render();
-
-	// 기본 깊이 상태로 복원
-	RENDERER.SetDefaultDepthState();
-}
-
 
 void AGizmoAxis::Picked()
 {
@@ -204,7 +151,6 @@ void AGizmoAxis::Picked()
 	//피킹 선택 상태 활성화
 	currentDragDist = 0.0f;
 	bSelected = true;
-	HighlightAxe();
 }
 
 void AGizmoAxis::Pressed()
@@ -298,9 +244,11 @@ void AGizmoAxis::Released()
 	SetColor(srcColor);
 }
 
-void AGizmoAxis::HighlightAxe()
+FLinearColor AGizmoAxis::GetDisplayColor() const
 {
-	SetColor(Highlighting(srcColor));
+	return (bHovered || bSelected)
+		? Highlighting(srcColor)
+		: srcColor;
 }
 
 AGizmo::AGizmo()
@@ -317,17 +265,15 @@ AGizmo::AGizmo()
 
 AGizmo::~AGizmo()
 {
-	//메인 기즈모 인스턴스 해제
 	if (MainGizmo == this)
 	{
 		MainGizmo = nullptr;
 	}
 
-	for (auto* axis : Axes)
+	for (auto* Axis : Axes)
 	{
-		delete axis;
+		delete Axis;
 	}
-	Axes.clear();
 }
 
 void AGizmo::SetTargetActor(AActor* inTarget)
@@ -351,6 +297,15 @@ void AGizmo::SetTargetActor(AActor* inTarget)
 		{
 			it->SetTargetActor(nullptr);
 		}
+	}
+}
+
+void AGizmo::SetGizmoMode(EGizmoMode inMode)
+{
+	GizMode = inMode;
+	for (auto* Axis : Axes)
+	{
+		Axis->SetMesh(OBJECT.GetMesh(Axis->GetRenderMeshName()));
 	}
 }
 
@@ -410,20 +365,6 @@ void AGizmo::Update(float DeltaTime)
 		{
 			axis->SetHovered(false);
 		}
-	}
-}
-
-
-void AGizmo::Render()
-{
-	//타겟 액터 없을 시 스킵
-	if (!TargetActor)
-		return;
-
-	//기즈모 축 렌더링
-	for (auto* axis : Axes)
-	{
-		axis->Render();
 	}
 }
 
