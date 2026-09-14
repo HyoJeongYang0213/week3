@@ -9,15 +9,19 @@
 
 void RenderResources::RegisterDefaultResources()
 {
+	wchar_t Buffer[256];
+	GetModuleFileNameW(nullptr, Buffer, 256);
+	FWString ExecutableDirectory = filesystem::path(Buffer).parent_path();
+
 	VertexShaders.Resize(static_cast<int>(VertexShaderType::Count));
 	PixelShaders.Resize(static_cast<int>(PixelShaderType::Count));
 	SamplerStates.Resize(static_cast<int>(Sampler::Count));
 
-	CreateVertexShader(VertexShaderType::Object, L"Resources/Shader/ShaderW0.hlsl", "mainVS");
-	CreateVertexShader(VertexShaderType::Line, L"Resources/Shader/LineShader.hlsl", "mainVS_Line");
-	CreateVertexShader(VertexShaderType::Outline, L"Resources/Shader/OutlineVS.hlsl", "mainVS");
-	CreatePixelShader(PixelShaderType::Object, L"Resources/Shader/ShaderW0.hlsl", "mainPS");
-	CreatePixelShader(PixelShaderType::Line, L"Resources/Shader/LineShader.hlsl", "mainPS_Line");
+	CreateVertexShader(VertexShaderType::Mesh, ExecutableDirectory +L"\\Shader\\MeshVS.cso");
+	CreateVertexShader(VertexShaderType::Line, ExecutableDirectory + L"\\Shader\\LineVS.cso");
+	CreateVertexShader(VertexShaderType::Outline, ExecutableDirectory + L"\\Shader\\OutlineVS.cso");
+	CreatePixelShader(PixelShaderType::Mesh, ExecutableDirectory + L"\\Shader\\MeshPS.cso");
+	CreatePixelShader(PixelShaderType::Line, ExecutableDirectory + L"\\Shader\\LinePS.cso");
 }
 
 const RenderMesh* RenderResources::GetMesh(const FString& Name)
@@ -58,29 +62,12 @@ const VertexShader& RenderResources::GetVertexShader(VertexShaderType Type) cons
 }
 
 // TODO: 경로 찾기 수정
-const VertexShader& RenderResources::CreateVertexShader(VertexShaderType Type, const FWString& FileName, const FString& EntryPoint)
+const VertexShader& RenderResources::CreateVertexShader(VertexShaderType Type, const FWString& Path)
 {
 	assert(Type != VertexShaderType::None && Type != VertexShaderType::Count);
 
-	std::filesystem::path Path(FileName);
-	if (!std::filesystem::exists(Path)) {
-		if (std::filesystem::exists(Path.filename())) {
-			Path = Path.filename();
-		}
-		else if (std::filesystem::exists(std::filesystem::path(L"Resources/Shader") / Path.filename())) {
-			Path = std::filesystem::path(L"Resources/Shader") / Path.filename();
-		}
-		else if (std::filesystem::exists(std::filesystem::path(L"Project1") / FileName)) {
-			Path = std::filesystem::path(L"Project1") / FileName;
-		}
-		else if (std::filesystem::exists(std::filesystem::path(L"../Project1") / FileName)) {
-			Path = std::filesystem::path(L"../Project1") / FileName;
-		}
-	}
-
 	Microsoft::WRL::ComPtr<ID3DBlob> Blob;
-	D3DCompileFromFile(Path.c_str(), nullptr, nullptr, EntryPoint.c_str(), "vs_5_0", 0, 0, &Blob, nullptr);
-
+	D3DReadFileToBlob(Path.c_str(), &Blob);
 	VertexShaders[static_cast<size_t>(Type)] = Device.CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize());
 
 	return *VertexShaders[static_cast<size_t>(Type)];
@@ -93,28 +80,12 @@ ID3D11PixelShader& RenderResources::GetPixelShader(PixelShaderType Type) const
 }
 
 // TODO: 경로 찾기 수정
-ID3D11PixelShader& RenderResources::CreatePixelShader(PixelShaderType Type, const FWString& FileName, const FString& EntryPoint)
+ID3D11PixelShader& RenderResources::CreatePixelShader(PixelShaderType Type, const FWString& Path)
 {
 	assert(Type != PixelShaderType::None && Type != PixelShaderType::Count);
 
-	std::filesystem::path Path(FileName);
-	if (!std::filesystem::exists(Path)) {
-		if (std::filesystem::exists(Path.filename())) {
-			Path = Path.filename();
-		}
-		else if (std::filesystem::exists(std::filesystem::path(L"Resources/Shader") / Path.filename())) {
-			Path = std::filesystem::path(L"Resources/Shader") / Path.filename();
-		}
-		else if (std::filesystem::exists(std::filesystem::path(L"Project1") / FileName)) {
-			Path = std::filesystem::path(L"Project1") / FileName;
-		}
-		else if (std::filesystem::exists(std::filesystem::path(L"../Project1") / FileName)) {
-			Path = std::filesystem::path(L"../Project1") / FileName;
-		}
-	}
-
 	Microsoft::WRL::ComPtr<ID3DBlob> Blob;
-	D3DCompileFromFile(Path.c_str(), nullptr, nullptr, EntryPoint.c_str(), "ps_5_0", 0, 0, &Blob, nullptr);
+	D3DReadFileToBlob(Path.c_str(), &Blob);
 
 	PixelShaders[static_cast<size_t>(Type)] = Device.CreatePixelShader(Blob->GetBufferPointer(), Blob->GetBufferSize());
 

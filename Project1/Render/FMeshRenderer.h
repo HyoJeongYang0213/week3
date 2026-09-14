@@ -39,8 +39,8 @@ private:
 inline void FMeshRenderer::Render(const ConstantBuffer& FrameBuffer, const TArray<FMeshRenderData>& RenderData, bool bIsWireframe)
 {
 	GraphicsPipelineDesc PipelineDesc{
-		.VertexShader = VertexShaderType::Object,
-		.PixelShader = PixelShaderType::Object,
+		.VertexShader = VertexShaderType::Mesh,
+		.PixelShader = PixelShaderType::Mesh,
 		.VertexLayout = VertexLayout::PositionColorUVNormal,
 		.Rasterizer = {
 			.FillMode = bIsWireframe ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID,

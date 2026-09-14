@@ -1,4 +1,4 @@
-﻿cbuffer ObjectConstants : register(b0)
+cbuffer ObjectConstants : register(b0)
 {
     matrix World;
 }

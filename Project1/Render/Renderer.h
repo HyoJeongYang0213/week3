@@ -89,10 +89,10 @@ public:
   void ReleaseFrameBuffer();
 
   // CreateShader 헬퍼 함수들
-  bool CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,
+  void CreateVertexShader(FWString path,
                           ID3D11VertexShader **outVS,
                           ID3DBlob **outBlob = nullptr);
-  bool CreatePixelShader(LPCWSTR path, LPCSTR entryPoint,
+  void CreatePixelShader(FWString path,
                          ID3D11PixelShader **outPS);
   bool CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
                          UINT numElements, ID3DBlob *vsBlob,

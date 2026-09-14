@@ -1,23 +1,4 @@
-cbuffer ObjectConstants : register(b0) // FConstants
-{
-    matrix World;
-};
-cbuffer FrameConstants : register(b1) // FFrameConstants
-{
-    matrix VP;
-    float3 CameraPos;
-    float pad;
-};
-cbuffer ColorConstants : register(b2)
-{
-    float4 CustomColor;
-    int UseTexture;
-    float3 ColorPad;
-};
-
-// 텍스처 및 샘플러 레지스터
-Texture2D MainTexture : register(t0);
-SamplerState MainSampler : register(s0);
+#include "Constants.hlsli"
 
 struct VS_INPUT
 {
@@ -57,15 +38,4 @@ PS_INPUT mainVS(VS_INPUT input)
     }
     
     return output;
-}
-
-// 일반 픽셀 셰이더
-float4 mainPS(PS_INPUT input) : SV_TARGET
-{
-    float coverage = MainTexture.Sample(MainSampler, input.uv).r;
-    
-    // 투명한 영역은 픽셀 폐기
-    clip(coverage - 0.01f);
-    
-    return float4(input.color.rgb, coverage * input.color.a);
 }

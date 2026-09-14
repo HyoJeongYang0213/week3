@@ -69,7 +69,7 @@ VertexShader RenderDevice::CreateVertexShader(const void* ByteCode, SIZE_T ByteC
 {
 	VertexShader Result;
 
-	Device->CreateVertexShader(ByteCode, ByteCodeSize, nullptr, &Result.Shader);
+	auto res = Device->CreateVertexShader(ByteCode, ByteCodeSize, nullptr, &Result.Shader);
 	Result.ByteCode.Resize(ByteCodeSize);
 	std::memcpy(Result.ByteCode.GetData(), ByteCode, ByteCodeSize);
 

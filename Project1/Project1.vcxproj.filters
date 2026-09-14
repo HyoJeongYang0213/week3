@@ -199,9 +199,6 @@
     <ClInclude Include="Render\Renderer.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UGrid.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="Resources\Geometry\CircleGenerator.h">
       <Filter>Resources\Geometry</Filter>
     </ClInclude>
@@ -302,6 +299,9 @@
     <ClInclude Include="Render\FLineBatchRenderer.h">
       <Filter>Render\New\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Render\FGrid.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">
@@ -387,9 +387,6 @@
     <ClCompile Include="Render\Renderer.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Render\UGrid.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Resources\Geometry\CircleGenerator.cpp">
       <Filter>Resources\Geometry</Filter>
     </ClCompile>
@@ -432,29 +429,21 @@
     <ClCompile Include="Core\FName.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Render\FLineBatchRenderer.cpp">
       <Filter>Render\New\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\FGrid.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
     </None>
-    <None Include="Resources\Shader\GridShader.hlsl" />
-    <None Include="Resources\Shader\ShaderLine.hlsl" />
     <None Include="Resources\Shader\Constants.hlsli">
       <Filter>Resources\Shader</Filter>
     </None>
     <None Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </None>
-    <None Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </None>
-    <None Include="Resources\Shader\LineShader.hlsl">
       <Filter>Resources\Shader</Filter>
     </None>
   </ItemGroup>
@@ -464,10 +453,31 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+    <FxCompile Include="Resources\Shader\OutlineVS.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\OutlineVS.hlsl">
+    <FxCompile Include="Resources\Shader\FontPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\FontVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\LinePS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\LineVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\MeshPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\MeshVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SkyPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SkyVS.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
   </ItemGroup>

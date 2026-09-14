@@ -1,7 +1,7 @@
 cbuffer ObjectConstants : register(b0)
 {
     matrix World;
-};
+}
 
 cbuffer FrameConstants : register(b1)
 {
@@ -10,7 +10,7 @@ cbuffer FrameConstants : register(b1)
     float pad;
     float3 CameraForward;
     float pad2;
-};
+}
 
 struct VS_INPUT
 {
@@ -27,7 +27,7 @@ struct PS_INPUT
     float overlay : TEXCOORD1;
 };
 
-PS_INPUT mainVS_Line(VS_INPUT input)
+PS_INPUT mainVS(VS_INPUT input)
 {
     PS_INPUT output = (PS_INPUT) 0;
 
@@ -44,24 +44,3 @@ PS_INPUT mainVS_Line(VS_INPUT input)
     return output;
 }
 
-float4 mainPS_Line(PS_INPUT input) : SV_TARGET
-{
-    if(input.overlay > 0.5f) return input.color;
-    
-    // 거리기반
-    float distance = length(input.worldPosition - CameraPos);
-    
-    // fov 기반
-    float h = abs(CameraPos.y - input.worldPosition.y);
-    float fadeEnd = min(10.0f * sqrt(h), 40.0f);
-    float fadeStart = fadeEnd * 0.3f;
-
-    float fade = 1.0f - smoothstep(fadeStart, fadeEnd, distance);
-    
-    clip(fade - 0.01f); // 완전히 투명해야하면 그냥 픽셸 버리기 
-    
-    float4 finalColor = input.color;
-    finalColor.a *= fade;
-    
-    return finalColor;
-}

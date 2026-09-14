@@ -31,9 +31,9 @@ public:
 	const RenderMesh& CreateMesh(const FString& Name, const TArray<TVertex>& Vertices, const TArray<TIndex>& Indices);
 
 	const VertexShader& GetVertexShader(VertexShaderType Type) const;
-	const VertexShader& CreateVertexShader(VertexShaderType Type, const FWString& FileName, const FString& EntryPoint);
+	const VertexShader& CreateVertexShader(VertexShaderType Type, const FWString& Path);
 	ID3D11PixelShader& GetPixelShader(PixelShaderType Type) const;
-	ID3D11PixelShader& CreatePixelShader(PixelShaderType Type, const FWString& FileName, const FString& EntryPoint);
+	ID3D11PixelShader& CreatePixelShader(PixelShaderType Type, const FWString& Path);
 
 	const Texture* GetTexture(const FString& Name);
 	const Texture& CreateTexture(const FString& Name, const FWString& FileName);

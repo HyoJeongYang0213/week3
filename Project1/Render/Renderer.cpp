@@ -264,82 +264,32 @@ void Renderer::ReleaseFrameBuffer() {
   }
 }
 
-bool Renderer::CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,
-                                  ID3D11VertexShader **outVS,
-                                  ID3DBlob **outBlob) {
-  std::filesystem::path p(path);
-  if (!std::filesystem::exists(p)) {
-    if (std::filesystem::exists(p.filename())) {
-      p = p.filename();
-    } else if (std::filesystem::exists(std::filesystem::path(L"Resources/Shader") / p.filename())) {
-      p = std::filesystem::path(L"Resources/Shader") / p.filename();
-    } else if (std::filesystem::exists(std::filesystem::path(L"Project1") / path)) {
-      p = std::filesystem::path(L"Project1") / path;
-    } else if (std::filesystem::exists(std::filesystem::path(L"../Project1") / path)) {
-      p = std::filesystem::path(L"../Project1") / path;
+void Renderer::CreateVertexShader(FWString path,
+    ID3D11VertexShader** outVS,
+    ID3DBlob** outBlob) {
+	ID3DBlob* tempBlob = nullptr;
+
+    D3DReadFileToBlob(path.c_str(), &tempBlob);
+
+    Device->CreateVertexShader(tempBlob->GetBufferPointer(),
+        tempBlob->GetBufferSize(), nullptr, outVS);
+
+    if (outBlob) {
+        *outBlob = tempBlob;
     }
-  }
-
-  ID3DBlob *vsBlob = nullptr;
-  ID3DBlob *errorBlob = nullptr;
-
-  HRESULT hr = D3DCompileFromFile(p.c_str(), nullptr, nullptr, entryPoint, "vs_5_0",
-                                  0, 0, &vsBlob, &errorBlob);
-
-  if (FAILED(hr) || !vsBlob) {
-    if (errorBlob) {
-      OutputDebugStringA((char *)errorBlob->GetBufferPointer());
-      errorBlob->Release();
+    else
+    {
+        tempBlob->Release();
     }
-    return false;
-  }
-
-  hr = Device->CreateVertexShader(vsBlob->GetBufferPointer(),
-                                  vsBlob->GetBufferSize(), nullptr, outVS);
-
-  if (outBlob) {
-    *outBlob = vsBlob;
-  } else {
-    vsBlob->Release();
-  }
-
-  return SUCCEEDED(hr);
 }
 
-bool Renderer::CreatePixelShader(LPCWSTR path, LPCSTR entryPoint,
-                                 ID3D11PixelShader **outPS) {
-  std::filesystem::path p(path);
-  if (!std::filesystem::exists(p)) {
-    if (std::filesystem::exists(p.filename())) {
-      p = p.filename();
-    } else if (std::filesystem::exists(std::filesystem::path(L"Resources/Shader") / p.filename())) {
-      p = std::filesystem::path(L"Resources/Shader") / p.filename();
-    } else if (std::filesystem::exists(std::filesystem::path(L"Project1") / path)) {
-      p = std::filesystem::path(L"Project1") / path;
-    } else if (std::filesystem::exists(std::filesystem::path(L"../Project1") / path)) {
-      p = std::filesystem::path(L"../Project1") / path;
-    }
-  }
+void Renderer::CreatePixelShader(FWString path,
+    ID3D11PixelShader** outPS) {
+    Microsoft::WRL::ComPtr<ID3DBlob> Blob;
+    D3DReadFileToBlob(path.c_str(), &Blob);
 
-  ID3DBlob *psBlob = nullptr;
-  ID3DBlob *errorBlob = nullptr;
-
-  HRESULT hr = D3DCompileFromFile(p.c_str(), nullptr, nullptr, entryPoint, "ps_5_0",
-                                  0, 0, &psBlob, &errorBlob);
-
-  if (FAILED(hr) || !psBlob) {
-    if (errorBlob) {
-      OutputDebugStringA((char *)errorBlob->GetBufferPointer());
-      errorBlob->Release();
-    }
-    return false;
-  }
-
-  hr = Device->CreatePixelShader(psBlob->GetBufferPointer(),
-                                 psBlob->GetBufferSize(), nullptr, outPS);
-  psBlob->Release();
-
-  return SUCCEEDED(hr);
+    Device->CreatePixelShader(Blob->GetBufferPointer(),
+        Blob->GetBufferSize(), nullptr, outPS);
 }
 
 bool Renderer::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
@@ -356,17 +306,19 @@ bool Renderer::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
 }
 
 void Renderer::CreateShader() {
-  LPCWSTR shaderPath = L"Resources/Shader/ShaderW0.hlsl";
+    wchar_t Buffer[256];
+    GetModuleFileNameW(nullptr, Buffer, 256);
+    FWString ExecutableDirectory = filesystem::path(Buffer).parent_path();
 
   // Vertex & Pixel Shader 컴파일 및 생성
   ID3DBlob *vsBlob = nullptr;
 
-  CreateVertexShader(shaderPath, "mainVS", &SimpleVertexShader, &vsBlob);
-  CreatePixelShader(shaderPath, "mainPS", &SimplePixelShader);
-  CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
-  CreatePixelShader(shaderPath, "mainPS_Sky", &SkyPixelShader);
-  CreateVertexShader(L"Resources/Shader/ShaderFont.hlsl", "mainVS", &FontVertexShader);
-  CreatePixelShader(L"Resources/Shader/ShaderFont.hlsl", "mainPS", &FontPixelShader);
+  CreateVertexShader(ExecutableDirectory + L"\\Shader\\MeshVS.cso", &SimpleVertexShader, &vsBlob);
+  CreatePixelShader(ExecutableDirectory + L"\\Shader\\MeshPS.cso", &SimplePixelShader);
+  CreateVertexShader(ExecutableDirectory + L"\\Shader\\SkyVS.cso", &SkyVertexShader);
+  CreatePixelShader(ExecutableDirectory + L"\\Shader\\SkyPS.cso", &SkyPixelShader);
+  CreateVertexShader(ExecutableDirectory + L"\\Shader\\FontVS.cso", &FontVertexShader);
+  CreatePixelShader(ExecutableDirectory + L"\\Shader\\FontPS.cso", &FontPixelShader);
 
   // 공용 입력 레이아웃 직접 생성
   CreateInputLayout(FVertexLayouts::Layout, FVertexLayouts::NumElements, vsBlob, &defaultInputLayout);

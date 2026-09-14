@@ -39,7 +39,7 @@ inline void FOutlineRenderer::Render(const ConstantBuffer& FrameBuffer, const FO
 {
 	GraphicsPipelineDesc PipelineDesc{
 		.VertexShader = VertexShaderType::Outline,
-		.PixelShader = PixelShaderType::Object,
+		.PixelShader = PixelShaderType::Mesh,
 		.VertexLayout = VertexLayout::PositionColorUVNormal,
 		.Rasterizer = {
 			.FillMode = D3D11_FILL_SOLID,
