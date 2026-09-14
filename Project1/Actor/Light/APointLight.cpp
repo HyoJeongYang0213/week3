@@ -12,5 +12,11 @@ void APointLight::Render()
 	Super::Render();
 
 	FVector Center = GetLocation();
-	DrawCircle(Center, FVector(1, 0, 0), FVector(0, 1, 0), Attenuation);
+	FVector Forward = transform.Forward();
+	FVector Up = transform.Up();
+	FVector Right = transform.Right();
+
+	DrawCircle(Center, Forward, Up, Attenuation);
+	DrawCircle(Center, Forward, Right, Attenuation);
+	DrawCircle(Center, Up, Right, Attenuation);
 }
