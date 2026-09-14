@@ -37,6 +37,7 @@ void Renderer::Create(HWND hWindow) {
   CreateBlendState();
   CreateShader();
   CreateColorBuffer();
+  CreateSubUVBuffer();
   CreateSamplerState();
   CreateFontBlendState();
 }
@@ -45,6 +46,7 @@ void Renderer::Release() {
   ReleaseTextures();
   ReleaseSamplerState();
   ReleaseFontBlendState();
+  ReleaseSubUVBuffer();
   ReleaseColorBuffer();
   ReleaseDepthStencil();
   ReleaseShader();
@@ -69,6 +71,17 @@ void Renderer::SetCustomColor(const FLinearColor &color) {
     CustomColorBuffer->SetVSBuffer(2);
     CustomColorBuffer->SetPSBuffer(2);
   }
+}
+
+void Renderer::CreateSubUVBuffer() { SubUVConstantBuffer = new ::SubUVBuffer(); }
+
+void Renderer::ReleaseSubUVBuffer()
+{
+    if (SubUVConstantBuffer)
+    {
+        delete SubUVConstantBuffer;
+        SubUVConstantBuffer = nullptr;
+    }
 }
 
 void Renderer::CreateSamplerState() {
@@ -402,6 +415,8 @@ bool Renderer::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
 void Renderer::CreateShader() {
   LPCWSTR shaderPath = L"Resources/Shader/ShaderW0.hlsl";
   LPCWSTR LineshaderPath = L"Resources/Shader/ShaderLine.hlsl";
+  LPCWSTR FontShaderPath = L"Resources/Shader/ShaderFont.hlsl";
+  LPCWSTR SubUVShaderPath = L"Resources/Shader/ShaderSubUV.hlsl";
 
   // Vertex & Pixel Shader 컴파일 및 생성
   ID3DBlob *vsBlob = nullptr;
@@ -413,8 +428,11 @@ void Renderer::CreateShader() {
   CreatePixelShader(LineshaderPath, "mainPS_Line", &LinePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
   CreatePixelShader(shaderPath, "mainPS_Sky", &SkyPixelShader);
-  CreateVertexShader(L"Resources/Shader/ShaderFont.hlsl", "mainVS", &FontVertexShader);
-  CreatePixelShader(L"Resources/Shader/ShaderFont.hlsl", "mainPS", &FontPixelShader);
+  CreateVertexShader(FontShaderPath, "mainVS", &FontVertexShader);
+  CreatePixelShader(FontShaderPath, "mainPS", &FontPixelShader);
+  CreateVertexShader(SubUVShaderPath, "mainVS", &SubUVVertexShader);
+  CreatePixelShader(SubUVShaderPath, "mainPS", &SubUVPixelShader);
+
 
   // 공용 입력 레이아웃 직접 생성
   CreateInputLayout(FVertexLayouts::Layout, FVertexLayouts::NumElements, vsBlob, &defaultInputLayout);
@@ -463,6 +481,26 @@ void Renderer::ReleaseShader() {
   if (SimpleVertexShader) {
     SimpleVertexShader->Release();
     SimpleVertexShader = nullptr;
+  }
+
+  if (FontVertexShader) {
+      FontVertexShader->Release();
+      FontVertexShader = nullptr;
+  }
+
+  if (FontPixelShader) {
+      FontPixelShader->Release();
+      FontPixelShader = nullptr;
+  }
+
+  if (SubUVVertexShader) {
+      SubUVVertexShader->Release();
+      SubUVVertexShader = nullptr;
+  }
+
+  if (SubUVPixelShader) {
+      SubUVPixelShader->Release();
+      SubUVPixelShader = nullptr;
   }
 }
 
@@ -548,12 +586,29 @@ void Renderer::PrepareFontShader()
     DeviceContext->OMSetBlendState(BlendState, nullptr, 0xffffffff);
 }
 
+void Renderer::PrepareSubUVShader() {
+    if (CurrentInputLayout != defaultInputLayout) {
+        CurrentInputLayout = defaultInputLayout;
+        DeviceContext->IASetInputLayout(defaultInputLayout);
+    }
+    DeviceContext->VSSetShader(SubUVVertexShader, nullptr, 0);
+    DeviceContext->PSSetShader(SubUVPixelShader, nullptr, 0);
+}
+
 void Renderer::UpdateFrameConstant() {
   Camera &cam = CAMERA;
   cam.vpBuffer->SetMat(cam.GetViewMatrix() *
                            cam.GetProjectionMatrix(wAspectRatio),
                        cam.GetLocation(), cam.GetForward());
 }
+
+//void Renderer::UpdateSubUVConstant(const FSubUVConstants& Data)
+//{
+//    D3D11_MAPPED_SUBRESOURCE Mapping;
+//    DeviceContext->Map(SubUVConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &Mapping);
+//    memcpy(SubUVConstantBuffer, Mapping.pData, sizeof(Data));
+//    DeviceContext->Unmap(SubUVConstantBuffer, 0);
+//}
 
 void Renderer::CreateDepthStencil() {
   { // 깊이 버퍼용 텍스쳐 생성

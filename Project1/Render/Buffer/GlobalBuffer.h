@@ -3,6 +3,7 @@
 #include "FMatrix.h"
 #include "ConstBuffer.h"
 #include "FLinearColor.h"
+#include "FVector.h"
 
 class MatrixBuffer : public ConstBuffer
 {
@@ -94,5 +95,32 @@ public:
     }
 };
 
+
+class SubUVBuffer : public ConstBuffer
+{
+private:
+    struct Data
+    {
+        float ScaleU = 1.f, ScaleV = 1.f;
+        float OffsetU = 0.f, OffsetV = 0.f;
+    };
+    Data data;
+public:
+    SubUVBuffer() : ConstBuffer(&data, sizeof(data))
+    {
+        data.ScaleU = 1.f;
+        data.ScaleV = 1.f;
+        data.OffsetU = 0.f;
+        data.OffsetV = 0.f;
+    }
+    void SetUV(float ScaleU, float ScaleV, float OffsetU, float OffsetV)
+    {
+        data.ScaleU = ScaleU;
+        data.ScaleV = ScaleV;
+        data.OffsetU = OffsetU;
+        data.OffsetV = OffsetV;
+    }
+    
+};
 
 

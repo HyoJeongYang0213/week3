@@ -296,7 +296,13 @@
       <Filter>Render\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="Render\Buffer\FBoundingBox.h" />
-    <ClInclude Include="Actor\ABillboard.h">
+    <ClInclude Include="Actor\UBillboard.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\UParticleSubUVComp.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\AParticleSubUVActor.h">
       <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
@@ -458,6 +464,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\ShaderSubUV.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
   </ItemGroup>

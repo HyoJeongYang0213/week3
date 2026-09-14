@@ -118,11 +118,13 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="..\Project1\Scenes\DefaultScene.h" />
     <ClInclude Include="..\Project1\pch.h" />
     <ClInclude Include="Actor\AActor.h" />
-    <ClInclude Include="Actor\ABillboard.h" />
+    <ClInclude Include="Actor\AParticleSubUVActor.h" />
     <ClInclude Include="Actor\ASkySphere.h" />
     <ClInclude Include="Actor\ASphere.h" />
     <ClInclude Include="Actor\AWorldAxises.h" />
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
+    <ClInclude Include="Actor\UBillboard.h" />
+    <ClInclude Include="Actor\UParticleSubUVComp.h" />
     <ClInclude Include="App\ConsoleWindow.h" />
     <ClInclude Include="App\GameManager.h" />
     <ClInclude Include="ATextActor.h" />
@@ -277,6 +279,9 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\ShaderSubUV.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

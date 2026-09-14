@@ -7,6 +7,7 @@
 #include "ASkySphere.h"
 #include "UGrid.h"
 #include "UBillboard.h"
+#include "UParticleSubUVComp.h"
 
 class DefaultScene : public Scene
 {
@@ -28,5 +29,7 @@ public:
 	ASkySphere* skysphere;
 
 	UBillboard* billboard;
+
+	UParticleSubUVComp* explosion;
 };
 

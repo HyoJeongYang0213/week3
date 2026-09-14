@@ -51,6 +51,8 @@ public:
   ID3D11PixelShader *SkyPixelShader = nullptr;
   ID3D11VertexShader* FontVertexShader = nullptr;
   ID3D11PixelShader* FontPixelShader = nullptr;
+  ID3D11VertexShader* SubUVVertexShader = nullptr;
+  ID3D11PixelShader* SubUVPixelShader = nullptr;
 
   ID3D11VertexShader* LineVertexShader = nullptr;
   ID3D11PixelShader* LinePixelShader = nullptr;
@@ -78,6 +80,8 @@ public:
 
   // 단일 공유 컬러 버퍼 (b2 슬롯)
   ColorBuffer *CustomColorBuffer = nullptr;
+  
+  SubUVBuffer* SubUVConstantBuffer = nullptr;
 
   FMatrix viewMatrix = FMatrix::Identity();
   FMatrix projMatrix = FMatrix::Identity();
@@ -127,6 +131,9 @@ public:
   void ReleaseColorBuffer();
   void SetCustomColor(const struct FLinearColor &color);
 
+  void CreateSubUVBuffer();
+  void ReleaseSubUVBuffer();
+
   // 텍스처 및 샘플러 관리
   void CreateSamplerState();
   void ReleaseSamplerState();
@@ -160,6 +167,7 @@ public:
   void PrepareOutlineShader();
   void PrepareSkyShader();
   void PrepareFontShader();
+  void PrepareSubUVShader();
 
   // 공용 입력 레이아웃 반환
   ID3D11InputLayout *GetInputLayout() { return defaultInputLayout; }
