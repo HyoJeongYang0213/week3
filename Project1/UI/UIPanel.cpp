@@ -312,6 +312,14 @@ void UIPanel_Picking::Render()
     			pickedActor->SetRotation(newRot);
     		}
 
+            // Light 관련 코드라면
+            if (pickedActor->GetClass()->Name == "ASpotLight") {
+                ASpotLight *light = Cast<ASpotLight>(pickedActor);
+                float angle = light->GetAngle();
+                if (ImGui::SliderFloat("Angle", &angle, 1.0f, 60.0f))
+                    light->SetAngle(angle);
+            }
+
             // 삭제버튼
             if (ImGui::Button("Delete"))
             {

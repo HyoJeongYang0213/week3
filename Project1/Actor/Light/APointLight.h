@@ -10,5 +10,5 @@ public:
 	virtual void Render() override;
 
 private:
-	float Attenuation = 1.0f;
+	float Attenuation = 3.0f;
 };
