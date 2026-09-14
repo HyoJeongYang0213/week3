@@ -188,6 +188,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Render\VertexBuffer.h" />
     <ClInclude Include="Render\VertexShader.h" />
     <ClInclude Include="Render\ULineBatch.h" />
+    <ClInclude Include="Resources\Geometry\Bulb.h" />
     <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
     <ClInclude Include="Resources\Geometry\Sphere.h" />
     <ClInclude Include="Scenes\SaveLoadManager.h" />

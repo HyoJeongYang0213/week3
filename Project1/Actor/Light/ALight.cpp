@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "ALight.h"
 #include "ULineBatch.h"
+#include "Bulb.h"
 #include <Global.h>
 
 ALight::ALight(const FLinearColor& color) : AActor(color)
 {
-	// 전구 메쉬 필요
-	SetMesh(OBJECT.GetOrCreateMesh("Sphere", CreateSphereVertices(0.5f, 20, 20, false)));
+	static const TArray<FVertexData> bulbVertices = CreateBulbVertices();
+	SetMesh(OBJECT.GetOrCreateMesh("LightBulb", bulbVertices));
 }
 
 void ALight::DrawCircle(const FVector & Center, const FVector &AxisA, const FVector &AxisB, const float Radius)
