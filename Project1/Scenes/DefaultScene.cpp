@@ -5,6 +5,7 @@
 #include "PickingManager.h"
 #include "SaveLoadManager.h"
 #include "ULineBatch.h"
+#include "APointLight.h"
 
 
 
@@ -76,6 +77,9 @@ void DefaultScene::Render()
 	{
 		gizmo->Render();
 	}
+
+	// Light 테스트용 코드! 후에 삭제 예정
+	FObjectFactory::SpawnActor<APointLight>(FVector(0, 1, 0), FVector(0.2f, 0.2f, 0.2f));
 
 	// 기본 깊이 상태 복원
 	RENDERER.SetDefaultDepthState();
