@@ -45,7 +45,7 @@ public:
 };
 
 // 씬 메니져 창 
-class UIPanel_ScenceManager : public IUIPanel
+class UIPanel_SceneManager : public IUIPanel
 {
 public:
     void Render() override;
