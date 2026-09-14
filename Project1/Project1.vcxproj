@@ -124,6 +124,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
     <ClInclude Include="Actor\Light\ALight.h" />
     <ClInclude Include="Actor\Light\APointLight.h" />
+    <ClInclude Include="Actor\Light\ASpotLight.h" />
     <ClInclude Include="App\ConsoleWindow.h" />
     <ClInclude Include="App\GameManager.h" />
     <ClInclude Include="ATextActor.h" />
@@ -206,6 +207,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
     <ClCompile Include="Actor\Light\ALight.cpp" />
     <ClCompile Include="Actor\Light\APointLight.cpp" />
+    <ClCompile Include="Actor\Light\ASpotLight.cpp" />
     <ClCompile Include="App\ConsoleWindow.cpp" />
     <ClCompile Include="App\GameManager.cpp" />
     <ClCompile Include="Core\FName.cpp" />

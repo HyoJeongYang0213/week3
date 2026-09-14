@@ -3,7 +3,7 @@
 #include <Global.h>
 #include "APointLight.h"
 
-APointLight::APointLight(const FLinearColor& color)
+APointLight::APointLight(const FLinearColor& color) : ALight(color)
 {
 }
 

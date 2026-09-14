@@ -305,6 +305,9 @@
     <ClInclude Include="Actor\Light\APointLight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\Light\ASpotLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">
@@ -443,6 +446,9 @@
       <Filter>Actor\Light</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Light\ALight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ASpotLight.cpp">
       <Filter>Actor\Light</Filter>
     </ClCompile>
   </ItemGroup>
