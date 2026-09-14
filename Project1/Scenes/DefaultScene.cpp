@@ -11,6 +11,7 @@
 // ---------------------
 #include "APointLight.h"
 #include "ASpotLight.h"
+#include "ADirectionalLight.h"
 
 
 
@@ -85,7 +86,8 @@ void DefaultScene::Render()
 
 	// Light 테스트용 코드! 후에 삭제 예정
 	//FObjectFactory::SpawnActor<APointLight>(FVector(0, 1, 0), FVector(0.2f, 0.2f, 0.2f));
-	FObjectFactory::SpawnActor<ASpotLight>(FVector(0, 1, 0), FVector(0.2f, 0.2f, 0.2f));
+	//FObjectFactory::SpawnActor<ASpotLight>(FVector(0, 1, 0), FVector(0.2f, 0.2f, 0.2f));
+	FObjectFactory::SpawnActor<ADirectionalLight>(FVector(0, 1, 0), FVector(0.2f, 0.2f, 0.2f));
 
 	// 기본 깊이 상태 복원
 	RENDERER.SetDefaultDepthState();

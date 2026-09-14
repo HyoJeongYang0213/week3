@@ -122,6 +122,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Actor\ASphere.h" />
     <ClInclude Include="Actor\AWorldAxises.h" />
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
+    <ClInclude Include="Actor\Light\ADirectionalLight.h" />
     <ClInclude Include="Actor\Light\ALight.h" />
     <ClInclude Include="Actor\Light\APointLight.h" />
     <ClInclude Include="Actor\Light\ASpotLight.h" />
@@ -205,6 +206,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Actor\ASkySphere.cpp" />
     <ClCompile Include="Actor\AWorldAxises.cpp" />
     <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp" />
     <ClCompile Include="Actor\Light\ALight.cpp" />
     <ClCompile Include="Actor\Light\APointLight.cpp" />
     <ClCompile Include="Actor\Light\ASpotLight.cpp" />
