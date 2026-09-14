@@ -48,8 +48,9 @@ inline void FOutlineRenderer::Render(const FMatrix& ViewProjection, const FVecto
 		},
 		.Blend = BlendMode::None,
 		.Depth = {
-			.bEnable = false,
-			.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO,
+			.bEnable = true,
+			.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
+			.DepthFunc = D3D11_COMPARISON_ALWAYS,
 		},
 		.Stencil = StencilMode::TestNotEqual,
 	};

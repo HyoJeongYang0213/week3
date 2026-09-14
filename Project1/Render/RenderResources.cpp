@@ -14,10 +14,10 @@ void RenderResources::RegisterDefaultResources()
 	SamplerStates.Resize(static_cast<int>(Sampler::Count));
 
 	CreateVertexShader(VertexShaderType::Object, L"Resources/Shader/ShaderW0.hlsl", "mainVS");
-	CreateVertexShader(VertexShaderType::Grid, L"Resources/Shader/GridShader.hlsl", "mainVS_Grid");
+	CreateVertexShader(VertexShaderType::Line, L"Resources/Shader/LineShader.hlsl", "mainVS_Line");
 	CreateVertexShader(VertexShaderType::Outline, L"Resources/Shader/OutlineVS.hlsl", "mainVS");
 	CreatePixelShader(PixelShaderType::Object, L"Resources/Shader/ShaderW0.hlsl", "mainPS");
-	CreatePixelShader(PixelShaderType::Grid, L"Resources/Shader/GridShader.hlsl", "mainPS_Grid");
+	CreatePixelShader(PixelShaderType::Line, L"Resources/Shader/LineShader.hlsl", "mainPS_Line");
 }
 
 const RenderMesh* RenderResources::GetMesh(const FString& Name)

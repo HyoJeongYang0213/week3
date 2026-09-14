@@ -33,8 +33,6 @@ void Renderer::Create(HWND hWindow) {
   CreateDeviceAndSwapChain(hWindow);
   CreateFrameBuffer();
   CreateDepthStencil();
-  CreateRasterizerState();
-  CreateBlendState();
   CreateShader();
   CreateColorBuffer();
   CreateSamplerState();
@@ -48,8 +46,6 @@ void Renderer::Release() {
   ReleaseColorBuffer();
   ReleaseDepthStencil();
   ReleaseShader();
-  ReleaseBlendState();
-  ReleaseRasterizerState();
   ReleaseFrameBuffer();
   ReleaseDeviceAndSwapChain();
 }
@@ -268,46 +264,6 @@ void Renderer::ReleaseFrameBuffer() {
   }
 }
 
-void Renderer::CreateRasterizerState() {
-  D3D11_RASTERIZER_DESC rasterizerdesc = {};
-  rasterizerdesc.FillMode = D3D11_FILL_SOLID;
-  rasterizerdesc.CullMode = D3D11_CULL_BACK;
-  rasterizerdesc.FrontCounterClockwise = FALSE;
-  rasterizerdesc.DepthClipEnable = TRUE;
-
-  Device->CreateRasterizerState(&rasterizerdesc, &RasterizerState);
-}
-
-void Renderer::ReleaseRasterizerState() {
-  if (RasterizerState) {
-    RasterizerState->Release();
-    RasterizerState = nullptr;
-  }
-}
-
-void Renderer::CreateBlendState()
-{
-    D3D11_BLEND_DESC blendDesc = {};
-    blendDesc.RenderTarget[0].BlendEnable = TRUE;
-    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    Device->CreateBlendState(&blendDesc, &AlphaBlendState);
-}
-
-void Renderer::ReleaseBlendState()
-{
-    if (AlphaBlendState) {
-        AlphaBlendState->Release();
-        AlphaBlendState = nullptr;
-    }
-}
-
 bool Renderer::CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,
                                   ID3D11VertexShader **outVS,
                                   ID3DBlob **outBlob) {
@@ -401,15 +357,12 @@ bool Renderer::CreateInputLayout(const D3D11_INPUT_ELEMENT_DESC *layoutDesc,
 
 void Renderer::CreateShader() {
   LPCWSTR shaderPath = L"Resources/Shader/ShaderW0.hlsl";
-  LPCWSTR LineshaderPath = L"Resources/Shader/ShaderLine.hlsl";
 
   // Vertex & Pixel Shader 컴파일 및 생성
   ID3DBlob *vsBlob = nullptr;
 
   CreateVertexShader(shaderPath, "mainVS", &SimpleVertexShader, &vsBlob);
   CreatePixelShader(shaderPath, "mainPS", &SimplePixelShader);
-  CreateVertexShader(LineshaderPath, "mainVS_Line", &LineVertexShader);
-  CreatePixelShader(LineshaderPath, "mainPS_Line", &LinePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
   CreatePixelShader(shaderPath, "mainPS_Sky", &SkyPixelShader);
   CreateVertexShader(L"Resources/Shader/ShaderFont.hlsl", "mainVS", &FontVertexShader);
@@ -439,16 +392,6 @@ void Renderer::ReleaseShader() {
     SkyVertexShader = nullptr;
   }
 
-  if (LinePixelShader) {
-      LinePixelShader->Release();
-      LinePixelShader = nullptr;
-  }
-
-  if (LineVertexShader) {
-      LineVertexShader->Release();
-      LineVertexShader = nullptr;
-  }
-
   if (SimplePixelShader) {
     SimplePixelShader->Release();
     SimplePixelShader = nullptr;
@@ -474,42 +417,6 @@ ID3D11Buffer *Renderer::CreateVertexBuffer(const void *vertices,
   Device->CreateBuffer(&vertexbufferdesc, &vertexbufferSRD, &vertexBuffer);
 
   return vertexBuffer;
-}
-
-void Renderer::Prepare() {
-  DeviceContext->ClearRenderTargetView(FrameBufferRTV, ClearColor);
-
-  DeviceContext->RSSetViewports(1, &ViewportInfo);
-  DeviceContext->RSSetState(RasterizerState);
-
-  DeviceContext->ClearDepthStencilView(
-      depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-  DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, depthStencilView);
-  DeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
-
-  UINT stencilRef = 1; // 스텐실 기준값
-  DeviceContext->OMSetDepthStencilState(dsState, stencilRef);
-
-  // 샘플러 바인딩 및 텍스처 초기화
-  if (SamplerState) {
-    DeviceContext->PSSetSamplers(0, 1, &SamplerState);
-  }
-  SetTexture(nullptr);
-
-  // 입력 레이아웃 캐시 초기화
-  CurrentInputLayout = nullptr;
-}
-
-void Renderer::PrepareLineShader()
-{
-    if (CurrentInputLayout != defaultInputLayout) {
-        CurrentInputLayout = defaultInputLayout;
-        DeviceContext->IASetInputLayout(defaultInputLayout);
-    }
-
-    DeviceContext->VSSetShader(LineVertexShader, nullptr, 0);
-    DeviceContext->PSSetShader(LinePixelShader, nullptr, 0);
 }
 
 void Renderer::PrepareSkyShader() {

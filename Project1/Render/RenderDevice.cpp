@@ -14,15 +14,16 @@ VertexBuffer RenderDevice::CreateVertexBuffer(const void* Data, UINT Stride, UIN
 
 	const D3D11_BUFFER_DESC Desc{
 		.ByteWidth = Stride * Count,
-		.Usage = D3D11_USAGE_DEFAULT,
+		.Usage = D3D11_USAGE_DYNAMIC,
 		.BindFlags = D3D11_BIND_VERTEX_BUFFER,
+		.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
 	};
 
 	const D3D11_SUBRESOURCE_DATA InitData{
 		.pSysMem = Data,
 	};
 
-	Device->CreateBuffer(&Desc, &InitData, &Result.Buffer);
+	Device->CreateBuffer(&Desc, Data ? &InitData : nullptr, &Result.Buffer);
 
 	return Result;
 }

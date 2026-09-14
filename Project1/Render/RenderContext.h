@@ -15,13 +15,18 @@ class RenderContext final
 {
 public:
 	void SetRenderTarget(ID3D11RenderTargetView& RenderTarget, ID3D11DepthStencilView* DepthStencilView = nullptr);
-	// void SetViewport()
+	void SetViewport(const D3D11_VIEWPORT& Viewport);
 	// void SetScissorRect()
-	// void ClearRenderTarget()
-	// void ClearDepthStencil()
+	void ClearRenderTarget(ID3D11RenderTargetView& RenderTarget, const float* Color = nullptr);
+	void ClearDepthStencil(ID3D11DepthStencilView& DepthStencilView, float Depth = 1.0f, UINT8 Stencil = 0u);
 
 	void SetVertexBuffer(const VertexBuffer& InVertexBuffer);
+	void UpdateVertexBuffer(const VertexBuffer& InVertexBuffer, const void* Data, UINT Size);
+	template <typename T> void UpdateVertexBuffer(const VertexBuffer& InVertexBuffer, const T& Value);
+
 	void SetIndexBuffer(const IndexBuffer& InIndexBuffer);
+
+	void SetTopology(D3D11_PRIMITIVE_TOPOLOGY Topology);
 	
 	void SetConstantBuffer(UINT Slot, const ConstantBuffer& InConstantBuffer);
 	void UpdateConstantBuffer(ConstantBuffer& InConstantBuffer, const void* Data, UINT Size);
@@ -43,6 +48,12 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> Context;
 };
+
+template <typename T>
+void RenderContext::UpdateVertexBuffer(const VertexBuffer& InVertexBuffer, const T& Value)
+{
+	UpdateVertexBuffer(InVertexBuffer, &Value, sizeof(T));
+}
 
 template <typename T>
 void RenderContext::UpdateConstantBuffer(ConstantBuffer& InConstantBuffer, const T& Value)

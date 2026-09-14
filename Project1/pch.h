@@ -94,7 +94,7 @@ using namespace std;
 
 #define IMGUI UIManager::GetInstance()
 #define SAVELOAD SaveLoadManager::GetInstance()
-#define LINEBATCH ULineBatch::GetInstance()
+#define LINEBATCH FLineBatchRenderer::GetInstance()
 
 #define WIN_WIDTH 1920	
 #define WIN_HEIGHT 1080

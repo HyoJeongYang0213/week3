@@ -38,10 +38,6 @@ public:
   ID3D11Texture2D *FrameBuffer = nullptr;
   ID3D11RenderTargetView *FrameBufferRTV = nullptr;
 
-  // CreateRasterizerState
-  ID3D11RasterizerState *RasterizerState = nullptr;
-  ID3D11BlendState* AlphaBlendState = nullptr;
-
   // CreateShader
   ID3D11VertexShader *SimpleVertexShader = nullptr;
   ID3D11PixelShader *SimplePixelShader = nullptr;
@@ -50,9 +46,6 @@ public:
   ID3D11PixelShader *SkyPixelShader = nullptr;
   ID3D11VertexShader* FontVertexShader = nullptr;
   ID3D11PixelShader* FontPixelShader = nullptr;
-
-  ID3D11VertexShader* LineVertexShader = nullptr;
-  ID3D11PixelShader* LinePixelShader = nullptr;
 
   // Direct2D & WIC Management
   ID2D1Factory *D2DFactory = nullptr;
@@ -65,7 +58,6 @@ public:
   D3D11_VIEWPORT ViewportInfo;
   FLOAT ClearColor[4] = {0.8f, 0.8f, 0.8f, 1.0f};
   float wAspectRatio;
-  float GetAspectRatio() { return wAspectRatio; }
 
   // 깊이 스텐실 버퍼
   ID3D11DepthStencilView *depthStencilView = nullptr;
@@ -95,12 +87,6 @@ public:
 
   void CreateFrameBuffer();
   void ReleaseFrameBuffer();
-
-  void CreateRasterizerState();
-  void ReleaseRasterizerState();
-
-  void CreateBlendState();
-  void ReleaseBlendState();
 
   // CreateShader 헬퍼 함수들
   bool CreateVertexShader(LPCWSTR path, LPCSTR entryPoint,
@@ -132,8 +118,6 @@ public:
 
   ID3D11Buffer *CreateVertexBuffer(const void *vertices, UINT byteWidth);
 
-  void Prepare();
-
   // 입력 레이아웃과 셰이더 및 파이프라인 준비
   void PrepareShader() {
     if (CurrentInputLayout != defaultInputLayout) {
@@ -148,8 +132,6 @@ public:
     SetTexture(nullptr);
   }
 
-  void PrepareGridShader();
-  void PrepareLineShader();
   void PrepareSkyShader();
   void PrepareFontShader();
 

@@ -2,7 +2,7 @@
 #include "UGrid.h"
 
 #include "FVertexSimple.h"
-#include "ULineBatch.h"
+#include "FLineBatchRenderer.h"
 
 void UGrid::Update(const FVector& CameraLocation) {
 	Location.x = floor(CameraLocation.x / CellSize) * CellSize;

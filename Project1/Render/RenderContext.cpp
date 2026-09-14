@@ -11,16 +11,24 @@
 void RenderContext::SetRenderTarget(ID3D11RenderTargetView& RenderTarget, ID3D11DepthStencilView* DepthStencilView)
 {
 	ID3D11RenderTargetView* RenderTargets[] = { &RenderTarget };
+	Context->OMSetRenderTargets(1u, RenderTargets, DepthStencilView);
+}
 
-	Context->OMSetRenderTargets(1, RenderTargets, DepthStencilView);
+void RenderContext::SetViewport(const D3D11_VIEWPORT& Viewport)
+{
+	const D3D11_VIEWPORT Viewports[] = { Viewport };
+	Context->RSSetViewports(1u, Viewports);
+}
 
-	constexpr float ClearColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	Context->ClearRenderTargetView(&RenderTarget, ClearColor);
+void RenderContext::ClearRenderTarget(ID3D11RenderTargetView& RenderTarget, const float* Color)
+{
+	constexpr float DefaultColor[] = { 1.0f, 0.0f, 1.0f, 1.0f };
+	Context->ClearRenderTargetView(&RenderTarget, Color ? Color : DefaultColor);
+}
 
-	if (DepthStencilView)
-	{
-		Context->ClearDepthStencilView(DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	}
+void RenderContext::ClearDepthStencil(ID3D11DepthStencilView& DepthStencilView, float Depth, UINT8 Stencil)
+{
+	Context->ClearDepthStencilView(&DepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, Depth, Stencil);
 }
 
 void RenderContext::SetVertexBuffer(const VertexBuffer& InVertexBuffer)
@@ -31,9 +39,30 @@ void RenderContext::SetVertexBuffer(const VertexBuffer& InVertexBuffer)
 	Context->IASetVertexBuffers(0u, 1u, Buffers, Strides, Offsets);
 }
 
+void RenderContext::UpdateVertexBuffer(const VertexBuffer& InVertexBuffer, const void* Data, UINT Size)
+{
+	if (Size > InVertexBuffer.GetCount() * InVertexBuffer.GetStride())
+	{
+		assert(false);
+		return;
+	}
+
+	ID3D11Buffer* NativeBuffer = &InVertexBuffer.GetNativeBuffer();
+
+	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	Context->Map(NativeBuffer, 0u, D3D11_MAP_WRITE_DISCARD, 0u, &MappedResource);
+	memcpy(MappedResource.pData, Data, Size);
+	Context->Unmap(NativeBuffer, 0u);
+}
+
 void RenderContext::SetIndexBuffer(const IndexBuffer& InIndexBuffer)
 {
 	Context->IASetIndexBuffer(&InIndexBuffer.GetNativeBuffer(), InIndexBuffer.GetFormat(), InIndexBuffer.GetOffset());
+}
+
+void RenderContext::SetTopology(D3D11_PRIMITIVE_TOPOLOGY Topology)
+{
+	Context->IASetPrimitiveTopology(Topology);
 }
 
 void RenderContext::SetConstantBuffer(UINT Slot, const ConstantBuffer& InConstantBuffer)
@@ -46,7 +75,11 @@ void RenderContext::SetConstantBuffer(UINT Slot, const ConstantBuffer& InConstan
 
 void RenderContext::UpdateConstantBuffer(ConstantBuffer& InConstantBuffer, const void* Data, UINT Size)
 {
-	assert(Size <= InConstantBuffer.GetSize());
+	if (Size > InConstantBuffer.GetSize())
+	{
+		assert(false);
+		return;
+	}
 
 	ID3D11Buffer* NativeBuffer = &InConstantBuffer.GetNativeBuffer();
 

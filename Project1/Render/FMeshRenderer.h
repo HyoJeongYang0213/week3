@@ -45,7 +45,6 @@ inline void FMeshRenderer::Render(const FMatrix& ViewProjection, const FVector& 
 		.Rasterizer = {
 			.FillMode = bIsWireframe ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID,
 			.CullMode = D3D11_CULL_BACK,
-			.bFrontCounterClockWise = false
 		},
 		.Blend = BlendMode::None,
 		.Depth = {

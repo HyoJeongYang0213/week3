@@ -6,7 +6,7 @@
 enum class VertexShaderType : uint8
 {
 	Object,
-	Grid,
+	Line,
 	Outline,
 
 	Count,
@@ -16,7 +16,7 @@ enum class VertexShaderType : uint8
 enum class PixelShaderType : uint8
 {
 	Object,
-	Grid,
+	Line,
 
 	Count,
 	None = 0xFF,
