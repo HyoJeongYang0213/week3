@@ -318,6 +318,16 @@ void UIPanel_Picking::Render()
                 float angle = light->GetAngle();
                 if (ImGui::SliderFloat("Angle", &angle, 1.0f, 60.0f))
                     light->SetAngle(angle);
+                float length = light->GetLength();
+                if (ImGui::SliderFloat("Length", &length, 0.1f, 30.0f))
+                    light->SetLength(length);
+            }
+
+            if (pickedActor->GetClass()->Name == "APointLight") {
+                APointLight* light = Cast<APointLight>(pickedActor);
+                float radius = light->GetRadius();
+                if (ImGui::SliderFloat("Radius", &radius, 1.0f, 40.0f))
+                    light->SetRadius(radius);
             }
 
             // 삭제버튼

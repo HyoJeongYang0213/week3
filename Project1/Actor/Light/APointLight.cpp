@@ -16,7 +16,10 @@ void APointLight::Render()
 	FVector Up = transform.Up();
 	FVector Right = transform.Right();
 
-	DrawCircle(Center, Forward, Up, Attenuation);
-	DrawCircle(Center, Forward, Right, Attenuation);
-	DrawCircle(Center, Up, Right, Attenuation);
+	float maxScale = (std::max)({ transform.GetScale().x, transform.GetScale().y, transform.GetScale().z });
+	float Scale = Radius * maxScale;
+
+	DrawCircle(Center, Forward, Up, Scale);
+	DrawCircle(Center, Forward, Right, Scale);
+	DrawCircle(Center, Up, Right, Scale);
 }

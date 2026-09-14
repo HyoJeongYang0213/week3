@@ -7,8 +7,11 @@ class APointLight : public ALight{
 public:
 	APointLight(const FLinearColor& color = FLinearColor::White);
 
+	float GetRadius() { return Radius; }
+	void SetRadius(float angle) { Radius = angle; }
+
 	virtual void Render() override;
 
 private:
-	float Attenuation = 1.0f;
+	float Radius = 1.0f;
 };

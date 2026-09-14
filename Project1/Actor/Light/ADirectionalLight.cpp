@@ -18,9 +18,9 @@ void ADirectionalLight::Render()
 	// FVector Right = transform.Right();
 
 	FVector Tip = Apex + Forward * Length;
-	FVector HeadBack = Tip - Forward*0.3f;	
-	FVector N1 = HeadBack - Up * 0.3f;
-	FVector N2 = HeadBack + Up * 0.3f;
+	FVector HeadBack = Tip - Forward*0.2f;	
+	FVector N1 = HeadBack - Up * 0.1f;
+	FVector N2 = HeadBack + Up * 0.1f;
 
 	LINEBATCH.AddLine(Apex, Tip, FLinearColor::White, true);
 	LINEBATCH.AddLine(N1, N2, FLinearColor::White, true);

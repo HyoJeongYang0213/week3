@@ -10,6 +10,9 @@ public:
 	float GetAngle() { return Angle; }
 	void SetAngle(float angle) { Angle = angle; }
 
+	float GetLength() { return Length; }
+	void SetLength(float length) { Length = length; }
+
 	virtual void Render() override;
 
 private:
