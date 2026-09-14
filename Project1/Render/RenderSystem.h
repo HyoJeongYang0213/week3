@@ -29,9 +29,12 @@ public:
 	PipelineCache& GetPipelines() { return Pipelines; }
 	const GraphicsPipeline& GetOrCreatePipeline(const GraphicsPipelineDesc& Desc) { return Pipelines.GetOrCreate(Desc); }
 
-	const D3D11_VIEWPORT& GetViewport() const { return Viewport; }
-	ID3D11RenderTargetView& GetBackBufferRTV() const { return *BackBufferRTV.Get(); }
-	ID3D11DepthStencilView& GetDepthStencilView() const { return *DepthStencilView.Get(); }
+	//const D3D11_VIEWPORT& GetViewport() const { return Viewport; }
+	const D3D11_VIEWPORT& GetViewport() const { return RENDERER.ViewportInfo; }
+	//ID3D11RenderTargetView& GetBackBufferRTV() const { return *BackBufferRTV.Get(); }
+	ID3D11RenderTargetView& GetBackBufferRTV() const { return *RENDERER.FrameBufferRTV; }
+	//ID3D11DepthStencilView& GetDepthStencilView() const { return *DepthStencilView.Get(); }
+	ID3D11DepthStencilView& GetDepthStencilView() const { return *RENDERER.depthStencilView; }
 
 	RenderSystem(const RenderSystem&) = delete;
 	RenderSystem& operator=(const RenderSystem&) = delete;
@@ -50,6 +53,7 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain;
 	D3D11_VIEWPORT Viewport{};
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> BackBufferRTV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> BackBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DepthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DepthStencilBuffer;
 

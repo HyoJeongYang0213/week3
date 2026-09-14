@@ -52,10 +52,10 @@ void RenderSystem::Initialize(HWND Window)
 	RECT ClientRect{};
 	GetClientRect(Window, &ClientRect);
 
-	CreateSwapChainResources(
-		static_cast<UINT>(ClientRect.right - ClientRect.left),
-		static_cast<UINT>(ClientRect.bottom - ClientRect.top)
-	);
+	//CreateSwapChainResources(
+	//	static_cast<UINT>(ClientRect.right - ClientRect.left),
+	//	static_cast<UINT>(ClientRect.bottom - ClientRect.top)
+	//);
 
 	Resources.RegisterDefaultResources();
 }
@@ -73,7 +73,8 @@ void RenderSystem::Present(bool bVsync)
 
 void RenderSystem::Resize(UINT Width, UINT Height)
 {
-	if (Width == 0u || Height == 0u)
+	// TODO: 애초에 SwapChain이 nullptr인 경우에는 Resize가 호출되지 않아야함
+	if (!SwapChain || Width == 0u || Height == 0u)
 	{
 		return;
 	}
@@ -81,12 +82,13 @@ void RenderSystem::Resize(UINT Width, UINT Height)
 	Context.Context->OMSetRenderTargets(0, nullptr, nullptr);
 
 	BackBufferRTV.Reset();
+	BackBuffer.Reset();
 	DepthStencilBuffer.Reset();
 	DepthStencilView.Reset();
 
 	SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0u);
 
-	CreateSwapChainResources(Width, Height);
+	//CreateSwapChainResources(Width, Height);
 }
 
 void RenderSystem::CreateSwapChainResources(UINT Width, UINT Height)
@@ -102,7 +104,6 @@ void RenderSystem::CreateSwapChainResources(UINT Width, UINT Height)
 		.MaxDepth = 1.0f,
 	};
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> BackBuffer;
 	SwapChain->GetBuffer(0u, IID_PPV_ARGS(&BackBuffer));
 	NativeDevice->CreateRenderTargetView(BackBuffer.Get(), nullptr, &BackBufferRTV);
 
