@@ -295,6 +295,10 @@
     <ClInclude Include="IndexBufferO.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
+    <ClInclude Include="Actor\ABillboard.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">

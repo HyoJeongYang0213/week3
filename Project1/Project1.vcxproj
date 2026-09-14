@@ -118,6 +118,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="..\Project1\Scenes\DefaultScene.h" />
     <ClInclude Include="..\Project1\pch.h" />
     <ClInclude Include="Actor\AActor.h" />
+    <ClInclude Include="Actor\ABillboard.h" />
     <ClInclude Include="Actor\ASkySphere.h" />
     <ClInclude Include="Actor\ASphere.h" />
     <ClInclude Include="Actor\AWorldAxises.h" />

@@ -2751,16 +2751,13 @@ inline FVertexData arrow_vertices[] =
 
 inline TArray<FVertexData> quad_vertices =
 {
-	// Triangle A
 	{ -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-left (red)
 	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f }, // Bottom-right (green)
 	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f }, // Top-left (blue)
-
-	// Triangle B
-	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f }, // Bottom-right (green)
 	{ 1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f }, // Top-right (red)
-	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f }, // Top-left (blue)
 };
+
+inline const uint32 quad_indices[] = { 0, 2, 1, 1, 2, 3 };
 
 inline TArray<FVertexData> rectangle_vertices =
 {

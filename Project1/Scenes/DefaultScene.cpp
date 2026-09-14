@@ -19,6 +19,7 @@ DefaultScene::DefaultScene()
 	// Sky 생성
 	skysphere = FObjectFactory::SpawnActor<ASkySphere>();
 
+	billboard = FObjectFactory::SpawnActor<UBillboard>();
 	
 }
 

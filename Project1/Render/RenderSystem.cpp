@@ -30,24 +30,24 @@ void RenderSystem::Initialize(HWND Window)
 	CreateDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	//D3D11CreateDeviceAndSwapChain(
-	//	nullptr,
-	//	D3D_DRIVER_TYPE_HARDWARE,
-	//	nullptr,
-	//	CreateDeviceFlags,
-	//	FeatureLevels,
-	//	ARRAYSIZE(FeatureLevels),
-	//	D3D11_SDK_VERSION,
-	//	&SwapChainDesc,
-	//	&SwapChain,
-	//	&Device.Device,
-	//	nullptr,
-	//	&Context.Context
-	//);
+	D3D11CreateDeviceAndSwapChain(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		CreateDeviceFlags,
+		FeatureLevels,
+		ARRAYSIZE(FeatureLevels),
+		D3D11_SDK_VERSION,
+		&SwapChainDesc,
+		&SwapChain,
+		&Device.Device,
+		nullptr,
+		&Context.Context
+	);
 
-	Device.Device = DEVICE;
-	Context.Context = DC;
-	SwapChain = RENDERER.GetSwapChain();
+	//Device.Device = DEVICE;
+	//Context.Context = DC;
+	//SwapChain = RENDERER.GetSwapChain();
 
 	RECT ClientRect{};
 	GetClientRect(Window, &ClientRect);
