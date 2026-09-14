@@ -342,10 +342,10 @@ void UIPanel_Grid::Render()
     }
     ImGui::End();
 }
-void UIPanel_ScenceManager::Render()
+void UIPanel_SceneManager::Render()
 {
     
-    ImGui::Begin("Sence Manager");
+    ImGui::Begin("Scene Manager");
     if (ImGui::TreeNode("Primitives"))
     {
         int32 Selected = -1;
