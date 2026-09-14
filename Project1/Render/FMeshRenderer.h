@@ -22,7 +22,7 @@ struct FMeshRenderData
 class FMeshRenderer final
 {
 public:
-	void Render(const FMatrix& ViewProjection, const FVector& CameraPosition, TArray<FMeshRenderData>& RenderData, bool bIsWireframe = false);
+	void Render(const ConstantBuffer& FrameBuffer, const TArray<FMeshRenderData>& RenderData, bool bIsWireframe = false);
 	
 	FMeshRenderer() :
 		ObjectBuffer(DEVICEN.CreateConstantBuffer(sizeof(ObjectConstants))),
@@ -36,7 +36,7 @@ private:
 	ConstantBuffer ColorBuffer;
 };
 
-inline void FMeshRenderer::Render(const FMatrix& ViewProjection, const FVector& CameraPosition, TArray<FMeshRenderData>& RenderData, bool bIsWireframe)
+inline void FMeshRenderer::Render(const ConstantBuffer& FrameBuffer, const TArray<FMeshRenderData>& RenderData, bool bIsWireframe)
 {
 	GraphicsPipelineDesc PipelineDesc{
 		.VertexShader = VertexShaderType::Object,
@@ -58,11 +58,6 @@ inline void FMeshRenderer::Render(const FMatrix& ViewProjection, const FVector& 
 	CONTEXT.SetConstantBuffer(0, ObjectBuffer);
 	CONTEXT.SetConstantBuffer(1, FrameBuffer);
 	CONTEXT.SetConstantBuffer(2, ColorBuffer);
-
-	CONTEXT.UpdateConstantBuffer(FrameBuffer, FrameConstants{
-		.VP = ViewProjection.Transpose(),
-		.CameraPos = CameraPosition,
-	});
 
 	for (const auto& Data : RenderData)
 	{

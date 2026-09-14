@@ -14,7 +14,7 @@ public:
 	}
 
 	void AddLine(const FVector & Start, const FVector& End, const FLinearColor& Color, bool bOverlay = false);
-	void Render();
+	void Render(const ConstantBuffer& FrameBuffer);
 
 private:
 	FLineBatchRenderer() :

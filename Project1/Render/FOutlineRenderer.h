@@ -21,7 +21,7 @@ struct FOutlineRenderData
 class FOutlineRenderer final
 {
 public:
-	void Render(const FMatrix& ViewProjection, const FVector& CameraPosition, const FOutlineRenderData& Data);
+	void Render(const ConstantBuffer& FrameBuffer, const FOutlineRenderData& Data);
 
 	FOutlineRenderer() :
 		ObjectBuffer(DEVICEN.CreateConstantBuffer(sizeof(ObjectConstants))),
@@ -35,7 +35,7 @@ private:
 	ConstantBuffer ColorBuffer;
 };
 
-inline void FOutlineRenderer::Render(const FMatrix& ViewProjection, const FVector& CameraPosition, const FOutlineRenderData& Data)
+inline void FOutlineRenderer::Render(const ConstantBuffer& FrameBuffer, const FOutlineRenderData& Data)
 {
 	GraphicsPipelineDesc PipelineDesc{
 		.VertexShader = VertexShaderType::Outline,
@@ -59,10 +59,6 @@ inline void FOutlineRenderer::Render(const FMatrix& ViewProjection, const FVecto
 	CONTEXT.SetConstantBuffer(0, ObjectBuffer);
 	CONTEXT.SetConstantBuffer(1, FrameBuffer);
 	CONTEXT.SetConstantBuffer(2, ColorBuffer);
-
-	CONTEXT.UpdateConstantBuffer(FrameBuffer, FrameConstants{
-		.VP = ViewProjection.Transpose(),
-		.CameraPos = CameraPosition });
 
 	CONTEXT.UpdateConstantBuffer(ObjectBuffer, ObjectConstants{
 		.World = Data.World.Transpose() });

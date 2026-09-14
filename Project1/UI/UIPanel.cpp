@@ -332,10 +332,11 @@ void UIPanel_Grid::Render()
     Scene* scene = SCENE.GetCurrentScene();
     DefaultScene* defaultScene = dynamic_cast<DefaultScene*>(scene);
 
-    float cellSize = defaultScene->Ugrid.GetCellSize();
-    if (ImGui::SliderFloat("Grid Interval", &cellSize, 0.15f, 2.0f))
+
+    float CellSize = defaultScene->Grid.CellSize;
+    if (ImGui::SliderFloat("Grid Interval", &CellSize, 0.15f, 2.0f))
     {
-        defaultScene->Ugrid.SetCellSize(cellSize);
+        defaultScene->Grid.CellSize = CellSize;
         // ----------------------------
         // editor.ini 저장 추가!!
         // ----------------------------

@@ -8,22 +8,14 @@
 #include "AGizmo.h"
 #include "FMeshRenderer.h"
 #include "FOutlineRenderer.h"
-
-struct FFadeOverlay
-{
-    float alpha = 0.0f;
-    bool bFading = false;
-    void StartFadeOut(float duration = 1.0f) { bFading = false; }
-    void StartFadeIn(float duration = 1.0f) { bFading = false; }
-    void Update(float deltaTime) {}
-    bool IsFading() const { return bFading; }
-};
+#include "ShaderConstants.h"
 
 class Scene
 {   
 
 public:
-    virtual ~Scene() = default;
+	Scene() : FrameBuffer(DEVICEN.CreateConstantBuffer(sizeof(FrameConstants))) {}
+    virtual ~Scene() {}
     virtual void Initialize() {}
     virtual void Enter() {}
     virtual void Exit() {}
@@ -49,6 +41,11 @@ public:
     {
 		FMatrix ViewProjection = CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(RENDER.GetViewport().Width / RENDER.GetViewport().Height);
 		FVector CameraLocation = CAMERA.GetLocation();
+
+        CONTEXT.UpdateConstantBuffer(FrameBuffer, FrameConstants{
+            .VP = ViewProjection.Transpose(),
+            .CameraPos = CameraLocation,
+        });
 
         auto& objects = OBJECT.GUObjectArray;
         TArray<FMeshRenderData> MeshRenderData;
@@ -76,8 +73,7 @@ public:
             }
         }
 		MeshRenderer.Render(
-			ViewProjection,
-			CameraLocation, 
+			FrameBuffer,
 			MeshRenderData,
 			CAMERA.ViewMode == EViewMode::Wireframe);
 
@@ -87,8 +83,7 @@ public:
             if (selected)
             {
                 OutlineRenderer.Render(
-                    ViewProjection,
-                    CameraLocation,
+                    FrameBuffer,
                     FOutlineRenderData{
                         .Mesh = RESOURCES.GetMesh(selected->GetRenderMeshName()),
                         .World = selected->GetTransform().GetWorldMatrix(),
@@ -101,13 +96,11 @@ public:
         }
     }
 
-    FFadeOverlay& GetFadeOverlay() { return m_fadeOverlay; }
-
-protected:
-    FFadeOverlay m_fadeOverlay;
-
 private:
     FMeshRenderer MeshRenderer;
 	FOutlineRenderer OutlineRenderer;
+
+protected:
+    ConstantBuffer FrameBuffer;
 };
 

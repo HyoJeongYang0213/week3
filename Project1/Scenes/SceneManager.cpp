@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Renderer.h"
@@ -31,10 +31,6 @@ void SceneManager::RequestChangeScene(const FString& name)
 	if (m_hasPendingSceneChange) return;
 	m_hasPendingSceneChange = true;
 	m_pendingSceneName = name;
-	if (m_currentScene)
-	{
-		m_currentScene->GetFadeOverlay().StartFadeOut(1.0f);
-	}
 }
 
 void  SceneManager::ChangeScene(const FString& name) 

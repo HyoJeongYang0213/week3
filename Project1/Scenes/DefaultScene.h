@@ -5,7 +5,7 @@
 #include "AWorldAxises.h"
 #include "PickingManager.h"
 #include "ASkySphere.h"
-#include "UGrid.h"
+#include "FGrid.h"
 
 class DefaultScene : public Scene
 {
@@ -22,7 +22,7 @@ public:
 
 	AWorldAxises* worldAxises;
 
-	UGrid Ugrid;
+	FGrid Grid;
 
 	ASkySphere* skysphere;
 };

@@ -21,8 +21,7 @@ void FLineBatchRenderer::AddLine(const FVector& Start, const FVector& End, const
 	Vertices.Add(v1);
 }
 
-// TODO: Frame Constant는 설정되어 있을 것이라고 가정한 상태인데, 수정 필요
-void FLineBatchRenderer::Render()
+void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer)
 {
 	bool bResized = false;
 	while (Vertices.size() > MaxVertexCount) {
@@ -51,6 +50,7 @@ void FLineBatchRenderer::Render()
 	auto& Pipeline = RENDER.GetOrCreatePipeline(PipelineDesc);
 	CONTEXT.SetPipeline(Pipeline);
 	CONTEXT.SetConstantBuffer(0, ObjectBuffer);
+	CONTEXT.SetConstantBuffer(1, FrameBuffer);
 
 	CONTEXT.UpdateVertexBuffer(VertexBuffer, Vertices.data(), sizeof(FVertexData) * Vertices.size());
 

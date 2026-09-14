@@ -49,23 +49,22 @@ void DefaultScene::Update(float deltatime)
 		gizmo->Update(deltatime);
 	}
 	
-	Camera& cam = CAMERA;
-	Ugrid.Update(cam.GetLocation());
+	Grid.Update(CAMERA.GetLocation());
 }
 
 void DefaultScene::Render()
 {
-	Ugrid.Render();
+	Grid.AddLines();
 	Scene::Render();
 
 	if (AGizmo::MainGizmo) {
 		AGizmo::MainGizmo->Render();
 	}
 
-	LINEBATCH.Render();
+	LINEBATCH.Render(FrameBuffer);
 
 	// 기본 깊이 상태 복원
-	RENDERER.SetDefaultDepthState();
+	//RENDERER.SetDefaultDepthState();
 
 	IMGUI.RenderAll();
 }

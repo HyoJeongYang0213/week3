@@ -65,6 +65,7 @@ void RenderContext::SetTopology(D3D11_PRIMITIVE_TOPOLOGY Topology)
 	Context->IASetPrimitiveTopology(Topology);
 }
 
+// TODO: 슬롯별로 캐싱해서 다시 바인드하지 않도록 하면 좋을 듯
 void RenderContext::SetConstantBuffer(UINT Slot, const ConstantBuffer& InConstantBuffer)
 {
 	ID3D11Buffer* Buffers[] = { &InConstantBuffer.GetNativeBuffer() };
