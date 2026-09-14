@@ -50,10 +50,11 @@ void UIPanel_Camera::Render()
 	{
 		cam.SetLocation(camLoc);
 	}
-	FQuaternion camRot = cam.GetRotation();
-	if (ImGui::DragFloat3("Cam Rot", &camRot.x, 0.01f, -3.14f, 3.14f))
+
+    FVector camEuler = FQuaternion::ToEuler(cam.GetRotation());
+	if (ImGui::DragFloat3("Cam Rot", &camEuler.x, 0.01f, -3.14f, 3.14f))
 	{
-		cam.SetRotation(camRot);
+		cam.SetRotation(FQuaternion::FromEuler(camEuler.x, camEuler.y, camEuler.z));
 	}
 
 	//카메라 속도 및 회전 조절
