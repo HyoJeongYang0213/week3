@@ -46,7 +46,6 @@ public:
   ID3D11VertexShader *SimpleVertexShader = nullptr;
   ID3D11PixelShader *SimplePixelShader = nullptr;
   ID3D11InputLayout *defaultInputLayout = nullptr;
-  ID3D11VertexShader *OutlineVertexShader = nullptr;
   ID3D11VertexShader *SkyVertexShader = nullptr;
   ID3D11PixelShader *SkyPixelShader = nullptr;
   ID3D11VertexShader* FontVertexShader = nullptr;
@@ -73,7 +72,6 @@ public:
   ID3D11DepthStencilState *dsState = nullptr;
   ID3D11DepthStencilState *dsGizmoState = nullptr;
   ID3D11DepthStencilState *dsSelectedState = nullptr;
-  ID3D11DepthStencilState *dsOutlineState = nullptr;
   ID3D11DepthStencilState *dsSkyState = nullptr;
 
   // 단일 공유 컬러 버퍼 (b2 슬롯)
@@ -90,12 +88,7 @@ public:
   void SetDefaultDepthState();
   void SetGizmoDepthState();
   void SetSelectedState();
-  void SetOutlineState();
   void SetSkyDepthState();
-  void SetOutlineParams(float pixels);
-
-  // 선택 액터 아웃라인 렌더링
-  void DrawOutline(class AActor *targetActor);
 
   void CreateDeviceAndSwapChain(HWND hWindow);
   void ReleaseDeviceAndSwapChain();
@@ -157,7 +150,6 @@ public:
 
   void PrepareGridShader();
   void PrepareLineShader();
-  void PrepareOutlineShader();
   void PrepareSkyShader();
   void PrepareFontShader();
 

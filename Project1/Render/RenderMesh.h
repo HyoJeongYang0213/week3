@@ -5,7 +5,7 @@
 #include <d3d11.h>
 #include <optional>
 
-struct RenderMesh final
+struct RenderMesh
 {
 	const VertexBuffer& GetVertexBuffer() const { return VertexBuffer; }
 	const IndexBuffer* GetIndexBuffer() const { return IndexBuffer ? &*IndexBuffer : nullptr; }

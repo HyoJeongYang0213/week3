@@ -81,6 +81,9 @@
 copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShader.hlsl"
 </Command>
     </PostBuildEvent>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -113,6 +116,9 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
 copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShader.hlsl"
 </Command>
     </PostBuildEvent>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Project1\Scenes\DefaultScene.h" />
@@ -166,7 +172,9 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Render\Buffer\VertexBufferO.h" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\ConstantBuffer.h" />
+    <ClInclude Include="Render\ShaderConstants.h" />
     <ClInclude Include="Render\FMeshRenderer.h" />
+    <ClInclude Include="Render\FOutlineRenderer.h" />
     <ClInclude Include="Render\GraphicsPipeline.h" />
     <ClInclude Include="Render\IndexBuffer.h" />
     <ClInclude Include="Render\Material.h" />
@@ -263,8 +271,11 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <Library Include="Library\DirectXTex\DirectXTex.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Shader\Constants.hlsli" />
     <None Include="Resources\Shader\GridShader.hlsl" />
-    <None Include="Resources\Shader\ShaderW0.hlsl" />
+    <None Include="Resources\Shader\ShaderW0.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\ShaderLine.hlsl">
@@ -273,6 +284,12 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     </None>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Resources\Shader\OutlineVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

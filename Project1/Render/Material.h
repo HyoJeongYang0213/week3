@@ -4,7 +4,7 @@
 #include "Containers.h"
 #include <type_traits>
 
-struct Material final
+struct Material
 {
 	VertexShaderType VertexShader;
 	PixelShaderType PixelShader;

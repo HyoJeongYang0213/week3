@@ -3,7 +3,7 @@
 #include <wrl/client.h>
 #include <d3d11.h>
 
-struct Texture final
+struct Texture
 {
 	ID3D11ShaderResourceView& GetSRV() const { return *SRV.Get(); }
 

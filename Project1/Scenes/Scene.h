@@ -7,6 +7,7 @@
 #include "PickingManager.h"
 #include "AGizmo.h"
 #include "FMeshRenderer.h"
+#include "FOutlineRenderer.h"
 
 struct FFadeOverlay
 {
@@ -46,6 +47,9 @@ public:
 
     virtual void Render()
     {
+		FMatrix ViewProjection = CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(RENDER.GetViewport().Width / RENDER.GetViewport().Height);
+		FVector CameraLocation = CAMERA.GetLocation();
+
         auto& objects = OBJECT.GUObjectArray;
         TArray<FMeshRenderData> MeshRenderData;
         for (size_t i = 0; i < objects.size(); ++i)
@@ -72,21 +76,27 @@ public:
             }
         }
 		MeshRenderer.Render(
-			CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(static_cast<float>(WIN_WIDTH) / static_cast<float>(WIN_HEIGHT)),
-			CAMERA.GetLocation(), 
+			ViewProjection,
+			CameraLocation, 
 			MeshRenderData,
 			CAMERA.ViewMode == EViewMode::Wireframe);
 
-        if (PICK.pickedObjcect)
-        {
-            RENDERER.DrawOutline(PICK.pickedObjcect);
-            PICK.pickedObjcect->Render();
-        }
 
         if (AGizmo::MainGizmo) {
             AActor* selected = AGizmo::MainGizmo->GetTargetActor();
-            if (selected) {
-                RENDERER.DrawOutline(selected);
+            if (selected)
+            {
+                OutlineRenderer.Render(
+                    ViewProjection,
+                    CameraLocation,
+                    FOutlineRenderData{
+                        .Mesh = RESOURCES.GetMesh(selected->GetRenderMeshName()),
+                        .World = selected->GetTransform().GetWorldMatrix(),
+                        .PixelWidth = 4.0f,
+                        .ViewportWidth = RENDER.GetViewport().Width,
+                        .ViewportHeight = RENDER.GetViewport().Height
+                    }
+                );
             }
             // 기즈모를 항상 최상단에 렌더링
             AGizmo::MainGizmo->Render();
@@ -103,5 +113,6 @@ protected:
 
 private:
     FMeshRenderer MeshRenderer;
+	FOutlineRenderer OutlineRenderer;
 };
 

@@ -1,19 +1,21 @@
-cbuffer ObjectConstants : register(b0) // FConstants
+cbuffer ObjectConstants : register(b0)
 {
     matrix World;
-};
-cbuffer FrameConstants : register(b1) // FFrameConstants
+}
+
+cbuffer FrameConstants : register(b1)
 {
     matrix VP;
-    float3 CameraPos; 
+    float3 CameraPos;
     float pad;
-};
+}
+
 cbuffer ColorConstants : register(b2)
 {
     float4 CustomColor;
     int UseTexture;
     float3 ColorPad;
-};
+}
 
 // 텍스처 및 샘플러 레지스터
 Texture2D MainTexture : register(t0);
@@ -101,37 +103,4 @@ float4 mainPS_Sky(PS_INPUT_SKY input) : SV_TARGET
     float v = 0.5f - asin(clamp(dir.y, -1.0f, 1.0f)) / 3.1415926f;
     
     return MainTexture.Sample(MainSampler, float2(u, v));
-}
-
-
-
-
-PS_INPUT mainVS_Outline(VS_INPUT input)
-{
-    PS_INPUT output;
-    
-    float outlinePixels = CustomColor.x;
-    float screenWidth = CustomColor.y;
-    float screenHeight = CustomColor.z;
-    
-    float3 norm = length(input.normal) > 0.001f ? input.normal : input.position;
-    float len = length(norm);
-    norm = (len > 0.0001f) ? (norm / len) : float3(0.0f, 1.0f, 0.0f);
-
-    float4 clipPos = mul(mul(float4(input.position, 1.0f), World), VP);
-    float4 clipNormal = mul(mul(float4(norm, 0.0f), World), VP);
-    
-    float2 offsetDir = normalize(clipNormal.xy + 0.00001f);
-    float2 pixelToNdc = float2(outlinePixels * 2.0f / screenWidth, outlinePixels * 2.0f / screenHeight);
-    
-    clipPos.xy += offsetDir * pixelToNdc * clipPos.w;
-    
-    float4 worldPos = mul(float4(input.position, 1.0f), World);
-
-    output.position = clipPos;
-    output.worldPosition = worldPos.xyz;
-    output.color = float4(1.0f, 1.0f, 0.0f, 1.0f);
-    output.uv = input.uv;
-    output.normal = norm;
-    return output;
 }

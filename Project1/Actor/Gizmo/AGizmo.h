@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "WeakObjectPtr.h"
 #include "AActor.h"
@@ -25,6 +25,20 @@ public:
 
 	virtual void Pressed() override;
 	virtual void Released() override;
+
+	FString GetRenderMeshName() const override
+	{
+		switch (*mode)
+		{
+		case EGizmoMode::Translation:
+			return "GizmoLocation";
+		case EGizmoMode::Rotation:
+			return "GizmoRotate";
+		case EGizmoMode::Scale:
+			return "GizmoScale";
+		}
+		return "";
+	}
 
 	void SetTargetActor(AActor* inTarget)
 	{

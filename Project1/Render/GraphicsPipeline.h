@@ -4,9 +4,8 @@
 #include <wrl/client.h>
 #include <d3d11.h>
 
-struct GraphicsPipeline final
+struct GraphicsPipeline
 {
-public:
 	ID3D11VertexShader& GetVertexShader() const
 	{
 		assert(VertexShader);
@@ -33,7 +32,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> DepthStencilState;
 };
 
-struct RasterizerDesc final
+struct RasterizerDesc
 {
 	D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
 	D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
@@ -42,16 +41,37 @@ struct RasterizerDesc final
 	bool operator==(const RasterizerDesc&) const = default;
 };
 
-struct DepthStencilDesc final
+struct DepthDesc
 {
-	bool bDepthEnabled = true;
+	bool bEnable = true;
 	D3D11_DEPTH_WRITE_MASK DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	D3D11_COMPARISON_FUNC DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-	bool operator==(const DepthStencilDesc&) const = default;
+	bool operator==(const DepthDesc&) const = default;
 };
 
-struct GraphicsPipelineDesc final
+struct StencilFaceDesc
+{
+	D3D11_STENCIL_OP FailOp = D3D11_STENCIL_OP_KEEP;
+	D3D11_STENCIL_OP DepthFailOp = D3D11_STENCIL_OP_KEEP;
+	D3D11_STENCIL_OP PassOp = D3D11_STENCIL_OP_KEEP;
+	D3D11_COMPARISON_FUNC Func = D3D11_COMPARISON_ALWAYS;
+
+	bool operator==(const StencilFaceDesc&) const = default;
+};
+
+struct StencilDesc
+{
+	bool bEnable = false;
+	UINT8 ReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	UINT8 WriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+	StencilFaceDesc FrontFace;
+	StencilFaceDesc BackFace;
+
+	bool operator==(const StencilDesc&) const = default;
+};
+
+struct GraphicsPipelineDesc
 {
 	VertexShaderType VertexShader;
 	PixelShaderType PixelShader;
@@ -60,7 +80,8 @@ struct GraphicsPipelineDesc final
 
 	RasterizerDesc Rasterizer;
 	BlendMode Blend;
-	DepthStencilDesc DepthStencil;
+	DepthDesc Depth;
+	StencilDesc Stencil;
 
 	bool operator==(const GraphicsPipelineDesc&) const = default;
 };
@@ -77,15 +98,52 @@ struct GraphicsPipelineDescHash
 		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Rasterizer.CullMode)));
 		HashCombine(Hash, std::hash<bool>()(Desc.Rasterizer.bFrontCounterClockWise));
 		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Blend)));
-		HashCombine(Hash, std::hash<bool>()(Desc.DepthStencil.bDepthEnabled));
-		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.DepthStencil.DepthWriteMask)));
-		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.DepthStencil.DepthFunc)));
+		HashCombine(Hash, std::hash<bool>()(Desc.Depth.bEnable));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Depth.DepthWriteMask)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Depth.DepthFunc)));
+		HashCombine(Hash, std::hash<bool>()(Desc.Stencil.bEnable));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.ReadMask)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.WriteMask)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.FrontFace.FailOp)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.FrontFace.DepthFailOp)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.FrontFace.PassOp)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.FrontFace.Func)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.BackFace.FailOp)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.BackFace.DepthFailOp)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.BackFace.PassOp)));
+		HashCombine(Hash, std::hash<uint8>()(static_cast<uint8>(Desc.Stencil.BackFace.Func)));
 		return Hash;
 	}
 
 private:
-	inline void HashCombine(std::size_t& Seed, std::size_t Value) const
+	void HashCombine(std::size_t& Seed, std::size_t Value) const
 	{
 		Seed ^= Value + 0x9e3779b9 + (Seed << 6) + (Seed >> 2);
 	}
 };
+
+namespace StencilMode
+{
+	constexpr StencilDesc Disabled{
+		.bEnable = false
+	};
+
+	constexpr StencilDesc TestNotEqual{
+		.bEnable = true,
+		.ReadMask = 0xFF,
+		.WriteMask = 0xFF,
+		.FrontFace = {
+			.FailOp = D3D11_STENCIL_OP_KEEP,
+			.DepthFailOp = D3D11_STENCIL_OP_KEEP,
+			.PassOp = D3D11_STENCIL_OP_KEEP,
+			.Func = D3D11_COMPARISON_NOT_EQUAL
+		},
+		.BackFace = {
+			.FailOp = D3D11_STENCIL_OP_KEEP,
+			.DepthFailOp = D3D11_STENCIL_OP_KEEP,
+			.PassOp = D3D11_STENCIL_OP_KEEP,
+			.Func = D3D11_COMPARISON_NOT_EQUAL
+		}
+	};
+}
+

@@ -64,7 +64,7 @@ void DefaultScene::Render()
 	if (AGizmo::MainGizmo) {
 		AActor* selected = AGizmo::MainGizmo->GetTargetActor();
 		if (selected) {
-			RENDERER.DrawOutline(selected);
+			//RENDERER.DrawOutline(selected);
 		}
 		// 기즈모를 항상 최상단에 렌더링
 		AGizmo::MainGizmo->Render();

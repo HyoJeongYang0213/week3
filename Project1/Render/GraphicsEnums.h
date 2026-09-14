@@ -7,6 +7,7 @@ enum class VertexShaderType : uint8
 {
 	Object,
 	Grid,
+	Outline,
 
 	Count,
 	None = 0xFF,

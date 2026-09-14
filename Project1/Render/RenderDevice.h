@@ -29,10 +29,10 @@ public:
 		VertexLayout Layout,
 		RasterizerDesc Rasterizer,
 		BlendMode Blend,
-		DepthStencilDesc DepthStencil) const;
+		DepthDesc Depth,
+		StencilDesc Stencil) const;
 
-	// ID3D11Device& GetNativeDevice() const { return *Device.Get(); }
-	ID3D11Device& GetNativeDevice() const { return *DEVICE; }
+	ID3D11Device& GetNativeDevice() const { return *Device.Get(); }
 
 private:
 	friend class RenderSystem;

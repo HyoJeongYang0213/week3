@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "FLinearColor.h"
 #include "FVertexSimple.h"
@@ -51,6 +51,8 @@ public:
     bOwnsMesh = bOwned;
   }
   Mesh *GetMesh() const { return mesh; }
+
+    virtual FString GetRenderMeshName() const { return ""; } // 임시
 
   virtual bool bIsPicked(const FRay &worldRay, float &outDistance);
   virtual bool bIsPicked(const FRay &worldRay) {

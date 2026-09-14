@@ -35,7 +35,8 @@ inline const GraphicsPipeline& PipelineCache::GetOrCreate(const GraphicsPipeline
 			Desc.VertexLayout,
 			Desc.Rasterizer,
 			Desc.Blend,
-			Desc.DepthStencil));
+			Desc.Depth,
+			Desc.Stencil));
 
 	return *Pipelines[Desc];
 }

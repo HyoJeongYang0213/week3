@@ -117,7 +117,8 @@ GraphicsPipeline RenderDevice::CreateGraphicsPipeline(
 	VertexLayout Layout, 
 	RasterizerDesc Rasterizer,
 	BlendMode Blend,
-	DepthStencilDesc DepthStencil) const
+	DepthDesc Depth,
+	StencilDesc Stencil) const
 {
 	GraphicsPipeline Result{ &InVertexShader.GetShader(), &PixelShader };
 
@@ -139,9 +140,26 @@ GraphicsPipeline RenderDevice::CreateGraphicsPipeline(
 	Device->CreateBlendState(&BlendDesc, &Result.BlendState);
 
 	const D3D11_DEPTH_STENCIL_DESC DepthDesc{
-		.DepthEnable = DepthStencil.bDepthEnabled,
-		.DepthWriteMask = DepthStencil.DepthWriteMask,
-		.DepthFunc = DepthStencil.DepthFunc,
+		.DepthEnable = Depth.bEnable,
+		.DepthWriteMask = Depth.DepthWriteMask,
+		.DepthFunc = Depth.DepthFunc,
+
+		.StencilEnable = Stencil.bEnable,
+		.StencilReadMask = Stencil.ReadMask,
+		.StencilWriteMask = Stencil.WriteMask,
+		
+		.FrontFace = {
+			.StencilFailOp = Stencil.FrontFace.FailOp,
+			.StencilDepthFailOp = Stencil.FrontFace.DepthFailOp,
+			.StencilPassOp = Stencil.FrontFace.PassOp,
+			.StencilFunc = Stencil.FrontFace.Func,
+		},
+		.BackFace = {
+			.StencilFailOp = Stencil.BackFace.FailOp,
+			.StencilDepthFailOp = Stencil.BackFace.DepthFailOp,
+			.StencilPassOp = Stencil.BackFace.PassOp,
+			.StencilFunc = Stencil.BackFace.Func,
+		}
 	};
 	Device->CreateDepthStencilState(&DepthDesc, &Result.DepthStencilState);
 

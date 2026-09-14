@@ -78,14 +78,14 @@ void RenderContext::SetSampler(UINT Slot, ID3D11SamplerState& SamplerState)
 	Context->PSSetSamplers(Slot, 1u, Samplers);
 }
 
-void RenderContext::SetPipeline(const GraphicsPipeline& Pipeline)
+void RenderContext::SetPipeline(const GraphicsPipeline& Pipeline, UINT8 StencilRef)
 {
 	Context->IASetInputLayout(Pipeline.GetInputLayout());
 	Context->VSSetShader(&Pipeline.GetVertexShader(), nullptr, 0u);
 	Context->PSSetShader(Pipeline.GetPixelShader(), nullptr, 0u);
 	Context->RSSetState(&Pipeline.GetRasterizerState());
 	Context->OMSetBlendState(&Pipeline.GetBlendState(), nullptr, 0xFFFFFFFF);
-	Context->OMSetDepthStencilState(&Pipeline.GetDepthStencilState(), 0u);
+	Context->OMSetDepthStencilState(&Pipeline.GetDepthStencilState(), StencilRef);
 }
 
 void RenderContext::Draw(UINT VertexCount)

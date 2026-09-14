@@ -408,7 +408,6 @@ void Renderer::CreateShader() {
 
   CreateVertexShader(shaderPath, "mainVS", &SimpleVertexShader, &vsBlob);
   CreatePixelShader(shaderPath, "mainPS", &SimplePixelShader);
-  CreateVertexShader(shaderPath, "mainVS_Outline", &OutlineVertexShader);
   CreateVertexShader(LineshaderPath, "mainVS_Line", &LineVertexShader);
   CreatePixelShader(LineshaderPath, "mainPS_Line", &LinePixelShader);
   CreateVertexShader(shaderPath, "mainVS_Sky", &SkyVertexShader);
@@ -453,11 +452,6 @@ void Renderer::ReleaseShader() {
   if (SimplePixelShader) {
     SimplePixelShader->Release();
     SimplePixelShader = nullptr;
-  }
-
-  if (OutlineVertexShader) {
-    OutlineVertexShader->Release();
-    OutlineVertexShader = nullptr;
   }
 
   if (SimpleVertexShader) {
@@ -505,15 +499,6 @@ void Renderer::Prepare() {
 
   // 입력 레이아웃 캐시 초기화
   CurrentInputLayout = nullptr;
-}
-
-void Renderer::PrepareOutlineShader() {
-  if (CurrentInputLayout != defaultInputLayout) {
-    CurrentInputLayout = defaultInputLayout;
-    DeviceContext->IASetInputLayout(defaultInputLayout);
-  }
-  DeviceContext->VSSetShader(OutlineVertexShader, nullptr, 0);
-  DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
 }
 
 void Renderer::PrepareLineShader()
@@ -629,26 +614,6 @@ void Renderer::CreateDepthStencil() {
     Device->CreateDepthStencilState(&gizmoDesc, &dsGizmoState);
   }
 
-  { // 아웃라이너용
-    // 가려진 영역도 항상 최상단 렌더링 본체는 스텐실로 보호
-    D3D11_DEPTH_STENCIL_DESC outlinerDesc = {};
-    outlinerDesc.DepthEnable = FALSE;
-    outlinerDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-
-    outlinerDesc.StencilEnable = TRUE;
-    outlinerDesc.StencilReadMask = 0xFF;
-    outlinerDesc.StencilWriteMask = 0xFF;
-
-    outlinerDesc.FrontFace.StencilFunc = D3D11_COMPARISON_NOT_EQUAL;
-    outlinerDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-    outlinerDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-    outlinerDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-
-    outlinerDesc.BackFace = outlinerDesc.FrontFace;
-
-    Device->CreateDepthStencilState(&outlinerDesc, &dsOutlineState);
-  }
-
   { // 스카이스피어용 깊이 상태
 
     D3D11_DEPTH_STENCIL_DESC skyDesc = {};
@@ -687,11 +652,6 @@ void Renderer::ReleaseDepthStencil() {
     dsSelectedState = nullptr;
   }
 
-  if (dsOutlineState) {
-    dsOutlineState->Release();
-    dsOutlineState = nullptr;
-  }
-
   if (dsSkyState) {
     dsSkyState->Release();
     dsSkyState = nullptr;
@@ -728,54 +688,9 @@ void Renderer::SetSelectedState() {
   DeviceContext->OMSetDepthStencilState(dsSelectedState, stencilRef);
 }
 
-void Renderer::SetOutlineState() {
-  UINT stencilRef = 1;
-  DeviceContext->OMSetDepthStencilState(dsOutlineState, stencilRef);
-}
-
 void Renderer::SetSkyDepthState() {
   UINT stencilRef = 1;
   DeviceContext->OMSetDepthStencilState(dsSkyState, stencilRef);
-}
-
-void Renderer::SetOutlineParams(float pixels) {
-  SetCustomColor(
-      FLinearColor(pixels, ViewportInfo.Width, ViewportInfo.Height, 1.0f));
-}
-
-void Renderer::DrawOutline(AActor *targetActor) {
-  if (!targetActor || !targetActor->GetMesh())
-    return;
-
-  Transform trans = targetActor->GetTransform();
-  Mesh *mesh = targetActor->GetMesh();
-
-  // 아웃라인 셰이더 및 깊이 스텐실 상태 설정
-  PrepareOutlineShader();
-  RENDERER.SetOutlineParams(4.0f);
-  SetOutlineState();
-
-  if (targetActor->worldBuffer) {
-    targetActor->worldBuffer->SetMat(trans.WorldMat);
-    targetActor->worldBuffer->SetVSBuffer(0);
-  }
-
-  // 아웃라인 셰이더 유지 상태로 드로우
-  // 적용된 텍스처(폰트 등) 삭제
-  SetTexture(nullptr);
-  mesh->IASet();
-
-  if (mesh->indexbuffer)
-  {
-      mesh->indexbuffer->IASet();
-      DeviceContext->DrawIndexed(mesh->indexbuffer->count, 0, 0);
-  }
-  else
-  {
-      DeviceContext->Draw(mesh->GetNumVertices(), 0);
-  }
-
-  SetDefaultDepthState();
 }
 
 void Renderer::SwapBuffer() { SwapChain->Present(1, 0); }

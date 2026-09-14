@@ -295,6 +295,13 @@
     <ClInclude Include="IndexBufferO.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
+    <ClInclude Include="Render\FOutlineRenderer.h">
+      <Filter>Render\New\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\ShaderConstants.h">
+      <Filter>Render\New\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">
@@ -407,7 +414,6 @@
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp" />
     <ClCompile Include="Render\RenderContext.cpp">
       <Filter>Render\New\Core</Filter>
     </ClCompile>
@@ -429,13 +435,13 @@
     <ClCompile Include="Core\FName.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
       <Filter>Library\DirectXTex</Filter>
-    </None>
-    <None Include="Resources\Shader\ShaderW0.hlsl">
-      <Filter>Resources\Shader</Filter>
     </None>
     <None Include="Resources\Shader\GridShader.hlsl">
       <Filter>Resources\Shader</Filter>
@@ -446,6 +452,12 @@
     <None Include="Resources\Shader\GridShader.hlsl" />
     <None Include="Resources\Shader\ShaderW0.hlsl" />
     <None Include="Resources\Shader\ShaderLine.hlsl" />
+    <None Include="Resources\Shader\Constants.hlsli">
+      <Filter>Resources\Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\ShaderW0.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Library\DirectXTex\DirectXTex.lib">
@@ -454,6 +466,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\OutlineVS.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
   </ItemGroup>

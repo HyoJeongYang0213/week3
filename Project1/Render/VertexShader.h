@@ -3,9 +3,8 @@
 #include <wrl/client.h>
 #include <d3d11.h>
 
-struct VertexShader final
+struct VertexShader
 {
-public:
 	ID3D11VertexShader& GetShader() const { return *Shader.Get(); }
 	const TArray<uint8>& GetByteCode() const { return ByteCode; }
 

@@ -31,13 +31,12 @@ public:
 	void SetTexture(UINT Slot, const Texture& InTexture);
 	void SetSampler(UINT Slot, ID3D11SamplerState& SamplerState);
 
-	void SetPipeline(const GraphicsPipeline& Pipeline);
+	void SetPipeline(const GraphicsPipeline& Pipeline, UINT8 StencilRef = 0u);
 
 	void Draw(UINT VertexCount);
 	void DrawIndexed(UINT IndexCount);
 	
-	// ID3D11DeviceContext& GetNativeContext() const { return *Context.Get(); }
-	ID3D11DeviceContext& GetNativeContext() const { return *DC; }
+	ID3D11DeviceContext& GetNativeContext() const { return *Context.Get(); }
 
 private:
 	friend class RenderSystem;
