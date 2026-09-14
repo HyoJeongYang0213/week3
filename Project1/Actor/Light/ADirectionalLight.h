@@ -10,5 +10,5 @@ public:
 	virtual void Render() override;
 
 private:
-	float Length = 3.0f;
+	float Length = 1.0f;
 };
