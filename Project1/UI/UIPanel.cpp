@@ -208,8 +208,11 @@ void UIPanel_SaveLoad::Render()
 	// SAVE
 	if (ImGui::Button("Save Scene"))
 	{
-		// "./SceneData/MyScene.Scene" 으로 저장됨
-		SAVELOAD.SaveScene("./SceneData/MyScene"); 
+        FString path = SaveSceneFileDialog();
+        if (!path.empty())
+        {
+		    SAVELOAD.SaveScene(path); 
+        }
 	}
 	
 	// LOAD
@@ -460,7 +463,7 @@ FString UIPanel_SaveLoad::OpenSceneFileDialog()
 			if (SUCCEEDED(hr))
 			{
 				COMDLG_FILTERSPEC rgSpec[] = {
-					{ L"씬 파일 (*.Scene)", L"*.Scene" }
+					{ L"SCENE 파일 (*.Scene)", L"*.Scene" }
 				};
 				UINT cFileTypes = ARRAYSIZE(rgSpec);
 				hr = pfd->SetFileTypes(cFileTypes, rgSpec);
@@ -507,4 +510,154 @@ FString UIPanel_SaveLoad::OpenSceneFileDialog()
 	}
     pfd->Release();
 	return result;
+}
+
+FString UIPanel_SaveLoad::SaveSceneFileDialog()
+{
+    FString result;
+
+    // 게임매니저에서 관리하는 Main Window 받아오기
+    HWND hwnd = GameManager::GetInstance().GetMainWindow();
+
+    // COM 클래스의 CLSID_FileSaveDialog 객체 만들고 IFileDialog 포인터(pfd) 받기
+    IFileDialog* pfd = NULL;
+    HRESULT hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+    // CoCreateInstance 성공 ?
+    if (SUCCEEDED(hr))
+    {
+        // shtypes.h의 요소 필터링 구조체
+        COMDLG_FILTERSPEC rgSpec[] = {
+            { L"SCENE 파일 (*.Scene)", L"*.Scene" }
+        };
+        UINT cFileTypes = ARRAYSIZE(rgSpec);
+        hr = pfd->SetFileTypes(cFileTypes, rgSpec);
+
+        // SetFileTypes 성공?
+        if (SUCCEEDED(hr))
+        {
+            // 기본 확장자 ".Scene"으로 설정
+            hr = pfd->SetDefaultExtension(L"Scene");
+
+            if (SUCCEEDED(hr))
+            {
+                IShellItem* psiRoot = nullptr;
+                namespace fs = std::filesystem;
+                fs::path root = fs::current_path();
+                fs::path scenePath = root / "SceneData";
+
+                if (fs::exists(scenePath))
+                {
+                    int cur_max = 0;
+
+                    // std::filesystem의 directory_iterator로 매 directory_entry 순회
+                    for (const fs::directory_entry& entry : fs::directory_iterator(scenePath))
+                    {
+                        // 확장자가 '.Scene'인 경우
+                        if (entry.path().extension() == ".Scene")
+                        {
+                            // stem에 파일명 저장
+                            FString stem = entry.path().stem().string();
+
+                            // 파일명이 Scene으로 시작할 경우
+                            if (stem.starts_with("Scene"))
+                            {
+                                // Scene 뒷자리를 자름
+                                FString bh = stem.substr(5);
+                                if (!bh.empty())
+                                {
+                                    bool bIsEveryCharDigit = true;
+
+                                    for (char c : bh)
+                                    {
+                                        if (!isdigit(c))
+                                        {
+                                            bIsEveryCharDigit = false;
+                                            break;
+                                        }
+                                    }
+
+                                    // bh가 다 숫자로 이루어져 있다면
+                                    if (bIsEveryCharDigit)
+                                    {
+                                        int idx = std::stoi(bh);
+                                        cur_max = (cur_max > idx) ? cur_max : idx;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    std::wstring fn;
+                    if (cur_max < 9)
+                        fn = L"Scene0" + std::to_wstring(cur_max + 1);
+                    else
+                        fn = L"Scene" + std::to_wstring(cur_max + 1);
+
+                    hr = pfd->SetFileName(fn.c_str());
+
+                    // SetFileName 성공?
+                    if (SUCCEEDED(hr))
+                    {
+                        std::wstring scenePathW = scenePath.wstring();
+
+                        hr = SHCreateItemFromParsingName(
+                            scenePathW.c_str(),
+                            nullptr,
+                            IID_PPV_ARGS(&psiRoot)
+                        );
+
+                        // SHCreateItemFromParsingName 성공?
+                        if (SUCCEEDED(hr))
+                        {
+                            hr = pfd->SetFolder(psiRoot);
+
+                            // SetFolder 성공?
+                            if (SUCCEEDED(hr))
+                            {
+                                hr = pfd->Show(hwnd);
+
+                                // Show 성공 ?
+                                if (SUCCEEDED(hr))
+                                {
+                                    IShellItem* psiResult;
+                                    hr = pfd->GetResult(&psiResult);
+
+                                    // GetResult 성공 ?
+                                    if (SUCCEEDED(hr))
+                                    {
+                                        PWSTR pszFilePath = NULL;
+                                        hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+                                        // GetDisplayName 성공 ?
+                                        if (SUCCEEDED(hr))
+                                        {
+                                            // PWSTR를 FString(std::string)으로 변환
+                                            // wchar_t* to string
+                                            int wideLength = static_cast<int>(wcslen(pszFilePath));
+                                            int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
+
+                                            if (sizeNeeded > 0)
+                                            {
+                                                result.resize(sizeNeeded);
+                                                WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
+                                            }
+                                        }
+
+                                        CoTaskMemFree(pszFilePath);
+                                        psiResult->Release();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                psiRoot->Release();
+            }
+        }
+    }
+    if (pfd)
+    {
+        pfd->Release();
+    }
+    return result;
 }

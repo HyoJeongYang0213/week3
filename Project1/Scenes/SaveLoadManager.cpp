@@ -134,7 +134,7 @@ void SaveLoadManager::SaveScene(const FString& path)
     
     sceneJson["Primitives"] = objectsJson;
     
-    std::ofstream file(path + ".Scene"); // 파일 경로
+    std::ofstream file(path);
     
     if (!file.is_open())
     {

@@ -48,6 +48,7 @@ public:
 
 private:
     FString OpenSceneFileDialog();
+    FString SaveSceneFileDialog();
 };
 
 // 씬 매니저 창 
