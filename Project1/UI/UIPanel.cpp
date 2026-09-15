@@ -143,27 +143,27 @@ void UIPanel_Spawn::Render()
 				case 4 :
                     spawnedActor = FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
-        case 5 :
-            spawnedActor = FObjectFactory::SpawnActor<APointLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
-            break;
-        case 6:
-            spawnedActor = FObjectFactory::SpawnActor<ASpotLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
-            break;
-        case 7:
-            spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
-            break;
-        case 8:
-        {
-            ParticleSubUVDesc explosionsubuvdesc = {};
-            explosionsubuvdesc.ColumnCnt = 6;
-            explosionsubuvdesc.RowCnt = 6;
-            explosionsubuvdesc.LastIndex = 33;
-            explosionsubuvdesc.Duration = 3.f;
-            explosionsubuvdesc.bIsLoop = true;
+                case 5 :
+                    spawnedActor = FObjectFactory::SpawnActor<APointLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+                    break;
+                case 6:
+                    spawnedActor = FObjectFactory::SpawnActor<ASpotLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+                    break;
+                case 7:
+                    spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+                    break;
+                case 8:
+                {
+                    ParticleSubUVDesc explosionsubuvdesc = {};
+                    explosionsubuvdesc.ColumnCnt = 6;
+                    explosionsubuvdesc.RowCnt = 6;
+                    explosionsubuvdesc.LastIndex = 33;
+                    explosionsubuvdesc.Duration = 3.f;
+                    explosionsubuvdesc.bIsLoop = true;
 
-            spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>(L"Resources/Textures/Explosion.PNG", explosionsubuvdesc);
-            break;
-        }
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>(L"Resources/Textures/Explosion.PNG", explosionsubuvdesc);
+                    break;
+                }
 				default :
 					break;
 			}
