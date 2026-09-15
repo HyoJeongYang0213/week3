@@ -298,7 +298,6 @@
     <ClInclude Include="IndexBufferO.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
     <ClInclude Include="Actor\Light\ALight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
@@ -308,9 +307,14 @@
     <ClInclude Include="Actor\Light\ASpotLight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Actor\Light\ADirectionalLight.h" />
     <ClInclude Include="Resources\Geometry\Bulb.h">
       <Filter>Resources\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ADirectionalLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Buffer\FBoundingBox.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -424,7 +428,6 @@
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp" />
     <ClCompile Include="Render\RenderContext.cpp">
       <Filter>Render\New\Core</Filter>
     </ClCompile>
@@ -455,7 +458,12 @@
     <ClCompile Include="Actor\Light\ASpotLight.cpp">
       <Filter>Actor\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Actor\Light\ADirectionalLight.cpp" />
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
