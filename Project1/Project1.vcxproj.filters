@@ -439,6 +439,12 @@
     <ClCompile Include="Core\FName.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\UBillboard.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">

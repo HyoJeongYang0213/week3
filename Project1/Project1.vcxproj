@@ -205,6 +205,8 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Actor\ASkySphere.cpp" />
     <ClCompile Include="Actor\AWorldAxises.cpp" />
     <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
+    <ClCompile Include="Actor\UBillboard.cpp" />
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp" />
     <ClCompile Include="App\ConsoleWindow.cpp" />
     <ClCompile Include="App\GameManager.cpp" />
     <ClCompile Include="Core\FName.cpp" />

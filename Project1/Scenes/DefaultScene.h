@@ -29,8 +29,5 @@ public:
 	ASkySphere* skysphere;
 
 	UBillboard* billboard;
-
-	UParticleSubUVComp* explosion;
-	UParticleSubUVComp* explosion2;
 };
 
