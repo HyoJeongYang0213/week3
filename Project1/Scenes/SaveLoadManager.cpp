@@ -119,6 +119,7 @@ void SaveLoadManager::SaveScene(const FString& path)
         FVector scale = actor->GetScale();          // scale 저장
         EPrimitive type = actor->GetPrimitive();    // type 저장
         if (type == EPrimitive::Gizmo) continue; // Gizmo면 pass
+        FLinearColor color = actor->GetColor();     // color 저장
         
         json objJson;
         // objJson["UUID"]     = actor->GetID();
@@ -127,6 +128,7 @@ void SaveLoadManager::SaveScene(const FString& path)
         objJson["Scale"]    = { scale.x, scale.y, scale.z };
         // objJson["Class"]    = string(actor->GetObjClassName()); // ACube, ASphere ...
         objJson["Type"]     = EPrimitiveToStr(type);           // Sphere -> "Sphere", Cube -> "Cube"
+        objJson["Color"] = { color.r, color.g, color.b, color.a };
 
         objectsJson[std::to_string(index)] = objJson; // 0 -> "0", 1 -> "1" ...
         ++index;
@@ -207,15 +209,18 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         auto location   = objJson["Location"];
         auto rotation   = objJson["Rotation"];
         auto scale      = objJson["Scale"];
+        auto color      = objJson["Color"];
         
         // 명시적 형변환 (float) 하여 x, y, z 값 가져오기
         FVector loc(location[0].get<float>(), location[1].get<float>(), location[2].get<float>());
         FQuaternion rat = FQuaternion::FromEuler(rotation[0].get<float>(), rotation[1].get<float>(), rotation[2].get<float>());
         FVector sc(scale[0].get<float>(), scale[1].get<float>(), scale[2].get<float>());
+        FLinearColor lc(color[0].get<float>(), color[1].get<float>(), color[2].get<float>(), color[3].get<float>());
         
         AActor* actor = it->second(loc, rat, sc);
-        loadedObjects.push_back(actor);
+        actor->SetColor(lc);
 
+        loadedObjects.push_back(actor);
     }
 
     return loadedObjects;
