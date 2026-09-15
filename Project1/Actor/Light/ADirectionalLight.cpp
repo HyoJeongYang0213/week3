@@ -27,3 +27,7 @@ void ADirectionalLight::Render()
 	LINEBATCH.AddLine(N1, Tip, FLinearColor::White, true);
 	LINEBATCH.AddLine(N2, Tip, FLinearColor::White, true);
 }
+
+void ADirectionalLight::ApplyGizmoScale(const FVector& newScale, float moveDist)
+{
+}
