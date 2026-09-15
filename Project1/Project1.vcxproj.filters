@@ -52,9 +52,6 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{02F634BB-5AE4-BC9F-B2CD-FEE7A48673FC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Render\New">
       <UniqueIdentifier>{2846d16f-c4ee-4832-a4fa-e8cbfee30c88}</UniqueIdentifier>
     </Filter>
@@ -66,6 +63,12 @@
     </Filter>
     <Filter Include="Render\New\Renderer">
       <UniqueIdentifier>{5dfa7dfc-b2ba-4c79-9816-247163586f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\UI">
+      <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Light">
+      <UniqueIdentifier>{2fa5a235-6d74-4150-98a7-2146478a9523}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -218,13 +221,13 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="UI\IUIPanel.h">
-      <Filter>UI</Filter>
+      <Filter>Actor\UI</Filter>
     </ClInclude>
     <ClInclude Include="UI\UIManager.h">
-      <Filter>UI</Filter>
+      <Filter>Actor\UI</Filter>
     </ClInclude>
     <ClInclude Include="UI\UIPanel.h">
-      <Filter>UI</Filter>
+      <Filter>Actor\UI</Filter>
     </ClInclude>
     <ClInclude Include="Core\Pointers.h">
       <Filter>Core</Filter>
@@ -294,6 +297,24 @@
     </ClInclude>
     <ClInclude Include="IndexBufferO.h">
       <Filter>Render\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ALight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\APointLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ASpotLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\Bulb.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ADirectionalLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Buffer\FBoundingBox.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -396,10 +417,10 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="UI\UIManager.cpp">
-      <Filter>UI</Filter>
+      <Filter>Actor\UI</Filter>
     </ClCompile>
     <ClCompile Include="UI\UIPanel.cpp">
-      <Filter>UI</Filter>
+      <Filter>Actor\UI</Filter>
     </ClCompile>
     <ClCompile Include="FontMeshGenerator.cpp">
       <Filter>Resources\Geometry</Filter>
@@ -407,7 +428,6 @@
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp" />
     <ClCompile Include="Render\RenderContext.cpp">
       <Filter>Render\New\Core</Filter>
     </ClCompile>
@@ -428,6 +448,21 @@
     </ClCompile>
     <ClCompile Include="Core\FName.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\APointLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ALight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ASpotLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\ULineBatch.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
