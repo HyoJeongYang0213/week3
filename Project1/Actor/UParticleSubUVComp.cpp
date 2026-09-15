@@ -40,12 +40,12 @@ void UParticleSubUVComp::Update(float DeltaTime)
 	UpdateUVCoordinate();
 }
 
-const FVector2D& UParticleSubUVComp::GetSubUVScale() const
+FVector2D UParticleSubUVComp::GetSubUVScale()
 {
 	return FVector2D(CellSizeU, CellSizeV);
 }
 
-const FVector2D& UParticleSubUVComp::GetSubUVOffset() const
+FVector2D UParticleSubUVComp::GetSubUVOffset()
 {
 	return FVector2D(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
 }
@@ -62,7 +62,7 @@ void UParticleSubUVComp::UpdateUVCoordinate()
 {
 	assert(Desc.FirstIndex < Desc.LastIndex);
 	const uint32 IndexLength = Desc.LastIndex - Desc.FirstIndex;
-	CurrentFrameIndex = Desc.FirstIndex + (CurrentFrameIndex - Desc.LastIndex) % IndexLength;
+	CurrentFrameIndex = Desc.FirstIndex + (CurrentFrameIndex - Desc.FirstIndex) % IndexLength;
 	ColumnIndex = CurrentFrameIndex % Desc.ColumnCnt;
 	RowIndex = CurrentFrameIndex / Desc.ColumnCnt;
 }

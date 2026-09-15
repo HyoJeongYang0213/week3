@@ -163,7 +163,7 @@ void UIPanel_Spawn::Render()
                     explosionsubuvdesc.RowCnt = 6;
                     explosionsubuvdesc.LastIndex = 33;
                     explosionsubuvdesc.Duration = 3.f;
-                    explosionsubuvdesc.bIsLoop = true;
+                    explosionsubuvdesc.bIsLoop = false;
 
                     spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
                     break;

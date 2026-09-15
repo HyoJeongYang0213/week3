@@ -4,10 +4,10 @@
 
 struct ParticleSubUVDesc
 {
-	uint32 ColumnCnt = 1;
-	uint32 RowCnt = 1;
-	uint32 FirstIndex = 0;
-	uint32 LastIndex = 1;
+	int32 ColumnCnt = 1;
+	int32 RowCnt = 1;
+	int32 FirstIndex = 0;
+	int32 LastIndex = 1;
 
 	bool bIsLoop = true;
 	bool bPlay = true;
@@ -22,18 +22,18 @@ public:
 	UParticleSubUVComp(); 
 	UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc);
 	virtual void Update(float DeltaTime) override;
-	const FVector2D& GetSubUVScale() const;
-	const FVector2D& GetSubUVOffset() const;
+	FVector2D GetSubUVScale();
+	FVector2D GetSubUVOffset();
 
 private:
 	void Initialize();
 	void UpdateUVCoordinate();
 
 	ParticleSubUVDesc Desc;
-	uint32 TotalFrame = 1;
-	uint32 CurrentFrameIndex = 0;
-	uint32 ColumnIndex = 0;
-	uint32 RowIndex = 0;
+	int32 TotalFrame = 1;
+	int32 CurrentFrameIndex = 0;
+	int32 ColumnIndex = 0;
+	int32 RowIndex = 0;
 	float CellSizeU = 1.f;
 	float CellSizeV = 1.f;
 
