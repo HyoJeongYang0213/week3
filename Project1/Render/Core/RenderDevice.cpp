@@ -28,21 +28,23 @@ VertexBuffer RenderDevice::CreateVertexBuffer(const void* Data, UINT Stride, UIN
 	return Result;
 }
 
-IndexBuffer RenderDevice::CreateIndexBuffer(const void* Data, UINT Count) const
+IndexBuffer RenderDevice::CreateIndexBuffer(const void* Data, UINT Count, bool bDynamic) const
 {
 	IndexBuffer Result{ Count };
 
-	const D3D11_BUFFER_DESC Desc{
+	D3D11_BUFFER_DESC Desc = {
 		.ByteWidth = IndexBuffer::Size * Count,
-		.Usage = D3D11_USAGE_DEFAULT,
+		.Usage = (bDynamic ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT),
 		.BindFlags = D3D11_BIND_INDEX_BUFFER,
+		.CPUAccessFlags = (bDynamic ? (UINT)D3D11_CPU_ACCESS_WRITE : 0u)
 	};
+		
 
 	const D3D11_SUBRESOURCE_DATA InitData{
 		.pSysMem = Data,
 	};
 
-	Device->CreateBuffer(&Desc, &InitData, &Result.Buffer);
+	Device->CreateBuffer(&Desc, Data ? &InitData : nullptr, &Result.Buffer);
 
 	return Result;
 }

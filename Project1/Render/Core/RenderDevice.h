@@ -17,7 +17,7 @@ class RenderDevice final
 {
 public:
 	VertexBuffer CreateVertexBuffer(const void* Data, UINT Stride, UINT Count) const;
-	IndexBuffer CreateIndexBuffer(const void* Data, UINT Count) const;
+	IndexBuffer CreateIndexBuffer(const void* Data, UINT Count, bool bDynamic = false) const;
 	ConstantBuffer CreateConstantBuffer(UINT Size) const;
 
 	VertexShader CreateVertexShader(const void* ByteCode, SIZE_T ByteCodeSize) const;

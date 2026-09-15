@@ -60,6 +60,22 @@ void RenderContext::SetIndexBuffer(const IndexBuffer& InIndexBuffer)
 	Context->IASetIndexBuffer(&InIndexBuffer.GetNativeBuffer(), InIndexBuffer.GetFormat(), InIndexBuffer.GetOffset());
 }
 
+void RenderContext::UpdateIndexBuffer(const IndexBuffer& InIndexBuffer, const void* Data, UINT Size)
+{
+	if (Size > InIndexBuffer.GetCount() * IndexBuffer::Size)
+	{
+		assert(false);
+		return;
+	}
+
+	ID3D11Buffer* NativeBuffer = &InIndexBuffer.GetNativeBuffer();
+
+	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	Context->Map(NativeBuffer, 0u, D3D11_MAP_WRITE_DISCARD, 0u, &MappedResource);
+	memcpy(MappedResource.pData, Data, Size);
+	Context->Unmap(NativeBuffer, 0u);
+}
+
 void RenderContext::SetTopology(D3D11_PRIMITIVE_TOPOLOGY Topology)
 {
 	Context->IASetPrimitiveTopology(Topology);

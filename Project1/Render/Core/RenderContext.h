@@ -25,6 +25,8 @@ public:
 	template <typename T> void UpdateVertexBuffer(const VertexBuffer& InVertexBuffer, const T& Value);
 
 	void SetIndexBuffer(const IndexBuffer& InIndexBuffer);
+	void UpdateIndexBuffer(const IndexBuffer& InIndexBuffer, const void* Data, UINT Size);
+
 
 	void SetTopology(D3D11_PRIMITIVE_TOPOLOGY Topology);
 	

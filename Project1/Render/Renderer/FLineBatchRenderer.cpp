@@ -1,9 +1,12 @@
 ﻿#include "pch.h"
 #include "FLineBatchRenderer.h"
+#include "VertexBuffer.h"
 
 void FLineBatchRenderer::AddLine(const FVector& Start, const FVector& End, const FLinearColor& Color, bool bOverlay)
 {
-	if (Vertices.size() + 2 > MaxVertexCount) return;
+	// 들어온 Vertices의 시작점, 끝점의 인덱스 넣기
+	Indices.Add(static_cast<uint32>(Vertices.size()));
+	Indices.Add(static_cast<uint32>(Vertices.size() + 1));
 
 	FVertexData v0;
 	v0.x = Start.x; v0.y = Start.y; v0.z = Start.z;
@@ -32,6 +35,16 @@ void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer, bool bDepthEn
 		VertexBuffer = DEVICE.CreateVertexBuffer(nullptr, sizeof(FVertexData), MaxVertexCount);
 	}
 
+	bResized = false;
+	while (Indices.size() > MaxIndexCount) {
+		MaxIndexCount = Indices.size() * 2;
+		bResized = true;
+	}
+	if (bResized) {
+		IndexBuffer = DEVICE.CreateIndexBuffer(nullptr, MaxIndexCount, true);
+	}
+
+
 	GraphicsPipelineDesc PipelineDesc{
 		.VertexShader = VertexShaderType::Line,
 		.PixelShader = PixelShaderType::Line,
@@ -49,13 +62,42 @@ void FLineBatchRenderer::Render(const ConstantBuffer& FrameBuffer, bool bDepthEn
 	CONTEXT.SetConstantBuffer(1, FrameBuffer);
 
 	CONTEXT.UpdateVertexBuffer(VertexBuffer, Vertices.data(), sizeof(FVertexData) * Vertices.size());
+	CONTEXT.UpdateIndexBuffer(IndexBuffer, Indices.data(), IndexBuffer::Size * Indices.size());
 
 	FMatrix World = FMatrix::Identity();
 	CONTEXT.UpdateConstantBuffer(ObjectBuffer, &World, sizeof(FMatrix));
 
 	CONTEXT.SetVertexBuffer(VertexBuffer);
+	CONTEXT.SetIndexBuffer(IndexBuffer);
 	CONTEXT.SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	
-	CONTEXT.Draw(Vertices.size());
+	CONTEXT.DrawIndexed(Indices.size());
 	Vertices.clear();
+	Indices.clear();
+}
+
+void FLineBatchRenderer::AddBox(const FVector Corners[8], const FLinearColor& Color, bool bOverlay)
+{
+	uint32 BaseSize = static_cast<uint32>(Vertices.size());
+
+	// 점 8개부터 넣기
+	for (int i = 0; i < 8; i++) {
+		FVertexData v;
+		v.x = Corners[i].x; v.y = Corners[i].y; v.z = Corners[i].z;
+		v.r = Color.r; v.g = Color.g; v.b = Color.b; v.a = Color.a;
+		v.u = (bOverlay ? 1.0f : 0.0f);
+		Vertices.Add(v);
+	}
+
+	// 인덱스 추가
+	static const uint32 BoxEdges[24] = {
+		0, 1, 2, 3, 4, 5, 6, 7 ,
+		0, 2 ,1, 3 ,4, 6 ,5, 7 ,
+		0, 4, 1, 5 ,2, 6 ,3, 7 
+	};
+
+	// 시작위치 + 박스 인덱스
+	for (int i = 0; i < 24; i++) {
+		Indices.Add(BaseSize + BoxEdges[i]);
+	}
 }
