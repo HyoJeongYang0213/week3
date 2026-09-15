@@ -108,7 +108,7 @@ void UIPanel_Spawn::Render()
 
 	// Select Primitives
 	static int selected_item = 0;
-	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight"};
+	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "SubUV"};
 	ImGui::Combo("##Primitives", &selected_item, items, IM_ARRAYSIZE(items));
 
 	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
@@ -161,11 +161,22 @@ void UIPanel_Spawn::Render()
                 case 7:
                     spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
                     break;
+                case 8:
+                {
+                    ParticleSubUVDesc explosionsubuvdesc = {};
+                    explosionsubuvdesc.ColumnCnt = 6;
+                    explosionsubuvdesc.RowCnt = 6;
+                    explosionsubuvdesc.LastIndex = 33;
+                    explosionsubuvdesc.Duration = 3.f;
+                    explosionsubuvdesc.bIsLoop = true;
 
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>(L"Resources/Textures/Explosion.PNG", explosionsubuvdesc);
+                    break;
+                }
 				default :
 					break;
 			}
-            if (spawnedActor)
+            if (spawnedActor && items[selected_item] != "SubUV")
             {
                 // 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
                 ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();

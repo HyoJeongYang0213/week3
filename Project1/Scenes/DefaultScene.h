@@ -6,6 +6,8 @@
 #include "PickingManager.h"
 #include "ASkySphere.h"
 #include "UGrid.h"
+#include "UBillboard.h"
+#include "UParticleSubUVComp.h"
 
 class DefaultScene : public Scene
 {
@@ -25,5 +27,7 @@ public:
 	UGrid Ugrid;
 
 	ASkySphere* skysphere;
+
+	UBillboard* billboard;
 };
 

@@ -16,8 +16,6 @@ DefaultScene::DefaultScene()
 
 	// Sky 생성
 	skysphere = FObjectFactory::SpawnActor<ASkySphere>();
-
-	
 }
 
 DefaultScene::~DefaultScene()
