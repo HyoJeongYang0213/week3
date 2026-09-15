@@ -1,15 +1,24 @@
 ﻿#include "pch.h"
+
 #include "UIPanel.h"
 #include "Global.h"
-#include "ATextActor.h"
+#include "Containers.h"
+
+#include "GameManager.h"
 #include "AActor.h"
+#include "ATextActor.h"
+
+#include "DefaultScene.h"
 
 #include "APointLight.h"
 #include "ASpotLight.h"
 #include "ADirectionalLight.h"
 
+
 #include <random>
-#include <DefaultScene.h>
+
+#include <windows.h>
+#include <shobjidl.h>
 
 void UIPanel_Memory::Render()
 {
@@ -36,7 +45,7 @@ void UIPanel_Camera::Render()
 
     // 카메라 직교투영 여부 선택 체크박스
     bool isOrtho = (cam.GetProjectionMode() == Orthographic);
-    if (ImGui::Checkbox("Orthgraphic", &isOrtho)) {
+    if (ImGui::Checkbox("Orthographic", &isOrtho)) {
         cam.SetProjectionMode(isOrtho ? Orthographic : Perspective);
     }
 
@@ -191,7 +200,7 @@ void UIPanel_Spawn::Render()
 
 void UIPanel_SaveLoad::Render()
 {
-    ImGui::Begin("Picking Primitive Property", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Scene Controls", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
 
     ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.8f, 1.0f), "[ Save & Load Scene ]");
 	
@@ -210,24 +219,28 @@ void UIPanel_SaveLoad::Render()
 	// SAVE
 	if (ImGui::Button("Save Scene"))
 	{
-		// "./SceneData/MyScene.Scene" 으로 저장됨
-		SAVELOAD.SaveScene("./SceneData/MyScene"); 
+        FString path = SaveSceneFileDialog();
+        if (!path.empty())
+        {
+		    SAVELOAD.SaveScene(path); 
+        }
 	}
 	
 	// LOAD
 	if (ImGui::Button("Load Scene"))
 	{
-		// "./SceneData/MyScene.Scene" 에서 로드됨
-		TArray<UObject*> loadedObj = SAVELOAD.LoadScene("./SceneData/MyScene.Scene");
-
+		FString path = OpenSceneFileDialog();
+		if (!path.empty())
+		{
+		    SAVELOAD.LoadScene(path);
+		}
 	}
-	
 	ImGui::End();
 }
 
 void UIPanel_Picking::Render()
 {
-    ImGui::Begin("Picking Primitive Property", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Inspector", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
     
     // Picked Primitive Editor
     ImGui::TextColored(ImVec4(0.6f, 0.8f, 1.0f, 1.0f), "[ Picking Controls ]");
@@ -388,15 +401,12 @@ void UIPanel_Grid::Render()
     if (ImGui::SliderFloat("Grid Interval", &cellSize, 0.15f, 2.0f))
     {
         defaultScene->Ugrid.SetCellSize(cellSize);
-        // ----------------------------
-        // editor.ini 저장 추가!!
-        // ----------------------------
     }
     ImGui::End();
 }
+
 void UIPanel_SceneManager::Render()
 {
-    
     ImGui::Begin("Scene Manager");
     if (ImGui::TreeNode("Primitives"))
     {
@@ -431,4 +441,234 @@ void UIPanel_SceneManager::Render()
         ImGui::TreePop();
     }
     ImGui::End();
+}
+
+FString UIPanel_SaveLoad::OpenSceneFileDialog()
+{
+	FString result;
+	HWND hwnd = GameManager::GetInstance().GetMainWindow();
+
+	IFileDialog* pfd = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+	// CoCreateInstance 성공 ?
+	if (SUCCEEDED(hr))
+	{
+		IShellItem* psiRoot = nullptr;
+        std::filesystem::path root = std::filesystem::current_path();
+        std::filesystem::path scenePath = root / "SceneData";
+        std::wstring scenePathW = scenePath.wstring();
+
+		hr = SHCreateItemFromParsingName(
+            scenePathW.c_str(),
+			nullptr,
+			IID_PPV_ARGS(&psiRoot)
+		);
+
+		// SHCreateItemFromParsingName 성공?
+		if (SUCCEEDED(hr))
+		{
+			hr = pfd->SetDefaultFolder(psiRoot);
+
+			// SetDefaultFolder 성공?
+			if (SUCCEEDED(hr))
+			{
+				COMDLG_FILTERSPEC rgSpec[] = {
+					{ L"SCENE 파일 (*.Scene)", L"*.Scene" }
+				};
+				UINT cFileTypes = ARRAYSIZE(rgSpec);
+				hr = pfd->SetFileTypes(cFileTypes, rgSpec);
+
+				// SetFileTypes 성공?
+				if (SUCCEEDED(hr))
+				{
+					hr = pfd->Show(hwnd);
+
+					// Show 성공 ?
+					if (SUCCEEDED(hr))
+					{
+						IShellItem* psiResult;
+						hr = pfd->GetResult(&psiResult);
+
+						// GetResult 성공 ?
+						if (SUCCEEDED(hr))
+						{
+							PWSTR pszFilePath = NULL;
+							hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+							// GetDisplayName 성공 ?
+							if (SUCCEEDED(hr))
+							{
+								// PWSTR를 FString(std::string)으로 변환
+								// wchar_t* to string
+								int wideLength = static_cast<int>(wcslen(pszFilePath));
+								int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
+
+								if (sizeNeeded > 0)
+								{
+									result.resize(sizeNeeded);
+									WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
+								}
+							}
+							CoTaskMemFree(pszFilePath);
+							psiResult->Release();
+						}
+					}
+				}
+			}
+			psiRoot->Release();
+		}
+	}
+    pfd->Release();
+	return result;
+}
+
+FString UIPanel_SaveLoad::SaveSceneFileDialog()
+{
+    FString result;
+
+    // 게임매니저에서 관리하는 Main Window 받아오기
+    HWND hwnd = GameManager::GetInstance().GetMainWindow();
+
+    // COM 클래스의 CLSID_FileSaveDialog 객체 만들고 IFileDialog 포인터(pfd) 받기
+    IFileDialog* pfd = NULL;
+    HRESULT hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+    // CoCreateInstance 성공 ?
+    if (SUCCEEDED(hr))
+    {
+        // shtypes.h의 요소 필터링 구조체
+        COMDLG_FILTERSPEC rgSpec[] = {
+            { L"SCENE 파일 (*.Scene)", L"*.Scene" }
+        };
+        UINT cFileTypes = ARRAYSIZE(rgSpec);
+        hr = pfd->SetFileTypes(cFileTypes, rgSpec);
+
+        // SetFileTypes 성공?
+        if (SUCCEEDED(hr))
+        {
+            // 기본 확장자 ".Scene"으로 설정
+            hr = pfd->SetDefaultExtension(L"Scene");
+
+            if (SUCCEEDED(hr))
+            {
+                IShellItem* psiRoot = nullptr;
+                namespace fs = std::filesystem;
+                fs::path root = fs::current_path();
+                fs::path scenePath = root / "SceneData";
+
+                if (fs::exists(scenePath))
+                {
+                    int cur_max = 0;
+
+                    // std::filesystem의 directory_iterator로 매 directory_entry 순회
+                    for (const fs::directory_entry& entry : fs::directory_iterator(scenePath))
+                    {
+                        // 확장자가 '.Scene'인 경우
+                        if (entry.path().extension() == ".Scene")
+                        {
+                            // stem에 파일명 저장
+                            FString stem = entry.path().stem().string();
+
+                            // 파일명이 Scene으로 시작할 경우
+                            if (stem.starts_with("Scene"))
+                            {
+                                // Scene 뒷자리를 자름
+                                FString bh = stem.substr(5);
+                                if (!bh.empty())
+                                {
+                                    bool bIsEveryCharDigit = true;
+
+                                    for (char c : bh)
+                                    {
+                                        if (!isdigit(c))
+                                        {
+                                            bIsEveryCharDigit = false;
+                                            break;
+                                        }
+                                    }
+
+                                    // bh가 다 숫자로 이루어져 있다면
+                                    if (bIsEveryCharDigit)
+                                    {
+                                        int idx = std::stoi(bh);
+                                        cur_max = (cur_max > idx) ? cur_max : idx;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    std::wstring fn;
+                    if (cur_max < 9)
+                        fn = L"Scene0" + std::to_wstring(cur_max + 1);
+                    else
+                        fn = L"Scene" + std::to_wstring(cur_max + 1);
+
+                    hr = pfd->SetFileName(fn.c_str());
+
+                    // SetFileName 성공?
+                    if (SUCCEEDED(hr))
+                    {
+                        std::wstring scenePathW = scenePath.wstring();
+
+                        hr = SHCreateItemFromParsingName(
+                            scenePathW.c_str(),
+                            nullptr,
+                            IID_PPV_ARGS(&psiRoot)
+                        );
+
+                        // SHCreateItemFromParsingName 성공?
+                        if (SUCCEEDED(hr))
+                        {
+                            hr = pfd->SetFolder(psiRoot);
+
+                            // SetFolder 성공?
+                            if (SUCCEEDED(hr))
+                            {
+                                hr = pfd->Show(hwnd);
+
+                                // Show 성공 ?
+                                if (SUCCEEDED(hr))
+                                {
+                                    IShellItem* psiResult;
+                                    hr = pfd->GetResult(&psiResult);
+
+                                    // GetResult 성공 ?
+                                    if (SUCCEEDED(hr))
+                                    {
+                                        PWSTR pszFilePath = NULL;
+                                        hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+                                        // GetDisplayName 성공 ?
+                                        if (SUCCEEDED(hr))
+                                        {
+                                            // PWSTR를 FString(std::string)으로 변환
+                                            // wchar_t* to string
+                                            int wideLength = static_cast<int>(wcslen(pszFilePath));
+                                            int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
+
+                                            if (sizeNeeded > 0)
+                                            {
+                                                result.resize(sizeNeeded);
+                                                WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
+                                            }
+                                        }
+
+                                        CoTaskMemFree(pszFilePath);
+                                        psiResult->Release();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                psiRoot->Release();
+            }
+        }
+    }
+    if (pfd)
+    {
+        pfd->Release();
+    }
+    return result;
 }

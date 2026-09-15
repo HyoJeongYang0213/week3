@@ -1,5 +1,8 @@
 #pragma once
+
+#include "Containers.h"
 #include "IUIPanel.h"
+
 #include <string>
 
 // FPS
@@ -42,9 +45,13 @@ class UIPanel_SaveLoad : public IUIPanel
 {
 public:
     void Render() override;
+
+private:
+    FString OpenSceneFileDialog();
+    FString SaveSceneFileDialog();
 };
 
-// 씬 메니져 창 
+// 씬 매니저 창 
 class UIPanel_SceneManager : public IUIPanel
 {
 public:

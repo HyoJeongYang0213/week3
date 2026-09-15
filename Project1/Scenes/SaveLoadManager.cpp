@@ -3,19 +3,16 @@
 #include "ObjectManager.h"
 #include "Containers.h"
 #include "AActor.h"
+#include "ATextActor.h"
 #include "UEngineStatics.h"
-#include <fstream> // file input stream
+
+// file input stream
+#include <fstream>
 #include <filesystem>
+
 
 // Version 상수 처리 
 constexpr int CURRENT_SCENE_VERSION = 1;
-
-// 1. vs - 솔루션탐색기 - 프로젝트 우클릭 - NuGet 패키지 관리
-// 2. nlohmann.json 검색 후 설치
-// 추후 json.hpp 파일을 다운로드 후 ThirdParty 폴더에 업로드해 놓을 예정 (설치 불필요하도록)
-/////////////////////////
-/////// 반영 완료! ///////
-/////////////////////////
 
 #include <nlohmann/json.hpp>
 
@@ -76,7 +73,6 @@ TMap<string, SaveLoadManager::CreatorFunc>& SaveLoadManager::GetActorCreatorRegi
             return actor;
         };
     }
-    
     return registry;
 }
 
@@ -124,6 +120,7 @@ void SaveLoadManager::SaveScene(const FString& path)
         FVector scale = actor->GetScale();          // scale 저장
         EPrimitive type = actor->GetPrimitive();    // type 저장
         if (type == EPrimitive::Gizmo) continue; // Gizmo면 pass
+        FLinearColor color = actor->GetColor();     // color 저장
         
         json objJson;
         // objJson["UUID"]     = actor->GetID();
@@ -132,6 +129,7 @@ void SaveLoadManager::SaveScene(const FString& path)
         objJson["Scale"]    = { scale.x, scale.y, scale.z };
         // objJson["Class"]    = string(actor->GetObjClassName()); // ACube, ASphere ...
         objJson["Type"]     = EPrimitiveToStr(type);           // Sphere -> "Sphere", Cube -> "Cube"
+        objJson["Color"] = { color.r, color.g, color.b, color.a };
 
         objectsJson[std::to_string(index)] = objJson; // 0 -> "0", 1 -> "1" ...
         ++index;
@@ -139,7 +137,7 @@ void SaveLoadManager::SaveScene(const FString& path)
     
     sceneJson["Primitives"] = objectsJson;
     
-    std::ofstream file(path + ".Scene"); // 파일 경로
+    std::ofstream file(path);
     
     if (!file.is_open())
     {
@@ -200,7 +198,7 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
 
     for (json objJson : sceneJson["Primitives"]){
 
-        string Class     = objJson["Type"];  // Cube, Sphere ...
+        string Class = objJson["Type"];  // Cube, Sphere ...
 
         auto it = registry.find(Class);
 
@@ -212,17 +210,24 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         auto location   = objJson["Location"];
         auto rotation   = objJson["Rotation"];
         auto scale      = objJson["Scale"];
+        auto color      = objJson["Color"];
         
         // 명시적 형변환 (float) 하여 x, y, z 값 가져오기
         FVector loc(location[0].get<float>(), location[1].get<float>(), location[2].get<float>());
         FQuaternion rat = FQuaternion::FromEuler(rotation[0].get<float>(), rotation[1].get<float>(), rotation[2].get<float>());
         FVector sc(scale[0].get<float>(), scale[1].get<float>(), scale[2].get<float>());
+        FLinearColor lc(color[0].get<float>(), color[1].get<float>(), color[2].get<float>(), color[3].get<float>());
         
         AActor* actor = it->second(loc, rat, sc);
+        actor->SetColor(lc);
+
         loadedObjects.push_back(actor);
 
+        ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
+        label->SetScale(FVector(0.25f, 0.25f, 0.25f));
+        label->SetTarget(actor);
+        label->SetText(std::to_wstring(actor->GetID()));
     }
-
     return loadedObjects;
 
 }
