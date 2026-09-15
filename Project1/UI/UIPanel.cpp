@@ -200,7 +200,7 @@ void UIPanel_Spawn::Render()
 
 void UIPanel_SaveLoad::Render()
 {
-    ImGui::Begin("Picking Primitive Property", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Scene Controls", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
 
     ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.8f, 1.0f), "[ Save & Load Scene ]");
 	
@@ -240,7 +240,7 @@ void UIPanel_SaveLoad::Render()
 
 void UIPanel_Picking::Render()
 {
-    ImGui::Begin("Picking Primitive Property", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Inspector", &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
     
     // Picked Primitive Editor
     ImGui::TextColored(ImVec4(0.6f, 0.8f, 1.0f, 1.0f), "[ Picking Controls ]");
