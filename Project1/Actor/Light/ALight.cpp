@@ -25,3 +25,11 @@ void ALight::DrawCircle(const FVector & Center, const FVector &AxisA, const FVec
 	}
 	
 }
+
+void ALight::Render()
+{
+	FVector originScale = transform.GetScale();
+	SetScale({0.2f, 0.2f, 0.2f});
+	Super::Render();
+	SetScale(originScale);
+}

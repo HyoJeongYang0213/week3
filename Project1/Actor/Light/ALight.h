@@ -9,6 +9,7 @@ public:
 
 	void DrawCircle(const FVector& Center, const FVector& AxisA, const FVector& AxisB, const float Radius);
 
+	virtual void Render() override;
 private:
 
 };
