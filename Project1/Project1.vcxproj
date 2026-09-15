@@ -140,6 +140,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClInclude Include="Core\UEngineStatics.h" />
     <ClInclude Include="Core\UObject.h" />
     <ClInclude Include="Core\WeakObjectPtr.h" />
+    <ClInclude Include="Editor\EditorSettings.h" />
     <ClInclude Include="FontMeshGenerator.h" />
     <ClInclude Include="IndexBufferO.h" />
     <ClInclude Include="Library\DirectXTex\DirectXTex.h" />
@@ -217,6 +218,7 @@ copy /B /Y "$(ProjectDir)Resources\Shader\GridShader.hlsl" "$(TargetDir)GridShad
     <ClCompile Include="Core\FNamePool.cpp" />
     <ClCompile Include="Core\ObjectManager.cpp" />
     <ClCompile Include="Core\UObject.cpp" />
+    <ClCompile Include="Editor\EditorSettings.cpp" />
     <ClCompile Include="FontMeshGenerator.cpp" />
     <ClCompile Include="IndexBufferO.cpp" />
     <ClCompile Include="Library\ImGui\imgui.cpp">

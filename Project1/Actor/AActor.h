@@ -59,6 +59,7 @@ public:
   }
   bool IsSelected() const;
 
+  FBoundingBox GetWorldBoundingBox() const;
   void DrawingBox();
 
   virtual void Pressed() {}
