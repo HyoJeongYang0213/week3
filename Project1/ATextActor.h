@@ -91,11 +91,15 @@ private:
 	{
 		if (!TargetActor) return;
 
-		float targetHalfHeight = TargetActor->GetScale().y * 0.5f;
-		float textHalfHeight = GetScale().y * 0.5f;
+		// Target Actor의 BoundingBox로 라벨 위치 구하기
+		FBoundingBox box = TargetActor->GetWorldBoundingBox();
 
-		float offsetY = targetHalfHeight + textHalfHeight + LabelPadding;
+		FVector labelPos(
+			(box.minX + box.maxX) * 0.5f,
+			box.maxY + LabelPadding,
+			(box.minZ + box.maxZ) * 0.5f
+		);
 
-		SetLocation(TargetActor->GetLocation() + FVector(0.0f, offsetY, 0.0f));
+		SetLocation(labelPos);
 	}
 };

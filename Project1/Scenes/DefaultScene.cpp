@@ -6,8 +6,6 @@
 #include "SaveLoadManager.h"
 #include "ULineBatch.h"
 
-
-
 DefaultScene::DefaultScene()
 {
 	// World Map Axis 생성
