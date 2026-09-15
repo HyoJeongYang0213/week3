@@ -31,3 +31,10 @@ void ASpotLight::Render()
 		LINEBATCH.AddLine(Apex, Q, Color, true);
 	}
 }
+
+void ASpotLight::ApplyGizmoScale(const FVector& newScale, float moveDist)
+{
+	if (DrawStartRadius + moveDist > 0.05f)
+		Length = DrawStartRadius + moveDist;
+	else Length = 0.05f;
+}

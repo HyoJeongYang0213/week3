@@ -15,7 +15,11 @@ public:
 
 	virtual void Render() override;
 
+	virtual void BeginGizmoScale() override { DrawStartRadius = Length; }
+	virtual void ApplyGizmoScale(const FVector& newScale, float moveDist) override;
+
 private:
 	float Length = 3.0f;
 	float Angle = 30.0f; 
+	float DrawStartRadius = 1.0f;
 };
