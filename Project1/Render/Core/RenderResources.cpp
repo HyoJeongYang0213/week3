@@ -22,6 +22,8 @@ void RenderResources::RegisterDefaultResources()
 	CreateMesh("GizmoRotate", rotate_ring_vertices);
 	CreateMesh("GizmoScale", scale_axis_vertices);
 	CreateMesh("SkySphere", skysphere_vertices);
+	CreateMesh("Billboard", quad_vertices, quad_indices);
+	CreateMesh("LightBulb", CreateSphereVertices(0.5f, 20, 20, false));
 
 	VertexShaders.Resize(static_cast<int>(VertexShaderType::Count));
 	PixelShaders.Resize(static_cast<int>(PixelShaderType::Count));
@@ -32,14 +34,17 @@ void RenderResources::RegisterDefaultResources()
 	CreateVertexShader(VertexShaderType::Outline, ExecutableDirectory + L"\\Shader\\OutlineVS.cso");
 	CreateVertexShader(VertexShaderType::Sky, ExecutableDirectory + L"\\Shader\\SkyVS.cso");
 	CreateVertexShader(VertexShaderType::Font, ExecutableDirectory + L"\\Shader\\FontVS.cso");
+	CreateVertexShader(VertexShaderType::SubUV, ExecutableDirectory + L"\\Shader\\SubUVVS.cso");
 
 	CreatePixelShader(PixelShaderType::Mesh, ExecutableDirectory + L"\\Shader\\MeshPS.cso");
 	CreatePixelShader(PixelShaderType::Line, ExecutableDirectory + L"\\Shader\\LinePS.cso");
 	CreatePixelShader(PixelShaderType::Sky, ExecutableDirectory + L"\\Shader\\SkyPS.cso");
 	CreatePixelShader(PixelShaderType::Font, ExecutableDirectory + L"\\Shader\\FontPS.cso");
+	CreatePixelShader(PixelShaderType::SubUV, ExecutableDirectory + L"\\Shader\\SubUVPS.cso");
 
 	CreateTexture("SkyTexture", L"Resources\\Textures\\Sky.jpg"); // TODO: 릴리즈 시 수정
 	CreateTexture("FontAtlas", L"Resources\\Textures\\Pretendard-Regular.dds"); // TODO: 릴리즈 시 수정
+	CreateTexture("Explosion", L"Resources\\Textures\\Explosion.PNG"); // TODO: 릴리즈 시 수정
 
 	SamplerStates[static_cast<uint8>(Sampler::LinearWrap)] = Device.CreateSamplerState(Sampler::LinearWrap);
 }

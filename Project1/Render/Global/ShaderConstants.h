@@ -21,3 +21,12 @@ struct ColorConstants
 	float Padding[3];
 };
 static_assert(sizeof(ColorConstants) % 16 == 0);
+
+struct SubUVConstants
+{
+	float UVScaleU = 1.0f;
+	float UVScaleV = 1.0f;
+	float UVOffsetU = 0.0f;
+	float UVOffsetV = 0.0f;
+};
+static_assert(sizeof(SubUVConstants) % 16 == 0);

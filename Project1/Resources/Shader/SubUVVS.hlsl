@@ -1,14 +1,10 @@
 #include "Constants.hlsli"
 
-cbuffer UVConstants : register(b3)
+cbuffer SubUVConstants : register(b3)
 {
 	float2 UVScale;
-	float2 UVOffset;
-};
-
-// 텍스처 및 샘플러 레지스터
-Texture2D MainTexture : register(t0);
-SamplerState MainSampler : register(s0);
+	float2 UVPosition;
+}
 
 struct VS_INPUT
 {
@@ -34,18 +30,10 @@ PS_INPUT mainVS(VS_INPUT input)
 	
 	float4 worldPos = mul(float4(input.position, 1.0f), World);
 	output.position = mul(worldPos, VP);
+    output.color = input.color;
 	output.worldPosition = worldPos.xyz;
-	output.uv = input.uv;
+	output.uv = input.uv * UVScale + UVPosition;
 	output.normal = normalize(mul(input.normal, (float3x3) World));
-	
-	if (CustomColor.a > 0.0f)
-	{
-		output.color = CustomColor;
-	}
-	else
-	{
-		output.color = input.color;
-	}
 	
 	return output;
 }

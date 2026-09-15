@@ -10,6 +10,7 @@ enum class EPrimitive
 	Rectangle,
 	Triangle,
 	Gizmo,
+	SubUV,
 	None
 };
 

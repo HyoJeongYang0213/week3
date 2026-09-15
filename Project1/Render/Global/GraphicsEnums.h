@@ -10,6 +10,7 @@ enum class VertexShaderType : uint8
 	Outline,
 	Sky,
 	Font,
+	SubUV,
 
 	Count,
 	None = 0xFF,
@@ -21,6 +22,7 @@ enum class PixelShaderType : uint8
 	Line,
 	Sky,
 	Font,
+	SubUV,
 
 	Count,
 	None = 0xFF,

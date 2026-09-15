@@ -68,3 +68,21 @@ struct FVector
 	FVector& operator+=(const FVector& other);
 	FVector& operator-=(const FVector& other);
 };
+
+struct FVector2D
+{
+	float x, y;
+
+	FVector2D(float _x = 0, float _y = 0)
+		: x(_x), y(_y)
+	{}
+
+	float Length() const { return sqrtf(x * x + y * y); }
+	FVector2D Normalize() const { return FVector2D(x / Length(), y / Length()); }
+	void Normalize()
+	{
+		float Len = Length();
+		x /= Len;
+		y /= Len;
+	}
+};

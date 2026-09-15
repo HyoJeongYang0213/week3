@@ -25,13 +25,11 @@ public:
 
 	FOutlineRenderer() :
 		ObjectBuffer(DEVICE.CreateConstantBuffer(sizeof(ObjectConstants))),
-		FrameBuffer(DEVICE.CreateConstantBuffer(sizeof(FrameConstants))),
 		ColorBuffer(DEVICE.CreateConstantBuffer(sizeof(ColorConstants))) {}
 
 private:
 	// ShaderW0.hlsl
 	ConstantBuffer ObjectBuffer;
-	ConstantBuffer FrameBuffer;
 	ConstantBuffer ColorBuffer;
 };
 

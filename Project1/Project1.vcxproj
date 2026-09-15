@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -60,8 +60,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Renderer;$(SolutionDir)Render\Global;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
@@ -72,7 +72,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)Library\DirectXTex;%(AdditionalLibraryDirectories);$(SolutionDir)Editor</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
     </ProjectReference>
@@ -91,7 +91,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Renderer;$(SolutionDir)Render\Global;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -107,7 +107,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)Library\DirectXTex;%(AdditionalLibraryDirectories);$(SolutionDir)Editor</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
     </ProjectReference>
@@ -127,6 +127,12 @@
     <ClInclude Include="Actor\ASphere.h" />
     <ClInclude Include="Actor\AWorldAxes.h" />
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
+    <ClInclude Include="Actor\UBillboard.h" />
+    <ClInclude Include="Actor\UParticleSubUVComp.h" />
+    <ClInclude Include="Actor\Light\ADirectionalLight.h" />
+    <ClInclude Include="Actor\Light\ALight.h" />
+    <ClInclude Include="Actor\Light\APointLight.h" />
+    <ClInclude Include="Actor\Light\ASpotLight.h" />
     <ClInclude Include="App\ConsoleWindow.h" />
     <ClInclude Include="App\GameManager.h" />
     <ClInclude Include="ATextActor.h" />
@@ -168,15 +174,13 @@
     <ClInclude Include="Render\Core\RenderResources.h" />
     <ClInclude Include="Render\Core\RenderSystem.h" />
     <ClInclude Include="Render\FBoundingBox.h" />
-    <ClInclude Include="Render\FLinearColor.h" />
-    <ClInclude Include="Render\FVertexSimple.h" />
+    <ClInclude Include="Render\FGrid.h" />
     <ClInclude Include="Render\Global\FLinearColor.h" />
     <ClInclude Include="Render\Global\FVertexSimple.h" />
     <ClInclude Include="Render\Global\GraphicsEnums.h" />
     <ClInclude Include="Render\Global\ShaderConstants.h" />
     <ClInclude Include="Render\Mesh.h" />
     <ClInclude Include="Render\PickingManager.h" />
-    <ClInclude Include="Render\FGrid.h" />
     <ClInclude Include="Render\Renderer\FGizmoRenderer.h" />
     <ClInclude Include="Render\Renderer\FLineBatchRenderer.h" />
     <ClInclude Include="Render\Renderer\FMeshRenderer.h" />
@@ -188,6 +192,7 @@
     <ClInclude Include="Render\Resource\Texture.h" />
     <ClInclude Include="Render\Resource\VertexBuffer.h" />
     <ClInclude Include="Render\Resource\VertexShader.h" />
+    <ClInclude Include="Resources\Geometry\Bulb.h" />
     <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
     <ClInclude Include="Resources\Geometry\Sphere.h" />
     <ClInclude Include="Scenes\SaveLoadManager.h" />
@@ -205,6 +210,12 @@
     <ClCompile Include="Actor\ASkySphere.cpp" />
     <ClCompile Include="Actor\AWorldAxes.cpp" />
     <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
+    <ClCompile Include="Actor\UBillboard.cpp" />
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp" />
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp" />
+    <ClCompile Include="Actor\Light\ALight.cpp" />
+    <ClCompile Include="Actor\Light\APointLight.cpp" />
+    <ClCompile Include="Actor\Light\ASpotLight.cpp" />
     <ClCompile Include="App\ConsoleWindow.cpp" />
     <ClCompile Include="App\GameManager.cpp" />
     <ClCompile Include="Core\FName.cpp" />
@@ -324,6 +335,18 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SubUVPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainPS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainPS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SubUVVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

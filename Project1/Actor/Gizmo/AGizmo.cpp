@@ -145,6 +145,7 @@ void AGizmoAxis::Picked()
 		dragStartActorLocation = TargetActor->GetLocation();
 		dragStartActorRotation = TargetActor->GetRotation();
 		dragStartActorScale = TargetActor->GetScale();
+		TargetActor->BeginGizmoScale();
 	}
 
 
@@ -214,7 +215,8 @@ void AGizmoAxis::Pressed()
 			newScale.y = (std::max)(newScale.y, 0.05f);
 			newScale.z = (std::max)(newScale.z, 0.05f);
 
-			TargetActor->SetScale(newScale);
+			//TargetActor->SetScale(newScale);
+			TargetActor->ApplyGizmoScale(newScale, moveDist);
 			currentDragDist = moveDist;
 		}
 		else //이동일때

@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 #include "AGizmo.h"
+#include "ALight.h"
 #include "ASkySphere.h"
 #include "ATextActor.h"
 #include "AWorldAxes.h"
@@ -48,12 +49,13 @@ void Scene::Render()
 			.VP = ViewProjection.Transpose(),
 			.CameraPos = CameraLocation });
 
+	Grid.AddLines();
+	LINEBATCH.Render(FrameBuffer);
+
 	TArray<FMeshRenderData> ObjectData;
 	TArray<FMeshRenderData> TextData;
 	CollectRenderData(ObjectData, TextData);
 
-	Grid.AddLines();
-	LINEBATCH.Render(FrameBuffer);
 
 	MeshRenderer.Render(FrameBuffer, ObjectData);
 
@@ -107,7 +109,6 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 			{
 				ObjectData.Add(FMeshRenderData{
 					.Mesh = *RESOURCES.GetMesh(Collider->GetMeshName()),
-					.Material = nullptr,
 					.World = Collider->GetTransform().GetWorldMatrix(),
 					.Color = Collider->GetColor(),
 					.bSelected = Collider->IsSelected(),
@@ -152,6 +153,15 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.Color = TextActor->GetColor(),
 					.bSelected = false,
 					.bWireFrame = false });
+			}
+			else if (ALight* Light = Cast<ALight>(objects[i]))
+			{
+				Light->AddLines();
+				ObjectData.Add(FMeshRenderData{
+					.Mesh = *RESOURCES.GetMesh(Light->GetRenderMeshName()),
+					.World = Light->GetTransform().GetWorldMatrix(),
+					.Color = Light->GetColor(),
+					.bSelected = false });
 			}
 		}
 	}

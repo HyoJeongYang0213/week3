@@ -6,7 +6,14 @@
 #include "Scene.h"
 #include "AGizmo.h"
 #include "TemplateLibrary.h"
+
+#include "APointLight.h"
+#include "ASpotLight.h"
+#include "ADirectionalLight.h"
+#include "UParticleSubUVComp.h"
+
 #include <random>
+
 
 void UIPanel_Memory::Render()
 {
@@ -96,7 +103,7 @@ void UIPanel_Spawn::Render()
 
 	// Select Primitives
 	static int selected_item = 0;
-	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle" };
+	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "SubUV"};
 	ImGui::Combo("##Primitives", &selected_item, items, IM_ARRAYSIZE(items));
 
 	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
@@ -140,10 +147,31 @@ void UIPanel_Spawn::Render()
 				case 4 :
                     spawnedActor = FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
+        case 5 :
+            spawnedActor = FObjectFactory::SpawnActor<APointLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+            break;
+        case 6:
+            spawnedActor = FObjectFactory::SpawnActor<ASpotLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+            break;
+        case 7:
+            spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+            break;
+        case 8:
+        {
+            ParticleSubUVDesc explosionsubuvdesc = {};
+            explosionsubuvdesc.ColumnCnt = 6;
+            explosionsubuvdesc.RowCnt = 6;
+            explosionsubuvdesc.LastIndex = 33;
+            explosionsubuvdesc.Duration = 3.f;
+            explosionsubuvdesc.bIsLoop = true;
+
+            spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
+            break;
+        }
 				default :
 					break;
 			}
-            if (spawnedActor)
+            if (spawnedActor && items[selected_item] != "SubUV")
             {
                 // 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
                 ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
@@ -301,6 +329,24 @@ void UIPanel_Picking::Render()
     			);
     			pickedActor->SetRotation(newRot);
     		}
+
+            // Light 관련 코드라면
+            if (pickedActor->GetClass()->Name == "ASpotLight") {
+                ASpotLight *light = Cast<ASpotLight>(pickedActor);
+                float angle = light->GetAngle();
+                if (ImGui::SliderFloat("Angle", &angle, 1.0f, 60.0f))
+                    light->SetAngle(angle);
+                float length = light->GetLength();
+                if (ImGui::SliderFloat("Length", &length, 0.1f, 30.0f))
+                    light->SetLength(length);
+            }
+
+            if (pickedActor->GetClass()->Name == "APointLight") {
+                APointLight* light = Cast<APointLight>(pickedActor);
+                float radius = light->GetRadius();
+                if (ImGui::SliderFloat("Radius", &radius, 1.0f, 40.0f))
+                    light->SetRadius(radius);
+            }
 
             // 삭제버튼
             if (ImGui::Button("Delete"))

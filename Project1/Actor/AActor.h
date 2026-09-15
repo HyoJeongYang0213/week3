@@ -66,6 +66,9 @@ public:
   virtual void Pressed() {}
   virtual void Released() {}
 
+  virtual void BeginGizmoScale() {}
+  virtual void ApplyGizmoScale(const FVector& newScale, float moveDist) { SetScale(newScale); }
+
   bool isInvalid = false;
 
 public:
