@@ -103,7 +103,7 @@ void UIPanel_Spawn::Render()
 
 	// Select Primitives
 	static int selected_item = 0;
-	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "SubUV"};
+	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "Explosion", "Flame"};
 	ImGui::Combo("##Primitives", &selected_item, items, IM_ARRAYSIZE(items));
 
 	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
@@ -147,27 +147,39 @@ void UIPanel_Spawn::Render()
 				case 4 :
                     spawnedActor = FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
-        case 5 :
-            spawnedActor = FObjectFactory::SpawnActor<APointLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
-            break;
-        case 6:
-            spawnedActor = FObjectFactory::SpawnActor<ASpotLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
-            break;
-        case 7:
-            spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
-            break;
-        case 8:
-        {
-            ParticleSubUVDesc explosionsubuvdesc = {};
-            explosionsubuvdesc.ColumnCnt = 6;
-            explosionsubuvdesc.RowCnt = 6;
-            explosionsubuvdesc.LastIndex = 33;
-            explosionsubuvdesc.Duration = 3.f;
-            explosionsubuvdesc.bIsLoop = true;
+                case 5 :
+                    spawnedActor = FObjectFactory::SpawnActor<APointLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+                    break;
+                case 6:
+                    spawnedActor = FObjectFactory::SpawnActor<ASpotLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+                    break;
+                case 7:
+                    spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+                    break;
+                case 8:
+                {
+                    ParticleSubUVDesc explosionsubuvdesc = {};
+                    explosionsubuvdesc.ColumnCnt = 6;
+                    explosionsubuvdesc.RowCnt = 6;
+                    explosionsubuvdesc.LastIndex = 33;
+                    explosionsubuvdesc.Duration = 3.f;
+                    explosionsubuvdesc.bIsLoop = true;
 
-            spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
-            break;
-        }
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
+                    break;
+                }
+                case 9:
+                {
+                    ParticleSubUVDesc flamesubuvdesc = {};
+                    flamesubuvdesc.ColumnCnt = 8;
+                    flamesubuvdesc.RowCnt = 1;
+                    flamesubuvdesc.LastIndex = 8;
+                    flamesubuvdesc.Duration = 3.f;
+                    flamesubuvdesc.bIsLoop = true;
+
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Flame", flamesubuvdesc);
+                    break;
+                }
 				default :
 					break;
 			}

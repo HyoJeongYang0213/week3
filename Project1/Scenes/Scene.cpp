@@ -13,6 +13,8 @@
 #include "RenderSystem.h"
 #include "ShaderConstants.h"
 #include "TemplateLibrary.h"
+#include "UBillboard.h"
+#include "UParticleSubUVComp.h"
 
 Scene::Scene(): FrameBuffer(DEVICE.CreateConstantBuffer(sizeof(FrameConstants)))
 {
@@ -126,7 +128,7 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 
 				ObjectData.Add(FMeshRenderData{
 					.Mesh = *RESOURCES.GetMesh("SkySphere"),
-					.Material = &SkyMaterial,
+					.Material = SkyMaterial,
 					.World = SkyTransform.GetWorldMatrix(),
 					.Color = SkySphere->GetColor(),
 					.bSelected = false,
@@ -153,7 +155,7 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 
 				TextData.Add(FMeshRenderData{
 					.Mesh = *Mesh,
-					.Material = &FontMaterial,
+					.Material = FontMaterial,
 					.World = TextActor->GetTransform().GetWorldMatrix(),
 					.Color = TextActor->GetColor(),
 					.bSelected = false,
@@ -166,6 +168,48 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.World = Light->GetTransform().GetWorldMatrix(),
 					.Color = Light->GetColor(),
 					.bSelected = Light->IsSelected() });
+			}
+			else if (UParticleSubUVComp* ParticleSubUV = Cast<UParticleSubUVComp>(objects[i]))
+			{
+				const Material ParticleSubUVMaterial
+				{
+					.VertexShader = VertexShaderType::SubUV,
+					.PixelShader = PixelShaderType::SubUV,
+					.Layout = VertexLayout::PositionColorUVNormal,
+					.Texture = ParticleSubUV->GetTextureName(),
+					.Sampler = Sampler::LinearWrap,
+					.Blend = BlendMode::AlphaBlend
+				};
+				ObjectData.Add(FMeshRenderData{
+					.Mesh = *RESOURCES.GetMesh(ParticleSubUV->GetRenderMeshName()),
+					.Material = ParticleSubUVMaterial,
+					.World = ParticleSubUV->GetTransform().GetWorldMatrix(),
+					.Color = ParticleSubUV->GetColor(),
+					.bSelected = false,
+					.bWireFrame = false,
+					.UVScale = ParticleSubUV->GetSubUVScale(),
+					.UVOffset = ParticleSubUV->GetSubUVOffset()
+					});
+			}
+			else if (UBillboard* Billboard = Cast<UBillboard>(objects[i]))
+			{
+				const Material BillboardMaterial
+				{
+					.VertexShader = VertexShaderType::SubUV,
+					.PixelShader = PixelShaderType::SubUV,
+					.Layout = VertexLayout::PositionColorUVNormal,
+					.Texture = Billboard->GetTextureName(),
+					.Sampler = Sampler::LinearWrap,
+					.Blend = BlendMode::AlphaBlend
+				};
+				ObjectData.Add(FMeshRenderData{
+					.Mesh = *RESOURCES.GetMesh(Billboard->GetRenderMeshName()),
+					.Material = BillboardMaterial,
+					.World = Billboard->GetTransform().GetWorldMatrix(),
+					.Color = Billboard->GetColor(),
+					.bSelected = false,
+					.bWireFrame = false,
+					});
 			}
 		}
 	}

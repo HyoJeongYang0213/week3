@@ -7,7 +7,7 @@ class UBillboard : public AActor // UPrimitiveComponent
 	DECLARE_CLASS(UBillboard, AActor)
 public:
 	UBillboard() = default;
-	UBillboard(const FString& TextureName);
+	UBillboard(const FString& InTextureName);
 
 	virtual void Update(float DeltaTime) override;
 

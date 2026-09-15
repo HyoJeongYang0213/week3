@@ -14,11 +14,13 @@
 struct FMeshRenderData
 {
 	const RenderMesh& Mesh;
-	const Material* Material = nullptr;
+	const TOptional<Material> Material = Nullopt;
 	FMatrix World;
 	FLinearColor Color;
 	bool bSelected = false;
 	bool bWireFrame = false;
+	FVector2D UVScale;
+	FVector2D UVOffset;
 };
 
 class FMeshRenderer final
@@ -28,12 +30,14 @@ public:
 	
 	FMeshRenderer() :
 		ObjectBuffer(DEVICE.CreateConstantBuffer(sizeof(ObjectConstants))),
-		ColorBuffer(DEVICE.CreateConstantBuffer(sizeof(ColorConstants))) {}
+		ColorBuffer(DEVICE.CreateConstantBuffer(sizeof(ColorConstants))),
+		SubUVBuffer(DEVICE.CreateConstantBuffer(sizeof(SubUVConstants))){}
 
 private:
 	// ShaderW0.hlsl
 	ConstantBuffer ObjectBuffer;
 	ConstantBuffer ColorBuffer;
+	ConstantBuffer SubUVBuffer;
 };
 
 inline void FMeshRenderer::Render(const ConstantBuffer& FrameBuffer, const TArray<FMeshRenderData>& RenderData, bool bDepthEnable)
@@ -41,8 +45,9 @@ inline void FMeshRenderer::Render(const ConstantBuffer& FrameBuffer, const TArra
 	CONTEXT.SetConstantBuffer(0, ObjectBuffer);
 	CONTEXT.SetConstantBuffer(1, FrameBuffer);
 	CONTEXT.SetConstantBuffer(2, ColorBuffer);
+	CONTEXT.SetConstantBuffer(3, SubUVBuffer);
 
-	for (const auto& [Mesh, Material, World, Color, bSelected, bWireFrame] : RenderData)
+	for (const auto& [Mesh, Material, World, Color, bSelected, bWireFrame, UVScale, UVOffset] : RenderData)
 	{
 		GraphicsPipelineDesc PipelineDesc{
 			.VertexShader = Material ? Material->VertexShader : VertexShaderType::Mesh,
@@ -75,6 +80,10 @@ inline void FMeshRenderer::Render(const ConstantBuffer& FrameBuffer, const TArra
 		CONTEXT.UpdateConstantBuffer(ColorBuffer, ColorConstants{
 			.CustomColor = Color,
 			.UseTexture = false,
+		});
+		CONTEXT.UpdateConstantBuffer(SubUVBuffer, SubUVConstants{
+			.UVScale = UVScale,
+			.UVOffset = UVOffset,
 		});
 
 		CONTEXT.SetMesh(Mesh);

@@ -40,6 +40,16 @@ void UParticleSubUVComp::Update(float DeltaTime)
 	UpdateUVCoordinate();
 }
 
+const FVector2D& UParticleSubUVComp::GetSubUVScale() const
+{
+	return FVector2D(CellSizeU, CellSizeV);
+}
+
+const FVector2D& UParticleSubUVComp::GetSubUVOffset() const
+{
+	return FVector2D(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
+}
+
 void UParticleSubUVComp::Initialize()
 {
 	TotalFrame = Desc.LastIndex - Desc.FirstIndex;

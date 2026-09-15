@@ -1,7 +1,11 @@
 ﻿#include "pch.h"
 #include "UBillboard.h"
 
-UBillboard::UBillboard(const FString& TextureName) : TextureName(TextureName) {}
+UBillboard::UBillboard(const FString& InTextureName)
+{
+	TextureName = InTextureName;
+	SetMesh(OBJECT.GetOrCreateMesh("Billboard", quad_vertices));
+}
 
 void UBillboard::Update(float DeltaTime)
 {
