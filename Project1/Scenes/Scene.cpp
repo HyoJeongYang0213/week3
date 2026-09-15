@@ -50,12 +50,12 @@ void Scene::Render()
 			.CameraPos = CameraLocation });
 
 	Grid.AddLines();
-	LINEBATCH.Render(FrameBuffer);
 
 	TArray<FMeshRenderData> ObjectData;
 	TArray<FMeshRenderData> TextData;
 	CollectRenderData(ObjectData, TextData);
 
+	LINEBATCH.Render(FrameBuffer);
 
 	MeshRenderer.Render(FrameBuffer, ObjectData);
 
@@ -68,10 +68,15 @@ void Scene::Render()
 	{
 		if (AActor* Selected = AGizmo::MainGizmo->GetTargetActor())
 		{
+			if (ALight* Light = Cast<ALight>(Selected))
+			{
+				Light->AddLines();
+			}
+
 			Selected->DrawingBox();
-			LINEBATCH.Render(FrameBuffer, false);
 		}
 	}
+	LINEBATCH.Render(FrameBuffer, false);
 
 	MeshRenderer.Render(FrameBuffer, TextData, false);
 
@@ -156,12 +161,11 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 			}
 			else if (ALight* Light = Cast<ALight>(objects[i]))
 			{
-				Light->AddLines();
 				ObjectData.Add(FMeshRenderData{
 					.Mesh = *RESOURCES.GetMesh(Light->GetRenderMeshName()),
 					.World = Light->GetTransform().GetWorldMatrix(),
 					.Color = Light->GetColor(),
-					.bSelected = false });
+					.bSelected = Light->IsSelected() });
 			}
 		}
 	}
