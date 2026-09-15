@@ -13,7 +13,7 @@ public:
 	ATextActor()
 	{
 		SetColor(FLinearColor(0.0f, 0.0f, 0.0f, 1.0f));
-		Primitive == EPrimitive::None;
+		Primitive = EPrimitive::None;
 	}
 
 	virtual ~ATextActor() = default;
@@ -25,7 +25,9 @@ public:
 			if (!OBJECT.IsValidObject(TargetActor, TargetUUID))
 			{
 				TargetActor = nullptr;
+				TargetUUID = 0;
 				DeActive();
+				OBJECT.ReserveDestroy(this);
 				return;
 			}
 			UpdateLabelTransform();

@@ -3,6 +3,7 @@
 #include "ObjectManager.h"
 #include "Containers.h"
 #include "AActor.h"
+#include "ATextActor.h"
 #include "UEngineStatics.h"
 
 // file input stream
@@ -221,8 +222,12 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         actor->SetColor(lc);
 
         loadedObjects.push_back(actor);
-    }
 
+        ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
+        label->SetScale(FVector(0.25f, 0.25f, 0.25f));
+        label->SetTarget(actor);
+        label->SetText(std::to_wstring(actor->GetID()));
+    }
     return loadedObjects;
 
 }
