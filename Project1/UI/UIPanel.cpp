@@ -174,6 +174,7 @@ void UIPanel_Spawn::Render()
 
                     spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
                     spawnedActor->SetScale(FVector(3.f, 3.f, 3.f));
+                    spawnedActor->SetLocation(randomLoc);
                     break;
                 }
                 case 9:
@@ -187,6 +188,7 @@ void UIPanel_Spawn::Render()
 
                     spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Fire", firesubuvdesc);
                     spawnedActor->SetScale(FVector(0.2f, 0.2f, 0.2f));
+                    spawnedActor->SetLocation(randomLoc);
                     break;
                 }
 				default :

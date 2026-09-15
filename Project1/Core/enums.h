@@ -9,6 +9,7 @@ enum class EPrimitive
 	Circle,
 	Rectangle,
 	Triangle,
+	Light,
 	Gizmo,
 	SubUV,
 	None

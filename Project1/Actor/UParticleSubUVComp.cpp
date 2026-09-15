@@ -4,14 +4,14 @@
 UParticleSubUVComp::UParticleSubUVComp()
 {
 	Initialize();
-	Primitive = EPrimitive::SubUV;
+	SetPrimitive(EPrimitive::SubUV);
 }
 
 UParticleSubUVComp::UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc)
 	: UBillboard(TextureName), Desc(InDesc)
 {
 	Initialize();
-	Primitive = EPrimitive::SubUV;
+	SetPrimitive(EPrimitive::SubUV);
 }
 
 void UParticleSubUVComp::Update(float DeltaTime)
