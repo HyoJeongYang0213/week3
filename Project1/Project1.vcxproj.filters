@@ -308,6 +308,10 @@
     <ClInclude Include="Actor\Light\ASpotLight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\Light\ADirectionalLight.h" />
+    <ClInclude Include="Resources\Geometry\Bulb.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\Scenes\DefaultScene.cpp">
@@ -451,6 +455,7 @@
     <ClCompile Include="Actor\Light\ASpotLight.cpp">
       <Filter>Actor\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">

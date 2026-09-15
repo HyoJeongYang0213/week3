@@ -6,8 +6,8 @@
 
 ALight::ALight(const FLinearColor& color) : AActor(color)
 {
-	static const TArray<FVertexData> bulbVertices = CreateBulbVertices();
 	SetMesh(OBJECT.GetOrCreateMesh("LightBulb", bulbVertices));
+	SetPrimitive(EPrimitive::None);
 }
 
 void ALight::DrawCircle(const FVector & Center, const FVector &AxisA, const FVector &AxisB, const float Radius)

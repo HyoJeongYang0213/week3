@@ -112,3 +112,5 @@ inline TArray<FVertexData> CreateBulbVertices()
 
     return Vertices;
 }
+
+inline const TArray<FVertexData> bulbVertices = CreateBulbVertices();
