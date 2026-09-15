@@ -14,8 +14,11 @@
 #include "ASpotLight.h"
 #include "ADirectionalLight.h"
 
+
 #include <random>
-#include <DefaultScene.h>
+
+#include <windows.h>
+#include <shobjidl.h>
 
 void UIPanel_Memory::Render()
 {
@@ -212,11 +215,12 @@ void UIPanel_SaveLoad::Render()
 	// LOAD
 	if (ImGui::Button("Load Scene"))
 	{
-		// "./SceneData/MyScene.Scene" 에서 로드됨
-		TArray<UObject*> loadedObj = SAVELOAD.LoadScene("./SceneData/MyScene.Scene");
-
+		FString path = OpenSceneFileDialog();
+		if (!path.empty())
+		{
+		    SAVELOAD.LoadScene(path);
+		}
 	}
-	
 	ImGui::End();
 }
 
@@ -386,9 +390,9 @@ void UIPanel_Grid::Render()
     }
     ImGui::End();
 }
+
 void UIPanel_SceneManager::Render()
 {
-    
     ImGui::Begin("Scene Manager");
     if (ImGui::TreeNode("Primitives"))
     {
@@ -423,4 +427,84 @@ void UIPanel_SceneManager::Render()
         ImGui::TreePop();
     }
     ImGui::End();
+}
+
+FString UIPanel_SaveLoad::OpenSceneFileDialog()
+{
+	FString result;
+	HWND hwnd = GameManager::GetInstance().GetMainWindow();
+
+	IFileDialog* pfd = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+	// CoCreateInstance 성공 ?
+	if (SUCCEEDED(hr))
+	{
+		IShellItem* psiRoot = nullptr;
+        std::filesystem::path root = std::filesystem::current_path();
+        std::filesystem::path scenePath = root / "SceneData";
+        std::wstring scenePathW = scenePath.wstring();
+
+		hr = SHCreateItemFromParsingName(
+            scenePathW.c_str(),
+			nullptr,
+			IID_PPV_ARGS(&psiRoot)
+		);
+
+		// SHCreateItemFromParsingName 성공?
+		if (SUCCEEDED(hr))
+		{
+			hr = pfd->SetDefaultFolder(psiRoot);
+
+			// SetDefaultFolder 성공?
+			if (SUCCEEDED(hr))
+			{
+				COMDLG_FILTERSPEC rgSpec[] = {
+					{ L"씬 파일 (*.Scene)", L"*.Scene" }
+				};
+				UINT cFileTypes = ARRAYSIZE(rgSpec);
+				hr = pfd->SetFileTypes(cFileTypes, rgSpec);
+
+				// SetFileTypes 성공?
+				if (SUCCEEDED(hr))
+				{
+					hr = pfd->Show(hwnd);
+
+					// Show 성공 ?
+					if (SUCCEEDED(hr))
+					{
+						IShellItem* psiResult;
+						hr = pfd->GetResult(&psiResult);
+
+						// GetResult 성공 ?
+						if (SUCCEEDED(hr))
+						{
+							PWSTR pszFilePath = NULL;
+							hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+							// GetDisplayName 성공 ?
+							if (SUCCEEDED(hr))
+							{
+								// PWSTR를 FString(std::string)으로 변환
+								// wchar_t* to string
+								int wideLength = static_cast<int>(wcslen(pszFilePath));
+								int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
+
+								if (sizeNeeded > 0)
+								{
+									result.resize(sizeNeeded);
+									WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
+								}
+							}
+							CoTaskMemFree(pszFilePath);
+							psiResult->Release();
+						}
+					}
+				}
+			}
+			psiRoot->Release();
+		}
+	}
+    pfd->Release();
+	return result;
 }
