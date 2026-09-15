@@ -1,8 +1,9 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ALight.h"
-#include "ULineBatch.h"
 #include "Bulb.h"
 #include <Global.h>
+
+#include "FLineBatchRenderer.h"
 
 ALight::ALight(const FLinearColor& color) : AActor(color)
 {
@@ -24,12 +25,4 @@ void ALight::DrawCircle(const FVector & Center, const FVector &AxisA, const FVec
 		LINEBATCH.AddLine(p0, p1, Color, true);
 	}
 	
-}
-
-void ALight::Render()
-{
-	FVector originScale = transform.GetScale();
-	SetScale({0.2f, 0.2f, 0.2f});
-	Super::Render();
-	SetScale(originScale);
 }

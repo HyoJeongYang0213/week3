@@ -54,6 +54,7 @@ using namespace std;
 #include "enums.h"
 // 프로젝트 공용 스마트 포인터
 #include "Pointers.h"
+#include "Containers.h"
 
 // 매크로 정의 (키보드, 마우스, 시간, 씬)
 #define KEY_PRESS(k) (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyDown(k))
@@ -74,14 +75,8 @@ using namespace std;
 #define SCENE SceneManager::GetInstance()
 #define DELTA ImGui::GetIO().DeltaTime
 
-#include "Renderer.h"
-#define RENDERER Renderer::GetInstance()
-#define DEVICE Renderer::GetInstance().GetDevice()
-#define DC Renderer::GetInstance().GetDeviceContext()
-
-#include "RenderSystem.h"
 #define RENDER RenderSystem::GetInstance()
-#define DEVICEN RenderSystem::GetInstance().GetDevice()
+#define DEVICE RenderSystem::GetInstance().GetDevice()
 #define CONTEXT RenderSystem::GetInstance().GetContext()
 #define RESOURCES RenderSystem::GetInstance().GetResources()
 
@@ -94,12 +89,10 @@ using namespace std;
 
 #define IMGUI UIManager::GetInstance()
 #define SAVELOAD SaveLoadManager::GetInstance()
-#define LINEBATCH ULineBatch::GetInstance()
+#define LINEBATCH FLineBatchRenderer::GetInstance()
 
 #define WIN_WIDTH 1920	
 #define WIN_HEIGHT 1080
-
-#include "Containers.h"
 
 //카메라
 #include "Camera.h"

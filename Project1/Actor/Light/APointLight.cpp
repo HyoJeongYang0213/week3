@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ALight.h"
 #include <Global.h>
 #include "APointLight.h"
@@ -7,9 +7,9 @@ APointLight::APointLight(const FLinearColor& color) : ALight(color)
 {
 }
 
-void APointLight::Render()
+void APointLight::AddLines()
 {
-	Super::Render();
+	Super::AddLines();
 
 	FVector Center = GetLocation();
 	FVector Forward = transform.Forward();

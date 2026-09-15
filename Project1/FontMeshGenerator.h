@@ -1,11 +1,14 @@
-#pragma once
+﻿#pragma once
 
 class Mesh;
 
-class FontMeshGenerator
+struct FontGeometry
 {
-public:
-    static Mesh* Generate(const std::wstring& text, float glyphAdvance);
-private:
-    static uint32 GetAtlasIndex(wchar_t ch);
+	TArray<FVertexData> Vertices;
+	TArray<uint32> Indices;
+};
+
+namespace FontMeshGenerator
+{
+	FontGeometry Generate(const std::wstring& text, float glyphAdvance);
 };

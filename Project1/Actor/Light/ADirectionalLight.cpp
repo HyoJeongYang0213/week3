@@ -1,16 +1,16 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ALight.h"
 #include <Global.h>
 #include "ADirectionalLight.h"
-#include "ULineBatch.h"
+#include "FLineBatchRenderer.h"
 
 ADirectionalLight::ADirectionalLight(const FLinearColor& color) : ALight(color)
 {
 }
 
-void ADirectionalLight::Render()
+void ADirectionalLight::AddLines()
 {
-	Super::Render();
+	Super::AddLines();
 
 	FVector Apex = GetLocation();
 	FVector Forward = transform.Forward(); // = normal
@@ -18,7 +18,7 @@ void ADirectionalLight::Render()
 	// FVector Right = transform.Right();
 
 	FVector Tip = Apex + Forward * Length;
-	FVector HeadBack = Tip - Forward*0.2f;	
+	FVector HeadBack = Tip - Forward * 0.2f;
 	FVector N1 = HeadBack - Up * 0.1f;
 	FVector N2 = HeadBack + Up * 0.1f;
 

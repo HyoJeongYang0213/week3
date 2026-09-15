@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ALight.h"
 
 class ADirectionalLight : public ALight{
@@ -12,7 +12,7 @@ public:
 	float GetLength() { return Length; }
 	void SetLength(float length) { Length = length; }
 
-	virtual void Render() override;
+	virtual void AddLines() override;
 
 	// 아래는 사용할 일 없다!
 	virtual void BeginGizmoScale() override { DrawStartRadius = Length; }

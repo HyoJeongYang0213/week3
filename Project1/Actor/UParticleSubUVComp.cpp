@@ -1,5 +1,18 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "UParticleSubUVComp.h"
+
+UParticleSubUVComp::UParticleSubUVComp()
+{
+	Initialize();
+	Primitive = EPrimitive::SubUV;
+}
+
+UParticleSubUVComp::UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc)
+	: UBillboard(TextureName), Desc(InDesc)
+{
+	Initialize();
+	Primitive = EPrimitive::SubUV;
+}
 
 void UParticleSubUVComp::Update(float DeltaTime)
 {
@@ -27,21 +40,14 @@ void UParticleSubUVComp::Update(float DeltaTime)
 	UpdateUVCoordinate();
 }
 
-void UParticleSubUVComp::Render()
+FVector2D UParticleSubUVComp::GetSubUVScale()
 {
-	SetWorldBuffer();
-	mesh->IASet(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	mesh->indexbuffer->IASet();
-	RENDERER.PrepareSubUVShader();
-	RENDERER.SetTexture(mesh->GetTexture()); // TODO: 각각의 텍스쳐를 로드하기
-	if (RENDERER.SubUVConstantBuffer)
-	{
-		RENDERER.SubUVConstantBuffer->SetUV(CellSizeU, CellSizeV, CellSizeU * ColumnIndex, CellSizeV * RowIndex);
-		RENDERER.SubUVConstantBuffer->SetVSBuffer(3);
-	}
-	DC->OMSetBlendState(RENDERER.AlphaBlendState, nullptr, 0xffffffff);
-	DC->DrawIndexed(mesh->indexbuffer->count, 0u, 0);
-	DC->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+	return FVector2D(CellSizeU, CellSizeV);
+}
+
+FVector2D UParticleSubUVComp::GetSubUVOffset()
+{
+	return FVector2D(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
 }
 
 void UParticleSubUVComp::Initialize()
@@ -56,7 +62,7 @@ void UParticleSubUVComp::UpdateUVCoordinate()
 {
 	assert(Desc.FirstIndex < Desc.LastIndex);
 	const uint32 IndexLength = Desc.LastIndex - Desc.FirstIndex;
-	CurrentFrameIndex = Desc.FirstIndex + (CurrentFrameIndex - Desc.LastIndex) % IndexLength;
+	CurrentFrameIndex = Desc.FirstIndex + (CurrentFrameIndex - Desc.FirstIndex) % IndexLength;
 	ColumnIndex = CurrentFrameIndex % Desc.ColumnCnt;
 	RowIndex = CurrentFrameIndex / Desc.ColumnCnt;
 }

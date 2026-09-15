@@ -1,9 +1,9 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "PickingManager.h"
 #include "Camera.h"
 #include "TemplateLibrary.h"
 #include "AGizmo.h"
-#include "AWorldAxises.h"
+#include "AWorldAxes.h"
 
 FRay PickingManager::ScreenToWorldRay(float mouseX, float mouseY, float screenW, float screenH) const
 {
@@ -32,13 +32,13 @@ FRay PickingManager::ScreenToWorldRay(float mouseX, float mouseY, float screenW,
 FRay PickingManager::ScreenToWorldRay() const
 {
 	return ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
-		RENDERER.ViewportInfo.Width, RENDERER.ViewportInfo.Height);
+		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
 }
 
 AActor* PickingManager::Pick()
 {
 	FRay ray = PICK.ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
-		RENDERER.ViewportInfo.Width, RENDERER.ViewportInfo.Height);
+		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
 
 	//기즈모 축 피킹 우선 검사
 	if (AGizmo::MainGizmo && AGizmo::MainGizmo->GetTargetActor())
@@ -73,7 +73,7 @@ AActor* PickingManager::Pick()
 
 	for (auto object : OBJECT.GUObjectArray) {
 		AActor* actor = Cast<AActor>(object);
-		if (actor == nullptr || Cast<AGizmo>(actor) || Cast<AWorldAxises>(actor)) continue;
+		if (actor == nullptr || Cast<AGizmo>(actor) || Cast<AWorldAxes>(actor)) continue;
 
 		float dist = 0.0f;
 		if (actor->bIsPicked(ray, dist) && dist < closestDist)

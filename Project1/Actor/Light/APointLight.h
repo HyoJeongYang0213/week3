@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ALight.h"
 
 class APointLight : public ALight{
@@ -10,7 +10,7 @@ public:
 	float GetRadius() { return Radius; }
 	void SetRadius(float angle) { Radius = angle; }
 
-	virtual void Render() override;
+	virtual void AddLines() override;
 
 	virtual void BeginGizmoScale() override { DrawStartRadius = Radius; }
 	virtual void ApplyGizmoScale(const FVector & newScale, float moveDist) override; 

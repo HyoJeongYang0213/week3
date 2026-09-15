@@ -1,14 +1,13 @@
-#pragma once 
+﻿#pragma once 
 
 #include "UBillboard.h"
-#include "GlobalBuffer.h"
 
 struct ParticleSubUVDesc
 {
-	uint32 ColumnCnt = 1;
-	uint32 RowCnt = 1;
-	uint32 FirstIndex = 0;
-	uint32 LastIndex = 1;
+	int32 ColumnCnt = 1;
+	int32 RowCnt = 1;
+	int32 FirstIndex = 0;
+	int32 LastIndex = 1;
 
 	bool bIsLoop = true;
 	bool bPlay = true;
@@ -20,29 +19,21 @@ class UParticleSubUVComp : public UBillboard
 {
 	DECLARE_CLASS(UParticleSubUVComp, UBillboard);       
 public:
-	UParticleSubUVComp(){
-		Initialize();
-		Primitive = EPrimitive::SubUV;
-	}
-	UParticleSubUVComp(const wstring& TexturePath, ParticleSubUVDesc InDesc)
-		: UBillboard(TexturePath), Desc(InDesc){
-		Initialize();
-		Primitive = EPrimitive::SubUV;
-	}
+	UParticleSubUVComp(); 
+	UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc);
 	virtual void Update(float DeltaTime) override;
-	virtual void Render() override;
+	FVector2D GetSubUVScale();
+	FVector2D GetSubUVOffset();
 
 private:
 	void Initialize();
 	void UpdateUVCoordinate();
 
-	ID3D11ShaderResourceView* TextureSRV; // TODO: 객체마다 각각의 SRV 포인팅하기
-
 	ParticleSubUVDesc Desc;
-	uint32 TotalFrame = 1;
-	uint32 CurrentFrameIndex = 0;
-	uint32 ColumnIndex = 0;
-	uint32 RowIndex = 0;
+	int32 TotalFrame = 1;
+	int32 CurrentFrameIndex = 0;
+	int32 ColumnIndex = 0;
+	int32 RowIndex = 0;
 	float CellSizeU = 1.f;
 	float CellSizeV = 1.f;
 

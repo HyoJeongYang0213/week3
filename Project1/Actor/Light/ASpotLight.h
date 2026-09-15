@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ALight.h"
 
 class ASpotLight : public ALight{
@@ -13,7 +13,7 @@ public:
 	float GetLength() { return Length; }
 	void SetLength(float length) { Length = length; }
 
-	virtual void Render() override;
+	virtual void AddLines() override;
 
 	virtual void BeginGizmoScale() override { DrawStartRadius = Length; }
 	virtual void ApplyGizmoScale(const FVector& newScale, float moveDist) override;

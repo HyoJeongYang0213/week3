@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SaveLoadManager.h"
+#include "TemplateLibrary.h"
 #include "ObjectManager.h"
 #include "Containers.h"
 #include "AActor.h"

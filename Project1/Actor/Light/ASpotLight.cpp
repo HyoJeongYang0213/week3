@@ -1,16 +1,16 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ALight.h"
 #include <Global.h>
 #include "ASpotLight.h"
-#include "ULineBatch.h"
+#include "FLineBatchRenderer.h"
 
 ASpotLight::ASpotLight(const FLinearColor& color) : ALight(color)
 {
 }
 
-void ASpotLight::Render()
+void ASpotLight::AddLines()
 {
-	Super::Render();
+	Super::AddLines();
 
 	FVector Apex = GetLocation();
 	FVector Forward = GetTransform().Forward();
@@ -21,7 +21,7 @@ void ASpotLight::Render()
 
 	FVector BaseCenter = Apex + Forward * Length;	// 밑면 센터
 	float Radius = Length * tanf(AngleRad);
-	
+
 	DrawCircle(BaseCenter, Right, Up, Radius);
 
 	int Segments = 16;

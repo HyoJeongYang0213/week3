@@ -1,6 +1,5 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "EditorSettings.h"
-#include "DefaultScene.h"
 
 const char* EditorIniPath = "./editor.ini";
 
@@ -58,10 +57,10 @@ void EditorSettings::Load()
 	cam.ViewMode = static_cast<EViewMode>(ReadInt("Camera", "ViewMode", "0"));
 
 	// Grid
-	DefaultScene* defaultScene = dynamic_cast<DefaultScene*>(SCENE.GetCurrentScene());
+	Scene* defaultScene = SCENE.GetCurrentScene();
 	if (defaultScene)
 	{
-		defaultScene->Ugrid.SetCellSize(ReadFloat("Grid", "Interval", "1.0"));
+		defaultScene->GetGrid().CellSize = ReadFloat("Grid", "Interval", "1.0");
 	}
 }
 
@@ -89,9 +88,9 @@ void EditorSettings::Save()
 	WriteInt("Camera", "ViewMode", static_cast<int>(cam.ViewMode));
 
 	// Grid
-	DefaultScene* defaultScene = dynamic_cast<DefaultScene*>(SCENE.GetCurrentScene());
+	Scene* defaultScene = SCENE.GetCurrentScene();
 	if (defaultScene)
 	{
-		WriteFloat("Grid", "Interval", defaultScene->Ugrid.GetCellSize());
+		WriteFloat("Grid", "Interval", defaultScene->GetGrid().CellSize);
 	}
 }

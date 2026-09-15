@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "FVector.h"
 #include "GameManager.h"
@@ -75,7 +75,6 @@ public:
   void operator delete(void *ptr, size_t size) noexcept;
 
   virtual void Update(float deltatime);
-  virtual void Render() {}
   virtual int GetRenderPriority() const { return 0; }
 
   virtual void Destroy();

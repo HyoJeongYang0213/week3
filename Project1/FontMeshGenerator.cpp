@@ -1,34 +1,36 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "FontMeshGenerator.h"
-#include "Mesh.h"
 #include "FVertexSImple.h"
 #include "Sphere.h"
 
-uint32 FontMeshGenerator::GetAtlasIndex(wchar_t ch)
+namespace
 {
-	// 1. ASCII 범위인가?
-	if (ch >= 0x20 && ch <= 0x7E)
+	uint32 GetAtlasIndex(wchar_t ch)
 	{
-		return ch - 0x20;
+		// 1. ASCII 범위인가?
+		if (ch >= 0x20 && ch <= 0x7E)
+		{
+			return ch - 0x20;
+		}
+		// 2. 한글 자모 범위인가?
+		else if (ch >= 0x3131 && ch <= 0x3163)
+		{
+			return ch - 0x3131 + 95;
+		}
+		// 3. 완성형 한글 범위인가?
+		else if (ch >= 0xAC00 && ch <= 0xD7A3)
+		{
+			return ch - 0xAC00 + 146;
+		}
+		// 4. 지원 안 하는 문자: '?'
+		return 31;
 	}
-	// 2. 한글 자모 범위인가?
-	else if (ch >= 0x3131 && ch <= 0x3163)
-	{
-		return ch - 0x3131 + 95;
-	}
-	// 3. 완성형 한글 범위인가?
-	else if (ch >= 0xAC00 && ch <= 0xD7A3)
-	{
-		return ch - 0xAC00 + 146;
-	}
-	// 4. 지원 안 하는 문자: '?'
-	return 31;
 }
 
-Mesh* FontMeshGenerator::Generate(const std::wstring& text, float glyphAdvance)
+FontGeometry FontMeshGenerator::Generate(const std::wstring& text, float glyphAdvance)
 {
-	std::vector<FVertexData> vertices;
-	std::vector<uint32> indices;
+	TArray<FVertexData> vertices;
+	TArray<uint32> indices;
 
 	for (size_t i = 0; i < text.size(); i++)
 	{
@@ -88,16 +90,5 @@ Mesh* FontMeshGenerator::Generate(const std::wstring& text, float glyphAdvance)
 		}
 	}
 
-
-	Mesh* mesh = new Mesh(vertices);
-
-	mesh->InitIndexBuffer(
-		indices.data(),
-		static_cast<UINT>(indices.size())
-	);
-
-	mesh->SetTexture(L"Resources/Textures/Pretendard-Regular.dds");
-	mesh->bIsFont = true;
-
-	return mesh;
+	return { std::move(vertices), std::move(indices) };
 }

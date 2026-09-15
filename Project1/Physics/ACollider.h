@@ -67,6 +67,11 @@ public:
 		return "None";
     }
 
+	FString GetRenderMeshName() const override
+	{
+		return GetMeshName();
+	}
+
   virtual void Pressed() override;
   virtual void Released() override;
   virtual float GetInertia() const {

@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <string>
 #include <cstdint>
+#include <span>
 
 using int8 = std::int8_t;
 using int16 = std::int16_t;
@@ -37,6 +38,9 @@ public:
 	TArray(std::initializer_list<T> initList) : ArrayData(initList) {}
 	explicit TArray(size_t count) : ArrayData(count) {}
 	TArray(size_t count, const T& value) : ArrayData(count, value) {}
+
+	using iterator = std::vector<T>::iterator;
+	using const_iterator = std::vector<T>::const_iterator;
 	
 	// 요소 추가
 	void Add(const T& item)
@@ -54,11 +58,12 @@ public:
     void push_back(T&& item) { ArrayData.push_back(std::move(item)); }
     
     // 요소 삽입
-    typename std::vector<T>::iterator insert(typename std::vector<T>::iterator it, const T& item)
+	iterator insert(iterator it, const T& item)
     {
         return ArrayData.insert(it, item);
     }
-    typename std::vector<T>::iterator Insert(typename std::vector<T>::iterator it, const T& item)
+
+	iterator Insert(iterator it, const T& item)
     {
         return ArrayData.insert(it, item);
     }
@@ -145,23 +150,23 @@ public:
 	void resize(size_t newSize) { ArrayData.resize(newSize); }
 	
 	// iterator
-	typename std::vector<T>::iterator begin()
+	iterator begin()
 	{
 		return ArrayData.begin();
 	}
-	
-	typename std::vector<T>::iterator end()
+
+	iterator end()
 	{
 		return ArrayData.end();        
 	}
 	
 	// const iterator ver.
-	typename std::vector<T>::const_iterator begin() const
+	const_iterator begin() const
 	{
 		return ArrayData.begin();
 	}
-	
-	typename std::vector<T>::const_iterator end() const
+
+	const_iterator end() const
 	{
 		return ArrayData.end();        
 	}

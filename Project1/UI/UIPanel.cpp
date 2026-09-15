@@ -7,12 +7,14 @@
 #include "GameManager.h"
 #include "AActor.h"
 #include "ATextActor.h"
-
-#include "DefaultScene.h"
+#include "Scene.h"
+#include "AGizmo.h"
+#include "TemplateLibrary.h"
 
 #include "APointLight.h"
 #include "ASpotLight.h"
 #include "ADirectionalLight.h"
+#include "UParticleSubUVComp.h"
 
 
 #include <random>
@@ -108,7 +110,7 @@ void UIPanel_Spawn::Render()
 
 	// Select Primitives
 	static int selected_item = 0;
-	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "SubUV"};
+	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "Explosion", "Fire"};
 	ImGui::Combo("##Primitives", &selected_item, items, IM_ARRAYSIZE(items));
 
 	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
@@ -168,9 +170,23 @@ void UIPanel_Spawn::Render()
                     explosionsubuvdesc.RowCnt = 6;
                     explosionsubuvdesc.LastIndex = 33;
                     explosionsubuvdesc.Duration = 3.f;
-                    explosionsubuvdesc.bIsLoop = true;
+                    explosionsubuvdesc.bIsLoop = false;
 
-                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>(L"Resources/Textures/Explosion.PNG", explosionsubuvdesc);
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
+                    spawnedActor->SetScale(FVector(3.f, 3.f, 3.f));
+                    break;
+                }
+                case 9:
+                {
+                    ParticleSubUVDesc firesubuvdesc = {};
+                    firesubuvdesc.ColumnCnt = 1;
+                    firesubuvdesc.RowCnt = 32;
+                    firesubuvdesc.LastIndex = 32;
+                    firesubuvdesc.Duration = 3.f;
+                    firesubuvdesc.bIsLoop = true;
+
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Fire", firesubuvdesc);
+                    spawnedActor->SetScale(FVector(0.2f, 0.2f, 0.2f));
                     break;
                 }
 				default :
@@ -188,11 +204,10 @@ void UIPanel_Spawn::Render()
 			
 	}
 
-    bool bShowUUID = RENDERER.IsShowFlagEnabled(EEngineShowFlags::SF_BillboardText);
-
+    bool bShowUUID = (CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None;
     if (ImGui::Checkbox("Show UUID", &bShowUUID))
     {
-        RENDERER.SetShowFlag(EEngineShowFlags::SF_BillboardText, bShowUUID);
+		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
     }
 
     ImGui::End();
@@ -276,10 +291,6 @@ void UIPanel_Picking::Render()
     				color.a = 1.0f;
     			}
     			pickedActor->SetColor(color);
-    			if (pickedActor->GetMesh())
-    			{
-    				pickedActor->GetMesh()->SetColor(color);
-    			}
     			if (PICK.pickedObjcect && !dynamic_cast<AGizmoAxis*>(PICK.pickedObjcect.Get()))
     			{
     				PICK.pickedObjcect->SetColor(color);
@@ -395,12 +406,12 @@ void UIPanel_Grid::Render()
     ImGui::Begin("Grid", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     
     Scene* scene = SCENE.GetCurrentScene();
-    DefaultScene* defaultScene = dynamic_cast<DefaultScene*>(scene);
 
-    float cellSize = defaultScene->Ugrid.GetCellSize();
-    if (ImGui::SliderFloat("Grid Interval", &cellSize, 0.15f, 2.0f))
+
+    float CellSize = scene->GetGrid().CellSize;
+    if (ImGui::SliderFloat("Grid Interval", &CellSize, 0.15f, 2.0f))
     {
-        defaultScene->Ugrid.SetCellSize(cellSize);
+        scene->GetGrid().CellSize = CellSize;
     }
     ImGui::End();
 }

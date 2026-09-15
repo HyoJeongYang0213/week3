@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "WeakObjectPtr.h"
 #include "AActor.h"
@@ -7,17 +7,15 @@
 
 struct FRay;
 
-// AActor를 상속받아 bIsPicked(정점 피킹) 및 트랜스폼/버퍼를 그대로 활용하는 기즈모 축 액터
+// AActor를 상속받아 IsPicked(정점 피킹) 및 트랜스폼/버퍼를 그대로 활용하는 기즈모 축 액터
 class AGizmoAxis : public AActor
 {
 	DECLARE_CLASS(AGizmoAxis, AActor)
 
 public:
 	AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis = EGizmoAxis::Y);
-	virtual ~AGizmoAxis();
 
 	void Update(float DeltaTime, const Transform& parentTransform);
-	virtual void Render() override;
 
 	EGizmoAxis GetAxis() const { return Axis; }
 	void Picked(); // 피킹되었을 때의 처리
@@ -25,6 +23,20 @@ public:
 
 	virtual void Pressed() override;
 	virtual void Released() override;
+
+	FString GetRenderMeshName() const override
+	{
+		switch (*mode)
+		{
+		case EGizmoMode::Translation:
+			return "GizmoLocation";
+		case EGizmoMode::Rotation:
+			return "GizmoRotate";
+		case EGizmoMode::Scale:
+			return "GizmoScale";
+		}
+		return "";
+	}
 
 	void SetTargetActor(AActor* inTarget)
 	{
@@ -40,25 +52,16 @@ public:
 	}
 	AActor* GetTargetActor() const { return TargetActor; }
 
-
-	void HighlightAxe();
-
 	void SetHovered(bool inHovered)
 	{
 		bHovered = inHovered;
-		if (bSelected || bHovered)
-		{
-			HighlightAxe();
-		}
-		else
-		{
-			SetColor(srcColor);
-		}
 	}
 	bool GetHovered() const { return bHovered; }
 
 	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
 	bool GetIsLocal() const { return bIsLocal; }
+
+	FLinearColor GetDisplayColor() const;
 
 	FLinearColor srcColor;
 
@@ -90,18 +93,17 @@ public:
 	static inline AGizmo* MainGizmo = nullptr;
 
 	AGizmo();
-		
-	virtual ~AGizmo();
+
+	~AGizmo() override;
 
 	virtual void Update(float DeltaTime) override;
-	virtual void Render() override;
 	virtual int GetRenderPriority() const override { return 100; }
 
 	// 타겟 액터 설정 (피킹된 액터 연결)
 	void SetTargetActor(AActor* inTarget);
 	AActor* GetTargetActor() const { return TargetActor; }
 
-	void SetGizmoMode(EGizmoMode inMode) { GizMode = inMode; }
+	void SetGizmoMode(EGizmoMode inMode);
 	EGizmoMode GetGizmoMode() const { return GizMode; }
 	void ChangeGizmoMode();
 

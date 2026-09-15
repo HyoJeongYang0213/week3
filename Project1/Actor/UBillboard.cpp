@@ -1,34 +1,14 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "UBillboard.h"
 
-UBillboard::UBillboard()
+UBillboard::UBillboard(const FString& InTextureName)
 {
-	Mesh* BillboardMesh = OBJECT.GetOrCreateMesh("Billboard", quad_vertices);
-	if (BillboardMesh->indexbuffer == nullptr){
-		BillboardMesh->InitIndexBuffer(quad_indices, sizeof(quad_indices) / sizeof(uint32));
-	}
-	SetMesh(BillboardMesh);
-}
-
-UBillboard::UBillboard(const wstring& TexturePath)
-{
-	Mesh* BillboardMesh = OBJECT.GetOrCreateMesh("Billboard", quad_vertices);
-	if (BillboardMesh->indexbuffer == nullptr){
-		BillboardMesh->InitIndexBuffer(quad_indices, sizeof(quad_indices) / sizeof(uint32));
-	}
-	BillboardMesh->SetTexture(TexturePath);
-	SetMesh(BillboardMesh);
+	TextureName = InTextureName;
+	SetMesh(OBJECT.GetOrCreateMesh("Billboard", quad_vertices));
 }
 
 void UBillboard::Update(float DeltaTime)
 {
 	SetRotation(CAMERA.GetRotation());
 	AActor::Update(DeltaTime);
-}
-
-void UBillboard::Render()
-{
-	DC->OMSetBlendState(RENDERER.AlphaBlendState, nullptr, 0xffffffff);
-	AActor::Render();
-	DC->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 }
