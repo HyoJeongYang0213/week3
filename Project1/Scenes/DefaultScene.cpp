@@ -22,7 +22,8 @@ DefaultScene::DefaultScene()
 	//billboard = FObjectFactory::SpawnActor<UBillboard>();
 
 	explosion = FObjectFactory::SpawnActor<UParticleSubUVComp>();
-	
+	explosion2 = FObjectFactory::SpawnActor<UParticleSubUVComp>();
+	explosion2->SetLocation(FVector(1, 1, 1));
 }
 
 DefaultScene::~DefaultScene()

@@ -31,5 +31,6 @@ public:
 	UBillboard* billboard;
 
 	UParticleSubUVComp* explosion;
+	UParticleSubUVComp* explosion2;
 };
 

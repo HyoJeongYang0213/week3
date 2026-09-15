@@ -7,23 +7,14 @@ class UParticleSubUVComp : public UBillboard
 {
 	DECLARE_CLASS(UParticleSubUVComp, UBillboard);
 public:
-	UParticleSubUVComp()
-	{
-		CellSizeU = 1.f / ColumnCnt;
-		CellSizeV = 1.f / RowCnt;
-		Initialize();
-	}
-	UParticleSubUVComp(uint32 ColumnCnt, uint32 RowCnt, uint32 TotalFrame, uint32 CurrentFrameIndex)
-		:ColumnCnt(ColumnCnt), RowCnt(RowCnt), TotalFrame(TotalFrame), CurrentFrameIndex(CurrentFrameIndex)
-	{
-		CellSizeU = 1.f / ColumnCnt;
-		CellSizeV = 1.f / RowCnt;
-		Initialize();
-	}
+	UParticleSubUVComp() = default;
+	UParticleSubUVComp(uint32 InColumnCnt, uint32 InRowCnt, uint32 InTotalFrame, uint32 InCurrentFrameIndex)
+		:ColumnCnt(InColumnCnt), RowCnt(InRowCnt), TotalFrame(InTotalFrame), CurrentFrameIndex(InCurrentFrameIndex), CellSizeU(1.f / InColumnCnt), CellSizeV(1.f / InRowCnt), bIsLoop(true), bIsPlaying(true), PlayRate(1.f), Duration(5.f), ElapsedTime(0.f)
+	{}
 
 	void UpdateUVCoordinate()
 	{
-		if (CurrentFrameIndex >= TotalFrame)
+		while (CurrentFrameIndex >= TotalFrame)
 		{
 			CurrentFrameIndex -= TotalFrame;
 		}
@@ -33,7 +24,24 @@ public:
 
 	void Initialize()
 	{
-		SubUVConstantBuffer = RENDERER.SubUVConstantBuffer;
+		CellSizeU = 1.f / ColumnCnt;
+		CellSizeV = 1.f / ColumnCnt;
+	}
+
+	virtual void Update(float DeltaTime) override
+	{
+		Super::Update(DeltaTime);
+		if (!bIsPlaying)
+		{
+			return;
+		}
+		ElapsedTime += DeltaTime * PlayRate;
+		while (ElapsedTime >= Duration)
+		{
+			ElapsedTime -= Duration;
+		}
+		CurrentFrameIndex = (ElapsedTime / Duration) * TotalFrame;
+		UpdateUVCoordinate();
 	}
 
 	virtual void Render() override
@@ -43,11 +51,10 @@ public:
 		mesh->indexbuffer->IASet();
 		RENDERER.PrepareSubUVShader();
 		RENDERER.SetTexture(mesh->GetTexture());
-		if (SubUVConstantBuffer)
+		if (RENDERER.SubUVConstantBuffer)
 		{
-			SubUVConstantBuffer->SetUV(CellSizeU, CellSizeV, CellSizeU * 2, CellSizeV * 1);
-			//SubUVConstantBuffer->SetUV(1, 1, 0, 0);
-			SubUVConstantBuffer->SetVSBuffer(3);
+			RENDERER.SubUVConstantBuffer->SetUV(CellSizeU, CellSizeV, CellSizeU * ColumnIndex, CellSizeV * RowIndex);
+			RENDERER.SubUVConstantBuffer->SetVSBuffer(3);
 		}
 		DC->OMSetBlendState(RENDERER.AlphaBlendState, nullptr, 0xffffffff);
 		DC->DrawIndexed(mesh->indexbuffer->count, 0u, 0);
@@ -62,8 +69,12 @@ private:
 	uint32 ColumnIndex = 0;
 	uint32 RowIndex = 0;
 
-	float CellSizeU = 0.f;
-	float CellSizeV = 0.f;
+	float CellSizeU = 1.f / ColumnCnt;
+	float CellSizeV = 1.f / RowCnt;
 
-	SubUVBuffer* SubUVConstantBuffer = nullptr;
+	bool bIsLoop = true;
+	bool bIsPlaying = true;
+	float PlayRate = 1.f; // ratio
+	float Duration = 3.f; // s
+	float ElapsedTime = 0.f; // s
 };
