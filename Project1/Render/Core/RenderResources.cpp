@@ -45,10 +45,11 @@ void RenderResources::RegisterDefaultResources()
 	CreateTexture("SkyTexture", L"Resources\\Textures\\Sky.jpg"); // TODO: 릴리즈 시 수정
 	CreateTexture("FontAtlas", L"Resources\\Textures\\Pretendard-Regular.dds"); // TODO: 릴리즈 시 수정
 	CreateTexture("Explosion", L"Resources\\Textures\\Explosion.PNG"); // TODO: 릴리즈 시 
-	CreateTexture("Flame", L"Resources\\Textures\\flame.png"); // TODO: 릴리즈 시 수정
+	CreateTexture("Fire", L"Resources\\Textures\\fire.png"); // TODO: 릴리즈 시 수정
 
 
 	SamplerStates[static_cast<uint8>(Sampler::LinearWrap)] = Device.CreateSamplerState(Sampler::LinearWrap);
+	SamplerStates[static_cast<uint8>(Sampler::PointClamp)] = Device.CreateSamplerState(Sampler::PointClamp);
 }
 
 const RenderMesh* RenderResources::GetMesh(const FString& Name)

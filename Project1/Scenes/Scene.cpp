@@ -177,7 +177,7 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.PixelShader = PixelShaderType::SubUV,
 					.Layout = VertexLayout::PositionColorUVNormal,
 					.Texture = ParticleSubUV->GetTextureName(),
-					.Sampler = Sampler::LinearWrap,
+					.Sampler = Sampler::PointClamp,
 					.Blend = BlendMode::AlphaBlend
 				};
 				ObjectData.Add(FMeshRenderData{
@@ -199,7 +199,7 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.PixelShader = PixelShaderType::SubUV,
 					.Layout = VertexLayout::PositionColorUVNormal,
 					.Texture = Billboard->GetTextureName(),
-					.Sampler = Sampler::LinearWrap,
+					.Sampler = Sampler::PointClamp,
 					.Blend = BlendMode::AlphaBlend
 				};
 				ObjectData.Add(FMeshRenderData{

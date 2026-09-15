@@ -105,6 +105,17 @@ Microsoft::WRL::ComPtr<ID3D11SamplerState> RenderDevice::CreateSamplerState(Samp
 			.MaxLOD = D3D11_FLOAT32_MAX
 		};
 		break;
+	case Sampler::PointClamp:
+		Desc = {
+			.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT,
+			.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP,
+			.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP,
+			.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP,
+			.ComparisonFunc = D3D11_COMPARISON_NEVER,
+			.MinLOD = 0.0f,
+			.MaxLOD = D3D11_FLOAT32_MAX
+		};
+		break;
 	}
 
 	Device->CreateSamplerState(&Desc, &Result);

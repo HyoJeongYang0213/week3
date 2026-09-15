@@ -31,6 +31,7 @@ enum class PixelShaderType : uint8
 enum class Sampler : uint8
 {
 	LinearWrap,
+	PointClamp,
 
 	Count,
 	None = 0xFF,

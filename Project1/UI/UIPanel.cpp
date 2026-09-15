@@ -103,7 +103,7 @@ void UIPanel_Spawn::Render()
 
 	// Select Primitives
 	static int selected_item = 0;
-	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "Explosion", "Flame"};
+	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "Explosion", "Fire"};
 	ImGui::Combo("##Primitives", &selected_item, items, IM_ARRAYSIZE(items));
 
 	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
@@ -166,18 +166,20 @@ void UIPanel_Spawn::Render()
                     explosionsubuvdesc.bIsLoop = false;
 
                     spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
+                    spawnedActor->SetScale(FVector(3.f, 3.f, 3.f));
                     break;
                 }
                 case 9:
                 {
-                    ParticleSubUVDesc flamesubuvdesc = {};
-                    flamesubuvdesc.ColumnCnt = 8;
-                    flamesubuvdesc.RowCnt = 1;
-                    flamesubuvdesc.LastIndex = 8;
-                    flamesubuvdesc.Duration = 3.f;
-                    flamesubuvdesc.bIsLoop = true;
+                    ParticleSubUVDesc firesubuvdesc = {};
+                    firesubuvdesc.ColumnCnt = 1;
+                    firesubuvdesc.RowCnt = 32;
+                    firesubuvdesc.LastIndex = 32;
+                    firesubuvdesc.Duration = 3.f;
+                    firesubuvdesc.bIsLoop = true;
 
-                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Flame", flamesubuvdesc);
+                    spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Fire", firesubuvdesc);
+                    spawnedActor->SetScale(FVector(0.2f, 0.2f, 0.2f));
                     break;
                 }
 				default :
