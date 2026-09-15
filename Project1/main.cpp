@@ -7,7 +7,10 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	// COM 라이브러리 초기화
-	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	// COM 객체를 STA(COINIT_APARTMENTTHREADED)방식으로 접근하도록 변경. 사유: Microsoft에서 UI 스레드는 STA 사용을 권장
+	// 참조: https://learn.microsoft.com/ko-kr/windows/win32/shell/common-file-dialog
+
+	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 
 	srand(static_cast<unsigned>(time(nullptr)));
 
