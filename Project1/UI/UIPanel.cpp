@@ -421,7 +421,7 @@ void UIPanel_Grid::Render()
 void UIPanel_SceneManager::Render()
 {
     ImGui::Begin("Scene Manager");
-    if (ImGui::TreeNode("Primitives"))
+    if(ImGui::TreeNodeEx("Primitives", ImGuiTreeNodeFlags_DefaultOpen))
     {
         int32 Selected = -1;
         int32 i = 0;
