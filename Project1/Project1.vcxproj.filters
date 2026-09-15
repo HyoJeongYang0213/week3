@@ -298,6 +298,13 @@
     <ClInclude Include="IndexBufferO.h">
       <Filter>Render\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
+    <ClInclude Include="Actor\UBillboard.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\UParticleSubUVComp.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
     <ClInclude Include="Actor\Light\ALight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
@@ -449,6 +456,12 @@
     <ClCompile Include="Core\FName.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\UBillboard.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
     <ClCompile Include="Actor\Light\APointLight.cpp">
       <Filter>Actor\Light</Filter>
     </ClCompile>
@@ -489,6 +502,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\ShaderFont.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\ShaderSubUV.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
   </ItemGroup>
