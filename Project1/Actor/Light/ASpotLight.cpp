@@ -17,10 +17,11 @@ void ASpotLight::Render()
 	FVector Up = GetTransform().Up();
 	FVector Right = GetTransform().Right();
 
-	FVector BaseCenter = Apex + Forward * Length;	// 밑면 센터
 	float AngleRad = Angle * Global::PI / 180.0f;
-	float Radius = Length * tanf(AngleRad);
 
+	FVector BaseCenter = Apex + Forward * Length;	// 밑면 센터
+	float Radius = Length * tanf(AngleRad);
+	
 	DrawCircle(BaseCenter, Right, Up, Radius);
 
 	int Segments = 16;

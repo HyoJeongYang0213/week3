@@ -17,5 +17,5 @@ public:
 
 private:
 	float Length = 3.0f;
-	float Angle = 30.0f;
+	float Angle = 30.0f; 
 };

@@ -16,10 +16,14 @@ void APointLight::Render()
 	FVector Up = transform.Up();
 	FVector Right = transform.Right();
 
-	float maxScale = (std::max)({ transform.GetScale().x, transform.GetScale().y, transform.GetScale().z });
-	float Scale = Radius * maxScale;
+	DrawCircle(Center, Forward, Up, Radius);
+	DrawCircle(Center, Forward, Right, Radius);
+	DrawCircle(Center, Up, Right, Radius);
+}
 
-	DrawCircle(Center, Forward, Up, Scale);
-	DrawCircle(Center, Forward, Right, Scale);
-	DrawCircle(Center, Up, Right, Scale);
+void APointLight::ApplyGizmoScale(const FVector& newScale, float moveDist)
+{
+	if(DrawStartRadius + moveDist > 0.05f)
+		Radius = DrawStartRadius + moveDist;
+	else Radius = 0.05f;
 }
