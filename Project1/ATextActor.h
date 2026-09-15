@@ -25,7 +25,9 @@ public:
 			if (!OBJECT.IsValidObject(TargetActor, TargetUUID))
 			{
 				TargetActor = nullptr;
+				TargetUUID = 0;
 				DeActive();
+				OBJECT.ReserveDestroy(this);
 				return;
 			}
 			UpdateLabelTransform();
