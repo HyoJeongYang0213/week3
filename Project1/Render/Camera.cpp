@@ -77,12 +77,12 @@ void Camera::Update()
 	if (KEY_PRESS(ImGuiKey_S)) MoveForward(-currentSpeed);
 	if (KEY_PRESS(ImGuiKey_D)) MoveRight(currentSpeed);
 	if (KEY_PRESS(ImGuiKey_A)) MoveRight(-currentSpeed);
-	if (KEY_PRESS(ImGuiKey_Q)) MoveUp(currentSpeed);
-	if (KEY_PRESS(ImGuiKey_E)) MoveUp(-currentSpeed);
+	if (KEY_PRESS(ImGuiKey_Q)) MoveWorldUp(-currentSpeed);
+	if (KEY_PRESS(ImGuiKey_E)) MoveWorldUp(currentSpeed);
 
 	//카메라 회전 처리
 	if (MOUSE_PRESS(1)) {
 		ImVec2 delta = ImGui::GetIO().MouseDelta;
-		Rotate(delta.x * 0.2f, delta.y * 0.2f);
+		Rotate(delta.x * rotationSpeed, delta.y * rotationSpeed);
 	}
 }

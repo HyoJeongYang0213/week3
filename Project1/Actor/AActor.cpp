@@ -33,7 +33,7 @@ bool AActor::IsSelected() const {
   return AGizmo::MainGizmo && this == AGizmo::MainGizmo->GetTargetActor();
 }
 
-void AActor::DrawingBox()
+FBoundingBox AActor::GetWorldBoundingBox() const
 {
 	FBoundingBox box = mesh->GetBoundingBox();
 	
@@ -51,27 +51,36 @@ void AActor::DrawingBox()
 	FVector wmin = TransformPoint(localedges[0], world);
 	FVector wmax = wmin;
 
-	// 월드좌표 내 [min, max] 범위 구하기 
-	for (int i = 1; i < 8; i++) {
-		FVector p = TransformPoint(localedges[i], world);
-		wmin.x = min(wmin.x, p.x);
-		wmax.x = max(wmax.x, p.x);
-		wmin.y = min(wmin.y, p.y);
-		wmax.y = max(wmax.y, p.y);
-		wmin.z = min(wmin.z, p.z);
-		wmax.z = max(wmax.z, p.z);
-	}
-	
-	// 해당 범위들로 꼭짓점 구성하기 
-	FVector edges[8];
-	for (int i = 0; i < 8; i++) {
-		edges[i] = FVector(
-			(i & 1) ? wmin.x : wmax.x,
-			(i & 2) ? wmin.y : wmax.y,
-			(i & 4) ? wmin.z : wmax.z
-		);
-	}
+    // 월드좌표 내 [min, max] 범위 구하기 
+    for (int i = 1; i < 8; i++) {
+        FVector p = TransformPoint(localedges[i], world);
+        wmin.x = min(wmin.x, p.x);
+        wmax.x = max(wmax.x, p.x);
+        wmin.y = min(wmin.y, p.y);
+        wmax.y = max(wmax.y, p.y);
+        wmin.z = min(wmin.z, p.z);
+        wmax.z = max(wmax.z, p.z);
+    }
 
+    return FBoundingBox{
+    wmin.x, wmin.y, wmin.z,
+    wmax.x, wmax.y, wmax.z
+    };
+}
+
+void AActor::DrawingBox()
+{
+    FBoundingBox box = GetWorldBoundingBox();
+    
+    // 해당 범위들로 꼭짓점 구성하기 
+    FVector edges[8];
+    for (int i = 0; i < 8; i++) {
+        edges[i] = FVector(
+            (i & 1) ? box.minX : box.maxX,
+            (i & 2) ? box.minY : box.maxY,
+            (i & 4) ? box.minZ : box.maxZ
+        );
+    }
 
 	FLinearColor color = FLinearColor::White;
 	LINEBATCH.AddLine(edges[0], edges[1], color, true);

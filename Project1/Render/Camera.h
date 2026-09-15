@@ -46,7 +46,7 @@ public:
 
 	void MoveForward(float delta) { transform.SetLocation(transform.GetLocation() + GetForward() * delta); }
 	void MoveRight(float delta) { transform.SetLocation(transform.GetLocation() + GetRight() * delta); }
-	void MoveUp(float delta) { transform.SetLocation(transform.GetLocation() + GetUp() * delta); }
+	void MoveWorldUp(float delta) { transform.SetLocation(transform.GetLocation() + FVector(0.0f, 1.0f, 0.0f) * delta); }
 
 	float GetNear() const { return NearZ; }
 	float GetFar() const { return FarZ; }

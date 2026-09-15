@@ -31,43 +31,51 @@ void UIPanel_Camera::Render()
 	ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.4f, 1.0f), "[ Camera Controls ]");
 	Camera& cam = CAMERA;
 
+    // 카메라 직교투영 여부 선택 체크박스
     bool isOrtho = (cam.GetProjectionMode() == Orthographic);
     if (ImGui::Checkbox("Orthgraphic", &isOrtho)) {
         cam.SetProjectionMode(isOrtho ? Orthographic : Perspective);
     }
 
+    // 에디터 뷰 모드 선택 콤보박스
 	int ViewMode = static_cast<int>(cam.ViewMode);
 	if (ImGui::Combo("View Mode", &ViewMode, "Unlit\0Wireframe\0"))
 	{
 		cam.ViewMode = static_cast<EViewMode>(ViewMode);
 	}
 
+    // 카메라 시야각 조절 슬라이더
     float fov = cam.GetFOV();
     if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
         cam.SetFOV(fov);
     ImGui::Text("FOV: %.3f", cam.GetFOV());
     
+    // 카메라 위치 조절 슬라이더
     FVector camLoc = cam.GetLocation();
 	if (ImGui::DragFloat3("Cam Pos", &camLoc.x, 0.05f, -20.0f, 20.0f))
 	{
 		cam.SetLocation(camLoc);
 	}
-	FQuaternion camRot = cam.GetRotation();
-	if (ImGui::DragFloat3("Cam Rot", &camRot.x, 0.01f, -3.14f, 3.14f))
+
+    // 카메라 각도 조절 슬라이더
+    FVector camEuler = FQuaternion::ToEuler(cam.GetRotation());
+	if (ImGui::DragFloat3("Cam Rot", &camEuler.x, 0.01f, -3.14f, 3.14f))
 	{
-		cam.SetRotation(camRot);
+		cam.SetRotation(FQuaternion::FromEuler(camEuler.x, camEuler.y, camEuler.z));
 	}
 
-	//카메라 속도 및 회전 조절
+	//카메라 이동 속도 및 회전 마우스 감도 조절 슬라이더
 	ImGui::SliderFloat("Move Speed", &cam.GetSpeedRef(), 0.5f, 20.0f, "%.1f");
-	ImGui::SliderFloat("Rot Speed", &cam.GetRotationSpeedRef(), 0.01f, 0.5f, "%.3f");
+	ImGui::SliderFloat("Mouse Sensitivity", &cam.GetRotationSpeedRef(), 0.01f, 0.5f, "%.3f");
 
+    // 카메라 설정 리셋 버튼
 	if (ImGui::Button("Reset Camera"))
 	{
 		cam.SetLocation(FVector(3.336f, 3.282f, -4.715f));
 		cam.SetRotation(FQuaternion::FromEuler(0.391f, -0.468f, 0.0f));
 	}
 	
+    // 카메라 앞(Forward)벡터 출력 텍스트
 	FVector camFwd = cam.GetForward();
 	ImGui::Text("Forward: (%.2f, %.2f, %.2f)", camFwd.x, camFwd.y, camFwd.z);
 
@@ -339,10 +347,10 @@ void UIPanel_Grid::Render()
     }
     ImGui::End();
 }
-void UIPanel_ScenceManager::Render()
+void UIPanel_SceneManager::Render()
 {
     
-    ImGui::Begin("Sence Manager");
+    ImGui::Begin("Scene Manager");
     if (ImGui::TreeNode("Primitives"))
     {
         int32 Selected = -1;

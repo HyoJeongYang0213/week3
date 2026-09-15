@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Camera.h"
 #include "ConsoleWindow.h"
+#include "EditorSettings.h"
 
 GameManager* GameManager::Instance = nullptr;
 
@@ -60,6 +61,8 @@ void GameManager::Init(HINSTANCE hInstance)
 
 	SCENE.AddScene("Default", new Scene());
 	SCENE.ChangeScene("Default");
+	
+	EditorSettings::Load();
 }
 
 void GameManager::Initwindow(HINSTANCE hInstance)
@@ -141,6 +144,9 @@ void GameManager::Render()
 
 void GameManager::ReleaseAll()
 {
+	// 정상 종료 시 에디터 설정 일괄 저장
+	EditorSettings::Save();
+
 	// 씬 리소스 해제
 	SCENE.Release();
 
