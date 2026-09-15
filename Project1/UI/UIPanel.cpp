@@ -1,8 +1,14 @@
 ﻿#include "pch.h"
+
 #include "UIPanel.h"
 #include "Global.h"
-#include "ATextActor.h"
+#include "Containers.h"
+
+#include "GameManager.h"
 #include "AActor.h"
+#include "ATextActor.h"
+
+#include "DefaultScene.h"
 
 #include "APointLight.h"
 #include "ASpotLight.h"
@@ -377,9 +383,6 @@ void UIPanel_Grid::Render()
     if (ImGui::SliderFloat("Grid Interval", &cellSize, 0.15f, 2.0f))
     {
         defaultScene->Ugrid.SetCellSize(cellSize);
-        // ----------------------------
-        // editor.ini 저장 추가!!
-        // ----------------------------
     }
     ImGui::End();
 }
