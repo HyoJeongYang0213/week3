@@ -39,7 +39,7 @@ public:
 	}
 
 	// 텍스트마다 메쉬 개별 생성
-	void SetText(const std::wstring& text)
+	void SetText(const FWString& text)
 	{
 		if (Text == text && mesh != nullptr) return;
 		
@@ -60,7 +60,7 @@ public:
 		SetMesh(new Mesh(Vertices), true);
 	}
 
-	const std::wstring& GetText() const { return Text; }
+	const FWString& GetText() const { return Text; }
 
 	void SetTarget(AActor* target)
 	{
@@ -94,7 +94,7 @@ public:
 	const FontGeometry& GetGeometry() const { return Geometry; }
 
 private:
-	std::wstring Text;
+	FWString Text;
 
 	float GlyphAdvance = 0.6f;
 	float LabelPadding = 0.1f;

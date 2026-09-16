@@ -468,7 +468,7 @@ FString UIPanel_SaveLoad::OpenSceneFileDialog()
 		IShellItem* psiRoot = nullptr;
         std::filesystem::path root = std::filesystem::current_path();
         std::filesystem::path scenePath = root / "SceneData";
-        std::wstring scenePathW = scenePath.wstring();
+        FWString scenePathW = scenePath.wstring();
 
 		hr = SHCreateItemFromParsingName(
             scenePathW.c_str(),
@@ -609,7 +609,7 @@ FString UIPanel_SaveLoad::SaveSceneFileDialog()
                             }
                         }
                     }
-                    std::wstring fn;
+                    FWString fn;
                     if (cur_max < 9)
                         fn = L"Scene0" + std::to_wstring(cur_max + 1);
                     else
@@ -620,7 +620,7 @@ FString UIPanel_SaveLoad::SaveSceneFileDialog()
                     // SetFileName 성공?
                     if (SUCCEEDED(hr))
                     {
-                        std::wstring scenePathW = scenePath.wstring();
+                        FWString scenePathW = scenePath.wstring();
 
                         hr = SHCreateItemFromParsingName(
                             scenePathW.c_str(),
