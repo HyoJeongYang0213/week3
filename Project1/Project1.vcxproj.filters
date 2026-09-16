@@ -61,9 +61,6 @@
     <Filter Include="Render\Global">
       <UniqueIdentifier>{88fc93bb-abcc-4727-b49c-40caa7c11a54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Actor\UI">
-      <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Actor\Light">
       <UniqueIdentifier>{2fa5a235-6d74-4150-98a7-2146478a9523}</UniqueIdentifier>
     </Filter>
@@ -199,15 +196,6 @@
     <ClInclude Include="Scenes\SceneManager.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="UI\IUIPanel.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIManager.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIPanel.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Pointers.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -261,9 +249,6 @@
     </ClInclude>
     <ClInclude Include="Actor\Light\ADirectionalLight.h">
       <Filter>Actor\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\Buffer\FBoundingBox.h">
-      <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="Render\Buffer\FBoundingBox.h" />
     <ClInclude Include="Actor\UBillboard.h">
@@ -346,6 +331,15 @@
     </ClInclude>
     <ClInclude Include="Render\FGrid.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\IUIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIPanel.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -432,12 +426,6 @@
     <ClCompile Include="Scenes\SceneManager.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UIManager.cpp">
-      <Filter>Actor\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIPanel.cpp">
-      <Filter>Actor\UI</Filter>
-    </ClCompile>
     <ClCompile Include="FontMeshGenerator.cpp">
       <Filter>Resources\Geometry</Filter>
     </ClCompile>
@@ -495,9 +483,6 @@
     <ClCompile Include="Actor\Light\ADirectionalLight.cpp">
       <Filter>Actor\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ULineBatch.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Editor\EditorSettings.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
@@ -512,6 +497,12 @@
     </ClCompile>
     <ClCompile Include="Render\Core\RenderSystem.cpp">
       <Filter>Render\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIPanel.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -556,9 +547,6 @@
       <Filter>Resources\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shader\SubUVVS.hlsl">
-      <Filter>Resources\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\ShaderSubUV.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shader\SubUVPS.hlsl">

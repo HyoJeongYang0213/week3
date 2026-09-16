@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ConsoleWindow.h"
 
 ConsoleWindow& ConsoleWindow::GetInstance()
@@ -41,81 +41,16 @@ void ConsoleWindow::ClearLogs()
 	Logs.Empty();
 }
 
-void ConsoleWindow::UpdateLayout()
-{
-	ImGuiViewport* Viewport = ImGui::GetMainViewport();
-
-	float Height = Viewport->WorkSize.y * 0.3f;
-
-	ImGui::SetNextWindowPos(
-		ImVec2(
-			Viewport->WorkPos.x,
-			Viewport->WorkPos.y + Viewport->WorkSize.y - Height
-		)
-	);
-
-	ImGui::SetNextWindowSize(
-		ImVec2(Viewport->WorkSize.x, Height)
-	);
-}
-
-void ConsoleWindow::RequestResize()
-{
-	bResizeRequested = true;
-}
-
 void ConsoleWindow::DrawConsole()
 {
-	//ImGuiViewport* Viewport = ImGui::GetMainViewport();
-	//ImVec2 WorkPos = Viewport->WorkPos;
-	//ImVec2 WorkSize = Viewport->WorkSize;
-
-	//float ConsoleHeight = WorkSize.y * 0.3f;
-
-	//// 메인 화면 하단 30%를 콘솔 영역으로 사용한다.
-	//ImGui::SetNextWindowPos(ImVec2(WorkPos.x, WorkPos.y + WorkSize.y - ConsoleHeight));
-	//ImGui::SetNextWindowSize(ImVec2(WorkSize.x, ConsoleHeight));
-
-	if (bResizeRequested)
+	if (!bIsOpen)
 	{
-		ImGuiViewport* Viewport = ImGui::GetMainViewport();
-
-		if (bWasCollapsed)
-		{
-			// 접힌 상태에서는 짧은 바 유지
-			ImGui::SetNextWindowSize(
-				ImVec2(100.0f, 0.0f),
-				ImGuiCond_Always
-			);
-		}
-		else
-		{
-			// 펼쳐진 상태에서는 하단 전체 크기
-			UpdateLayout();
-		}
-
-		bResizeRequested = false;
+		return;
 	}
 
-	ImGui::Begin("Console");
+	ImGui::Begin("Console", &bIsOpen);
 
 	bool bCollapsed = ImGui::IsWindowCollapsed();
-
-	// 접히는 순간
-	if (bCollapsed && !bWasCollapsed)
-	{
-		ImVec2 Size = ImGui::GetWindowSize();
-		ImGui::SetWindowSize(
-			ImVec2(100.0f, Size.y),
-			ImGuiCond_Always
-		);
-	}
-
-	// 다시 펼치는 순간
-	if (!bCollapsed && bWasCollapsed)
-	{
-		bResizeRequested = true; // 다음 프레임에 UpdateLayout()으로 원래 크기 복구
-	}
 
 	bWasCollapsed = bCollapsed;
 
