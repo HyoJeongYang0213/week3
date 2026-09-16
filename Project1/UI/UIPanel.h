@@ -23,8 +23,8 @@ public:
 	FString GetName() const override { return "Scene & Camera"; }
 
 private:
-    FString OpenSceneFileDialog();
-    FString SaveSceneFileDialog();
+    FWString OpenSceneFileDialog();
+    FWString SaveSceneFileDialog();
 };
 
 // 스폰 창

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "SaveLoadManager.h"
 
 #include "TemplateLibrary.h"
@@ -144,7 +144,7 @@ string SaveLoadManager::EPrimitiveToStr(EPrimitive prim)
 ////////////////////////////
 
 // 데이터 저장 - 직렬화(객체 -> json)
-void SaveLoadManager::SaveScene(const FString& path)
+void SaveLoadManager::SaveScene(const FWString& path)
 {
     json sceneJson;
 
@@ -231,7 +231,7 @@ void SaveLoadManager::SaveScene(const FString& path)
 ////////////////////////////
 
 // 데이터 로드 - 역직렬화(json -> 객체)
-TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
+TArray<UObject*> SaveLoadManager::LoadScene(const FWString& path)
 {
     TArray<UObject*> loadedObjects;
 
@@ -241,7 +241,7 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
     {
         UE_LOG("[Error] Failed to Load objects!");
         assert(false && "Failed to Load objects!\n");
-        OutputDebugStringA(("Failed to open: " + path + "\n").c_str());  // 추가
+        OutputDebugStringW((L"Failed to open: " + path + L"\n").c_str());  // 추가
 
         return loadedObjects; // {} 빈 배열 return
     }

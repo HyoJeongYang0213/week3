@@ -147,7 +147,7 @@ void UIPanel_SceneCamera::Render()
 	// SAVE
 	if (ImGui::Button("Save Scene", ImVec2(150.0f, 0.0f)))
 	{
-		FString path = SaveSceneFileDialog();
+		FWString path = SaveSceneFileDialog();
 		if (!path.empty())
 		{
 			SAVELOAD.SaveScene(path);
@@ -157,7 +157,7 @@ void UIPanel_SceneCamera::Render()
 	// LOAD
 	if (ImGui::Button("Load Scene", ImVec2(150.0f, 0.0f)))
 	{
-		FString path = OpenSceneFileDialog();
+		FWString path = OpenSceneFileDialog();
 		if (!path.empty())
 		{
 			SAVELOAD.LoadScene(path);
@@ -167,9 +167,9 @@ void UIPanel_SceneCamera::Render()
 	ImGui::End();
 }
 
-FString UIPanel_SceneCamera::OpenSceneFileDialog()
+FWString UIPanel_SceneCamera::OpenSceneFileDialog()
 {
-	FString result;
+	FWString result;
 	HWND hwnd = GameManager::GetInstance().GetMainWindow();
 
 	IFileDialog* pfd = NULL;
@@ -228,16 +228,7 @@ FString UIPanel_SceneCamera::OpenSceneFileDialog()
 							// GetDisplayName 성공 ?
 							if (SUCCEEDED(hr))
 							{
-								// PWSTR를 FString(std::string)으로 변환
-								// wchar_t* to string
-								int wideLength = static_cast<int>(wcslen(pszFilePath));
-								int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
-
-								if (sizeNeeded > 0)
-								{
-									result.resize(sizeNeeded);
-									WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
-								}
+								result = pszFilePath;
 							}
 							CoTaskMemFree(pszFilePath);
 							psiResult->Release();
@@ -252,9 +243,9 @@ FString UIPanel_SceneCamera::OpenSceneFileDialog()
 	return result;
 }
 
-FString UIPanel_SceneCamera::SaveSceneFileDialog()
+FWString UIPanel_SceneCamera::SaveSceneFileDialog()
 {
-	FString result;
+	FWString result;
 
 	// 게임매니저에서 관리하는 Main Window 받아오기
 	HWND hwnd = GameManager::GetInstance().GetMainWindow();
@@ -369,20 +360,9 @@ FString UIPanel_SceneCamera::SaveSceneFileDialog()
 								{
 									PWSTR pszFilePath = NULL;
 									hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-
-									// GetDisplayName 성공 ?
 									if (SUCCEEDED(hr))
 									{
-										// PWSTR를 FString(std::string)으로 변환
-										// wchar_t* to string
-										int wideLength = static_cast<int>(wcslen(pszFilePath));
-										int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
-
-										if (sizeNeeded > 0)
-										{
-											result.resize(sizeNeeded);
-											WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
-										}
+										result = pszFilePath;
 									}
 
 									CoTaskMemFree(pszFilePath);

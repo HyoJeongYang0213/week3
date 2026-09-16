@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Containers.h"
 
@@ -11,8 +11,8 @@ class SaveLoadManager
 {
 public:
 	static SaveLoadManager& GetInstance();
-	static void SaveScene(const FString& path);
-	static TArray<UObject*> LoadScene(const FString& path);
+	static void SaveScene(const FWString& path);
+	static TArray<UObject*> LoadScene(const FWString& path);
 
 private:
 
