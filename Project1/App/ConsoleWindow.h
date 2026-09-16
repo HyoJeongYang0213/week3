@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
 
 class ConsoleWindow
@@ -10,7 +10,7 @@ public:
 	void AddLog(const char* Format, ...);
 	void ClearLogs();
 
-	void RequestResize();
+	bool bIsOpen = true;
 
 private:
 	ConsoleWindow();
@@ -20,7 +20,6 @@ private:
 	ConsoleWindow& operator=(const ConsoleWindow&) = delete;
 
 	// UI
-	void UpdateLayout();
 	void DrawToolBar();
 	void DrawOptionsAndFilter();
 	void DrawLogArea();
@@ -72,7 +71,6 @@ private:
 
 	bool AutoScroll = true;
 	bool bWasCollapsed = false;
-	bool bResizeRequested = true;
 };
 
 

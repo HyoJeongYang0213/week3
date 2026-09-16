@@ -61,9 +61,6 @@
     <Filter Include="Render\Global">
       <UniqueIdentifier>{88fc93bb-abcc-4727-b49c-40caa7c11a54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Actor\UI">
-      <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Actor\Light">
       <UniqueIdentifier>{2fa5a235-6d74-4150-98a7-2146478a9523}</UniqueIdentifier>
     </Filter>
@@ -199,15 +196,6 @@
     <ClInclude Include="Scenes\SceneManager.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="UI\IUIPanel.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIManager.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIPanel.h">
-      <Filter>Actor\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Pointers.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -256,6 +244,7 @@
     <ClInclude Include="Actor\Light\ADirectionalLight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
     <ClInclude Include="Actor\UBillboard.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -334,10 +323,6 @@
     <ClInclude Include="Render\FGrid.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Render\FontMeshGenerator.h" />
-    <ClInclude Include="Actor\ATextActor.h" />
-    <ClInclude Include="Math\FIntPoint.h" />
-    <ClInclude Include="Input\InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\pch.cpp" />
@@ -429,6 +414,9 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>Actor\UI</Filter>
     </ClCompile>
+    <ClCompile Include="FontMeshGenerator.cpp">
+      <Filter>Resources\Geometry</Filter>
+    </ClCompile>
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -498,8 +486,6 @@
     <ClCompile Include="Render\Core\RenderSystem.cpp">
       <Filter>Render\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Render\FontMeshGenerator.cpp" />
-    <ClCompile Include="Input\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">

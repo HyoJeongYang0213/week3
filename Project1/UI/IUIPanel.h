@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class IUIPanel
 {
@@ -8,6 +8,8 @@ public:
 
     bool IsOpen() const { return bIsOpen; };
     void SetOpen(bool bOpen) { bIsOpen = bOpen; }
+
+    virtual FString GetName() const = 0;
 
 protected:
     bool bIsOpen = true; // 창 open 여부 (default : 열림)
