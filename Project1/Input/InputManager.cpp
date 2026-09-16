@@ -52,6 +52,11 @@ void InputManager::ProcessMessage(UINT message, WPARAM wParam, LPARAM lParam)
 			m_mouseWheelDelta += delta;
 			break;
 		}
+
+		case WM_KILLFOCUS:
+			m_current.reset();
+			m_mouseWheelDelta = 0;
+			break;
 	}
 }
 
