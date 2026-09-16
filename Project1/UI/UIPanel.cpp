@@ -86,19 +86,17 @@ void UIPanel_SceneCamera::Render()
 	{
 		cam.SetLocation(FVector(3.336f, 3.282f, -4.715f));
 		cam.SetRotation(FQuaternion::FromEuler(0.391f, -0.468f, 0.0f));
+        cam.SetFOV(60.0f);
+        cam.SetNear(0.1f);
+        cam.SetFar(1000.0f);
+        cam.SetSpeed(2.0f);
+        cam.SetRotationSpeed(0.08f);
 	}
 	
 	Scene* scene = SCENE.GetCurrentScene();
 
 
-	float CellSize = scene->GetGrid().CellSize;
-	if (ImGui::SliderFloat("Grid Interval", &CellSize, 0.15f, 2.0f))
-	{
-		scene->GetGrid().CellSize = CellSize;
-		// ----------------------------
-		// editor.ini 저장 추가!!
-		// ----------------------------
-	}
+
 
 	ImGui::PopItemWidth();
 
@@ -107,8 +105,9 @@ void UIPanel_SceneCamera::Render()
 	// NEW SCENE
 	if (ImGui::Button("New Scene", ImVec2(150.0f, 0.0f)))
 	{
-		// Collider만 삭제 (Grid, World Axis Gizmo 삭제되지 않도록)
-		OBJECT.DestroyAllColliders();
+        // Collider만 삭제 (Grid, World Axis Gizmo 삭제되지 않도록)
+		OBJECT.DestoryAllSceneActor();
+
 		PICK.pickedObjcect = nullptr;
 		if (AGizmo::MainGizmo)
 		{
@@ -450,6 +449,7 @@ void UIPanel_Spawn::Render()
 
 					spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
 					spawnedActor->SetScale(FVector(3.f, 3.f, 3.f));
+					spawnedActor->SetLocation(randomLoc);
 					break;
 				}
 				case 9:
@@ -463,6 +463,7 @@ void UIPanel_Spawn::Render()
 
 					spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Fire", firesubuvdesc);
 					spawnedActor->SetScale(FVector(0.2f, 0.2f, 0.2f));
+					spawnedActor->SetLocation(randomLoc);
 					break;
 				}
 				default :
@@ -620,7 +621,7 @@ void UIPanel_Picking::Render()
 void UIPanel_SceneManager::Render()
 {
 	ImGui::Begin(GetName().c_str(), &bIsOpen);
-	if (ImGui::TreeNode("Primitives"))
+	if (ImGui::TreeNodeEx("Primitives", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		int32 Selected = -1;
 		int32 i = 0;

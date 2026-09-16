@@ -6,6 +6,7 @@
 
 ADirectionalLight::ADirectionalLight(const FLinearColor& color) : ALight(color)
 {
+	SetPrimitive(EPrimitive::DirectionalLight);
 }
 
 void ADirectionalLight::AddLines()
