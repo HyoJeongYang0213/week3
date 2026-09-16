@@ -80,6 +80,7 @@ void UIPanel_SceneCamera::Render()
 	//카메라 이동 속도 및 회전 마우스 감도 조절 슬라이더
 	ImGui::SliderFloat("Move Speed", &cam.GetSpeedRef(), 0.5f, 20.0f, "%.1f");
 	ImGui::SliderFloat("Mouse Sensitivity", &cam.GetRotationSpeedRef(), 0.01f, 0.5f, "%.3f");
+	ImGui::SliderFloat("Wheel Speed", &cam.GetWheelSpeedRef(), 0.5f, 2.0f, "%.1f");
 
 	// 카메라 설정 리셋 버튼
 	if (ImGui::Button("Reset Camera"))
@@ -91,12 +92,10 @@ void UIPanel_SceneCamera::Render()
         cam.SetFar(1000.0f);
         cam.SetSpeed(2.0f);
         cam.SetRotationSpeed(0.08f);
+		cam.SetWheelSpeed(1.0f);
 	}
 	
 	Scene* scene = SCENE.GetCurrentScene();
-
-
-
 
 	ImGui::PopItemWidth();
 

@@ -86,4 +86,8 @@ void Camera::Update()
 		FIntPoint delta = INPUT.GetMouseDelta();
 		Rotate(delta.X * rotationSpeed, delta.Y * rotationSpeed);
 	}
+
+	// 카메라 줌인/줌아웃 처리
+	float wheelDelta = INPUT.GetMouseWheelDelta();
+	if (wheelDelta) MoveForward(wheelDelta * wheelSpeed);
 }
