@@ -58,6 +58,10 @@ public:
 	void SetRotationSpeed(float inRotSpeed) { rotationSpeed = inRotSpeed; }
 	float& GetRotationSpeedRef() { return rotationSpeed; }
 
+	float GetWheelSpeed() const { return wheelSpeed; }
+	void SetWheelSpeed(float inWheelSpeed) { wheelSpeed = inWheelSpeed; }
+	float& GetWheelSpeedRef() { return wheelSpeed; }
+
 	float GetFOV() const { return fov; }
 	void SetFOV(float inFov) { fov = inFov; }
 
@@ -90,7 +94,9 @@ private:
 	float fov = 60.0f;
 	float NearZ = 0.1f;
 	float FarZ = 1000.0f;
+
 	float speed = 2.0f;
 	float rotationSpeed = 0.08f;
+	float wheelSpeed = 1.0f;
 };
 

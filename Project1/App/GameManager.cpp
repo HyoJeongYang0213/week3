@@ -12,6 +12,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	INPUT.ProcessMessage(message, wParam, lParam);
 	bool imguiHandled = ImGui_ImplWin32_WndProcHandler(hwnd, message, wParam, lParam);
 
 	switch (message)
@@ -111,6 +112,8 @@ void GameManager::mainLoop()
 
 	// 렌더링 실행
 	Render();
+
+	INPUT.EndFrame();
 }
 
 void GameManager::Update()
