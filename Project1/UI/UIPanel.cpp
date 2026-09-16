@@ -41,7 +41,7 @@ void UIPanel_SceneCamera::Render()
 	ImGui::Begin(GetName().c_str(), &bIsOpen);
 
 	// 카메라 디버그 섹션
-	ImGui::Text("[ Camera Controls ]");
+	ImGui::Text("[ View Options ]");
 	Camera& cam = CAMERA;
 	ImGui::PushItemWidth(200.0f);
     // 카메라 직교투영 여부 선택 체크박스
@@ -55,6 +55,18 @@ void UIPanel_SceneCamera::Render()
 	if (ImGui::Combo("View Mode", &ViewMode, "Unlit\0Wireframe\0"))
 	{
 		cam.ViewMode = static_cast<EViewMode>(ViewMode);
+	}
+
+	bool bPrimitive = (CAMERA.ShowFlags & EEngineShowFlags::SF_Primitives) != EEngineShowFlags::SF_None;
+	if (ImGui::Checkbox("Primitives", &bPrimitive))
+	{
+		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_Primitives;
+	}
+
+	bool bBilldboard = (CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None;
+	if (ImGui::Checkbox("Billboard Texts", &bBilldboard))
+	{
+		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
 	}
 
     // 카메라 시야각 조절 슬라이더
@@ -420,8 +432,7 @@ void UIPanel_Spawn::Render()
 	float spawnDistance = 8.0f; // 카메라 앞으로 얼마나 떨어뜨릴지
 
 	// 카메라의 오른쪽 벡터 (forward와 up의 외적)
-	FVector worldUp(0.0f, 1.0f, 0.0f);
-	FVector camRight = FVector::Cross3D(camForward, worldUp).Normalized();
+	FVector camRight = FVector::Cross3D(camForward, FVector::Up).Normalized();
 
 	FVector spawnCenter = camLocation + camForward * spawnDistance;
 
@@ -432,7 +443,7 @@ void UIPanel_Spawn::Render()
 			AActor* spawnedActor = nullptr;
 
 			// 위치 안 겹치도록
-			FVector randomLoc = spawnCenter + camRight * distSide(rng) + worldUp * distUp(rng);
+			FVector randomLoc = spawnCenter + camRight * distSide(rng) + FVector::Up * distUp(rng);
 
 			switch(selected_item)
 			{
@@ -506,12 +517,6 @@ void UIPanel_Spawn::Render()
 			}
 		}
 			
-	}
-
-	bool bShowUUID = (CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None;
-	if (ImGui::Checkbox("Show UUID", &bShowUUID))
-	{
-		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
 	}
 
 	ImGui::End();

@@ -59,7 +59,10 @@ void Scene::Render()
 	TArray<FMeshRenderData> TextData;
 	CollectRenderData(ObjectData, TextData);
 
-	MeshRenderer.Render(FrameBuffer, ObjectData);
+	if ((CAMERA.ShowFlags & EEngineShowFlags::SF_Primitives) != EEngineShowFlags::SF_None)
+	{
+		MeshRenderer.Render(FrameBuffer, ObjectData);
+	}
 
 	LINEBATCH.Render(FrameBuffer);
 
@@ -83,7 +86,10 @@ void Scene::Render()
 	}
 	LINEBATCH.Render(FrameBuffer, false);
 
-	MeshRenderer.Render(FrameBuffer, TextData, false);
+	if ((CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None)
+	{
+		MeshRenderer.Render(FrameBuffer, TextData, false);
+	}
 
 	CONTEXT.ClearDepthStencil(RENDER.GetDepthStencilView());
 	RenderGizmo();

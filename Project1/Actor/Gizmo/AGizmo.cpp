@@ -45,7 +45,7 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 	FVector gizmoPos = parentTransform.Location;
 
 	float dist = (gizmoPos - camPos).Length();
-	float scaleFactor = dist * 0.15f;
+	float scaleFactor = dist * 0.0015f * CAMERA.GetFOVX();
 
 	float ScaleAxisFactor = scaleFactor;
 	if (mode && *mode == EGizmoMode::Scale && bSelected)
