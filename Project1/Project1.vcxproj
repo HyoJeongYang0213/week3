@@ -125,6 +125,7 @@
     <ClInclude Include="Actor\AActor.h" />
     <ClInclude Include="Actor\ASkySphere.h" />
     <ClInclude Include="Actor\ASphere.h" />
+    <ClInclude Include="Actor\ATextActor.h" />
     <ClInclude Include="Actor\AWorldAxes.h" />
     <ClInclude Include="Actor\Gizmo\AGizmo.h" />
     <ClInclude Include="Actor\UBillboard.h" />
@@ -135,7 +136,6 @@
     <ClInclude Include="Actor\Light\ASpotLight.h" />
     <ClInclude Include="App\ConsoleWindow.h" />
     <ClInclude Include="App\GameManager.h" />
-    <ClInclude Include="ATextActor.h" />
     <ClInclude Include="Core\Containers.h" />
     <ClInclude Include="Core\enums.h" />
     <ClInclude Include="Core\FName.h" />
@@ -148,7 +148,6 @@
     <ClInclude Include="Core\UObject.h" />
     <ClInclude Include="Core\WeakObjectPtr.h" />
     <ClInclude Include="Editor\EditorSettings.h" />
-    <ClInclude Include="FontMeshGenerator.h" />
     <ClInclude Include="Library\DirectXTex\DirectXTex.h" />
     <ClInclude Include="Library\ImGui\imconfig.h" />
     <ClInclude Include="Library\ImGui\imgui.h" />
@@ -175,6 +174,7 @@
     <ClInclude Include="Render\Core\RenderSystem.h" />
     <ClInclude Include="Render\FBoundingBox.h" />
     <ClInclude Include="Render\FGrid.h" />
+    <ClInclude Include="Render\FontMeshGenerator.h" />
     <ClInclude Include="Render\Global\FLinearColor.h" />
     <ClInclude Include="Render\Global\FVertexSimple.h" />
     <ClInclude Include="Render\Global\GraphicsEnums.h" />
@@ -223,7 +223,6 @@
     <ClCompile Include="Core\ObjectManager.cpp" />
     <ClCompile Include="Core\UObject.cpp" />
     <ClCompile Include="Editor\EditorSettings.cpp" />
-    <ClCompile Include="FontMeshGenerator.cpp" />
     <ClCompile Include="Library\ImGui\imgui.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -257,6 +256,7 @@
     <ClCompile Include="Render\Core\RenderDevice.cpp" />
     <ClCompile Include="Render\Core\RenderResources.cpp" />
     <ClCompile Include="Render\Core\RenderSystem.cpp" />
+    <ClCompile Include="Render\FontMeshGenerator.cpp" />
     <ClCompile Include="Render\Mesh.cpp" />
     <ClCompile Include="Render\PickingManager.cpp" />
     <ClCompile Include="Render\FGrid.cpp" />
