@@ -316,7 +316,7 @@ void AGizmo::Update(float DeltaTime)
 	AActor::Update(DeltaTime);
 
 	//키보드 L 누르면 bIsLocal 토글
-	if (KEY_DOWN(ImGuiKey_L))
+	if (INPUT.GetKeyDown('L'))
 	{
 		bIsLocal = !bIsLocal;
 		for (auto* axis : Axes)
@@ -325,8 +325,8 @@ void AGizmo::Update(float DeltaTime)
 		}
 	}
 
-	//키보드 1, 2, 3 누르면 기즈모 모드 전환 (1: Translation, 2: Rotation, 3: Scale;
-	if (KEY_DOWN(ImGuiKey_Space)) ChangeGizmoMode();
+	//키보드 Space 누르면 기즈모 모드 전환 (Translation → Rotation → Scale → Translation)
+	if (INPUT.GetKeyDown(VK_SPACE)) ChangeGizmoMode();
 
 	// 피킹된 타겟 액터가 있을 때만 위치 동기화 및 3개 축 업데이트
 	if (TargetActor)
@@ -356,7 +356,7 @@ void AGizmo::Update(float DeltaTime)
 			}
 		}
 
-		if (closestAxis && !MOUSE_PRESS(0))
+		if (closestAxis && !INPUT.GetMouseButton(MouseButton::LEFT))
 		{
 			closestAxis->SetHovered(true);
 		}

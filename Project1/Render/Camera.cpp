@@ -73,16 +73,17 @@ void Camera::Update()
 {
 	//카메라 이동 처리
 	float currentSpeed = speed * DELTA;
-	if (KEY_PRESS(ImGuiKey_W)) MoveForward(currentSpeed);
-	if (KEY_PRESS(ImGuiKey_S)) MoveForward(-currentSpeed);
-	if (KEY_PRESS(ImGuiKey_D)) MoveRight(currentSpeed);
-	if (KEY_PRESS(ImGuiKey_A)) MoveRight(-currentSpeed);
-	if (KEY_PRESS(ImGuiKey_Q)) MoveWorldUp(-currentSpeed);
-	if (KEY_PRESS(ImGuiKey_E)) MoveWorldUp(currentSpeed);
+
+	if (INPUT.GetKey('W')) MoveForward(-currentSpeed);
+	if (INPUT.GetKey('S')) MoveForward(-currentSpeed);
+	if (INPUT.GetKey('D')) MoveRight(currentSpeed);
+	if (INPUT.GetKey('A')) MoveRight(-currentSpeed);
+	if (INPUT.GetKey('Q')) MoveWorldUp(-currentSpeed);
+	if (INPUT.GetKey('E')) MoveWorldUp(currentSpeed);
 
 	//카메라 회전 처리
-	if (MOUSE_PRESS(1)) {
-		ImVec2 delta = ImGui::GetIO().MouseDelta;
-		Rotate(delta.x * rotationSpeed, delta.y * rotationSpeed);
+	if (INPUT.GetMouseButton(MouseButton::RIGHT)) {
+		FIntPoint delta = INPUT.GetMouseDelta();
+		Rotate(delta.X * rotationSpeed, delta.Y * rotationSpeed);
 	}
 }
