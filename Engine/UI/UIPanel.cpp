@@ -1,0 +1,674 @@
+﻿#include "pch.h"
+
+#include "UIPanel.h"
+#include "Global.h"
+#include "Containers.h"
+
+#include "GameManager.h"
+#include "AActor.h"
+#include "ATextActor.h"
+#include "Scene.h"
+#include "AGizmo.h"
+#include "TemplateLibrary.h"
+
+#include "APointLight.h"
+#include "ASpotLight.h"
+#include "ADirectionalLight.h"
+#include "UParticleSubUVComp.h"
+
+
+#include <random>
+
+#include <windows.h>
+#include <shobjidl.h>
+#include <ConsoleWindow.h>
+
+void UIPanel_Debug::Render()
+{
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+
+	ImGui::Begin(GetName().c_str(), &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("DirectX 11 & ImGui Active");
+	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+	ImGui::Text("[ Used Memory ] %u bytes", OBJECT.TotalAllocationBytes);
+	ImGui::Text("[ No. of Obj. ] %u", OBJECT.TotalAllocationCount);
+	ImGui::End();
+}
+
+void UIPanel_SceneCamera::Render()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_FirstUseEver);
+	ImGui::Begin(GetName().c_str(), &bIsOpen);
+
+	// 카메라 디버그 섹션
+	ImGui::Text("[ View Options ]");
+	Camera& cam = CAMERA;
+	ImGui::PushItemWidth(200.0f);
+    // 카메라 직교투영 여부 선택 체크박스
+    bool isOrtho = (cam.GetProjectionMode() == EProjectionMode::Orthographic);
+    if (ImGui::Checkbox("Orthographic", &isOrtho)) {
+        cam.SetProjectionMode(isOrtho ? EProjectionMode::Orthographic : EProjectionMode::Perspective);
+    }
+
+	// 에디터 뷰 모드 선택 콤보박스
+	int ViewMode = static_cast<int>(cam.ViewMode);
+	if (ImGui::Combo("View Mode", &ViewMode, "Unlit\0Wireframe\0"))
+	{
+		cam.ViewMode = static_cast<EViewMode>(ViewMode);
+	}
+
+	bool bPrimitive = (CAMERA.ShowFlags & EEngineShowFlags::SF_Primitives) != EEngineShowFlags::SF_None;
+	if (ImGui::Checkbox("Primitives", &bPrimitive))
+	{
+		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_Primitives;
+	}
+
+	bool bBilldboard = (CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None;
+	if (ImGui::Checkbox("Billboard Texts", &bBilldboard))
+	{
+		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
+	}
+
+	ImGui::SliderFloat("Grid Interval", &SCENE.GetCurrentScene()->GetGrid().CellSize, 0.15f, 2.0f);
+
+	ImGui::Separator();
+
+	ImGui::Text("[ Camera Options ]");
+
+    // 카메라 시야각 조절 슬라이더
+    if (cam.GetProjectionMode() == EProjectionMode::Perspective)
+    {
+        float fov = cam.GetFOVX();
+        if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
+            cam.SetFOVX(fov);
+    }
+    else
+    {
+        float OrthoWidth = cam.GetOrthoWidth();
+        if (ImGui::SliderFloat("Ortho Width", &OrthoWidth, 5.0f, 100.0f))
+            cam.SetOrthoWidth(OrthoWidth);
+        ImGui::Text("Ortho Width: %.3f", cam.GetOrthoWidth());
+    }
+    
+    // 카메라 위치 조절 슬라이더
+    FVector camLoc = cam.Location;
+	if (ImGui::DragFloat3("Cam Pos", &camLoc.X, 0.05f, -20.0f, 20.0f))
+	{
+		cam.Location = camLoc;
+	}
+
+	// 카메라 각도 조절 슬라이더
+	ImGui::SetNextItemWidth(100.0f);
+	ImGui::DragFloat("Yaw", &cam.Yaw, 0.1f);
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(100.0f);
+	ImGui::DragFloat("Pitch", &cam.Pitch, 0.1f, -89.0f, 89.0f);
+
+	//카메라 이동 속도 및 회전 마우스 감도 조절 슬라이더
+	ImGui::SliderFloat("Move Speed", &cam.GetSpeedRef(), 0.5f, 20.0f, "%.1f");
+	ImGui::SliderFloat("Mouse Sensitivity", &cam.GetRotationSpeedRef(), 0.01f, 0.5f, "%.3f");
+	ImGui::SliderFloat("Wheel Speed", &cam.GetWheelSpeedRef(), 0.5f, 2.0f, "%.1f");
+
+	// 카메라 설정 리셋 버튼
+	if (ImGui::Button("Reset Camera"))
+	{
+		cam.Location = CAMERA.DefaultLocation;
+		cam.Pitch = CAMERA.DefaultPitch;
+		cam.Yaw = CAMERA.DefaultYaw;
+        cam.SetFOVX(60.0f);
+        cam.SetNear(0.1f);
+        cam.SetFar(1000.0f);
+        cam.SetSpeed(2.0f);
+        cam.SetRotationSpeed(0.08f);
+		cam.SetWheelSpeed(1.0f);
+		cam.SetOrthoWidth(25.0f);
+	}
+	
+	Scene* scene = SCENE.GetCurrentScene();
+
+	ImGui::PopItemWidth();
+
+	ImGui::Separator();
+
+	ImGui::Text( "[ Save & Load Scene ]");
+
+	// NEW SCENE
+	if (ImGui::Button("New Scene", ImVec2(150.0f, 0.0f)))
+	{
+        // Collider만 삭제 (Grid, World Axis Gizmo 삭제되지 않도록)
+		OBJECT.DestoryAllSceneActor();
+
+		PICK.pickedObjcect = nullptr;
+		if (AGizmo::MainGizmo)
+		{
+			AGizmo::MainGizmo->SetTargetActor(nullptr);
+		}
+		UE_LOG("New Scene!");
+	}
+
+	// SAVE
+	if (ImGui::Button("Save Scene", ImVec2(150.0f, 0.0f)))
+	{
+		FWString path = SaveSceneFileDialog();
+		if (!path.empty())
+		{
+			SAVELOAD.SaveScene(path);
+		}
+	}
+
+	// LOAD
+	if (ImGui::Button("Load Scene", ImVec2(150.0f, 0.0f)))
+	{
+		FWString path = OpenSceneFileDialog();
+		if (!path.empty())
+		{
+			SAVELOAD.LoadScene(path);
+		}
+	}
+
+	ImGui::End();
+}
+
+FWString UIPanel_SceneCamera::OpenSceneFileDialog()
+{
+	FWString result;
+	HWND hwnd = GameManager::GetInstance().GetMainWindow();
+
+	IFileDialog* pfd = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+	// CoCreateInstance 성공 ?
+	if (SUCCEEDED(hr))
+	{
+		IShellItem* psiRoot = nullptr;
+		namespace fs = std::filesystem;
+		fs::path root = std::filesystem::current_path();
+		fs::path scenePath = root / "SceneData";
+		if (!fs::exists(scenePath))
+		{
+			fs::create_directories(scenePath);
+		}
+		FWString scenePathW = scenePath.wstring();
+
+		hr = SHCreateItemFromParsingName(
+			scenePathW.c_str(),
+			nullptr,
+			IID_PPV_ARGS(&psiRoot)
+		);
+
+		// SHCreateItemFromParsingName 성공?
+		if (SUCCEEDED(hr))
+		{
+			hr = pfd->SetDefaultFolder(psiRoot);
+
+			// SetDefaultFolder 성공?
+			if (SUCCEEDED(hr))
+			{
+				COMDLG_FILTERSPEC rgSpec[] = {
+					{ L"SCENE 파일 (*.Scene)", L"*.Scene" }
+				};
+				UINT cFileTypes = ARRAYSIZE(rgSpec);
+				hr = pfd->SetFileTypes(cFileTypes, rgSpec);
+
+				// SetFileTypes 성공?
+				if (SUCCEEDED(hr))
+				{
+					hr = pfd->Show(hwnd);
+
+					// Show 성공 ?
+					if (SUCCEEDED(hr))
+					{
+						IShellItem* psiResult;
+						hr = pfd->GetResult(&psiResult);
+
+						// GetResult 성공 ?
+						if (SUCCEEDED(hr))
+						{
+							PWSTR pszFilePath = NULL;
+							hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+							// GetDisplayName 성공 ?
+							if (SUCCEEDED(hr))
+							{
+								result = pszFilePath;
+							}
+							CoTaskMemFree(pszFilePath);
+							psiResult->Release();
+						}
+					}
+				}
+			}
+			psiRoot->Release();
+		}
+	}
+	pfd->Release();
+	return result;
+}
+
+FWString UIPanel_SceneCamera::SaveSceneFileDialog()
+{
+	FWString result;
+
+	// 게임매니저에서 관리하는 Main Window 받아오기
+	HWND hwnd = GameManager::GetInstance().GetMainWindow();
+
+	// COM 클래스의 CLSID_FileSaveDialog 객체 만들고 IFileDialog 포인터(pfd) 받기
+	IFileDialog* pfd = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+	// CoCreateInstance 성공 ?
+	if (SUCCEEDED(hr))
+	{
+		// shtypes.h의 요소 필터링 구조체
+		COMDLG_FILTERSPEC rgSpec[] = {
+			{ L"SCENE 파일 (*.Scene)", L"*.Scene" }
+		};
+		UINT cFileTypes = ARRAYSIZE(rgSpec);
+		hr = pfd->SetFileTypes(cFileTypes, rgSpec);
+
+		// SetFileTypes 성공?
+		if (SUCCEEDED(hr))
+		{
+			// 기본 확장자 ".Scene"으로 설정
+			hr = pfd->SetDefaultExtension(L"Scene");
+
+			if (SUCCEEDED(hr))
+			{
+				IShellItem* psiRoot = nullptr;
+				namespace fs = std::filesystem;
+				fs::path root = fs::current_path();
+				fs::path scenePath = root / "SceneData";
+				if (!fs::exists(scenePath))
+				{
+					fs::create_directories(scenePath);
+				}
+				
+				int cur_max = 0;
+
+				// std::filesystem의 directory_iterator로 매 directory_entry 순회
+				for (const fs::directory_entry& entry : fs::directory_iterator(scenePath))
+				{
+					// 확장자가 '.Scene'인 경우
+					if (entry.path().extension() == ".Scene")
+					{
+						// stem에 파일명 저장
+						FString stem = entry.path().stem().string();
+
+						// 파일명이 Scene으로 시작할 경우
+						if (stem.starts_with("Scene"))
+						{
+							// Scene 뒷자리를 자름
+							FString bh = stem.substr(5);
+							if (!bh.empty())
+							{
+								bool bIsEveryCharDigit = true;
+
+								for (char c : bh)
+								{
+									if (!isdigit(c))
+									{
+										bIsEveryCharDigit = false;
+										break;
+									}
+								}
+
+								// bh가 다 숫자로 이루어져 있다면
+								if (bIsEveryCharDigit)
+								{
+									int idx = std::stoi(bh);
+									cur_max = (cur_max > idx) ? cur_max : idx;
+								}
+							}
+						}
+					}
+				}
+				FWString fn;
+				if (cur_max < 9)
+					fn = L"Scene0" + std::to_wstring(cur_max + 1);
+				else
+					fn = L"Scene" + std::to_wstring(cur_max + 1);
+
+				hr = pfd->SetFileName(fn.c_str());
+
+                // SetFileName 성공?
+                if (SUCCEEDED(hr))
+                {
+                    std::wstring scenePathW = scenePath.wstring();
+
+					hr = SHCreateItemFromParsingName(
+						scenePathW.c_str(),
+						nullptr,
+						IID_PPV_ARGS(&psiRoot)
+					);
+
+					// SHCreateItemFromParsingName 성공?
+					if (SUCCEEDED(hr))
+					{
+						hr = pfd->SetFolder(psiRoot);
+
+						// SetFolder 성공?
+						if (SUCCEEDED(hr))
+						{
+							hr = pfd->Show(hwnd);
+
+							// Show 성공 ?
+							if (SUCCEEDED(hr))
+							{
+								IShellItem* psiResult;
+								hr = pfd->GetResult(&psiResult);
+
+								// GetResult 성공 ?
+								if (SUCCEEDED(hr))
+								{
+									PWSTR pszFilePath = NULL;
+									hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+									if (SUCCEEDED(hr))
+									{
+										result = pszFilePath;
+									}
+
+									CoTaskMemFree(pszFilePath);
+								}
+							}
+						}
+					}
+				}
+				if (psiRoot)
+				{
+					psiRoot->Release();
+				}
+			}
+		}
+	}
+	if (pfd)
+	{
+		pfd->Release();
+	}
+	return result;
+}
+
+void UIPanel_Spawn::Render()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_FirstUseEver);
+	ImGui::Begin(GetName().c_str(), &bIsOpen);
+
+	ImGui::PushItemWidth(-1.0f);
+
+	// Select number
+	static int spawnCount = 1;
+	ImGui::Text("Number of Spawns");
+	ImGui::InputInt("##Spawns", &spawnCount);
+	if (spawnCount < 0) spawnCount = 0;
+
+	// Select Primitives
+	static int selected_item = 0;
+	const char* items[] = { "Sphere", "Cube", "Circle", "Rectangle", "Triangle", "PointLight", "SpotLight", "DirectionalLight", "Explosion", "Fire"};
+	ImGui::Combo("##Primitives", &selected_item, items, IM_ARRAYSIZE(items));
+
+	ImGui::PopItemWidth();
+
+	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
+	// 화면 안에 spawn 되도록 수정
+	FVector camLocation = CAMERA.Location;
+	FVector camForward = CAMERA.GetForward();
+
+	static std::mt19937 rng(std::random_device{}());
+	static std::uniform_real_distribution<float> distSide(-3.0f, 3.0f);   // 좌우 범위
+	static std::uniform_real_distribution<float> distUp(0.0f, 2.0f);      // 상하 범위 (Grid 위로 한정)
+
+	float spawnDistance = 8.0f; // 카메라 앞으로 얼마나 떨어뜨릴지
+
+	// 카메라의 오른쪽 벡터 (forward와 up의 외적)
+	FVector camRight = FVector::Cross3D(camForward, FVector::Up).Normalized();
+
+	FVector spawnCenter = camLocation + camForward * spawnDistance;
+
+	if (ImGui::Button("Spawn"))
+	{
+		for (int i=0; i<spawnCount; i++)
+		{	
+			AActor* spawnedActor = nullptr;
+
+			// 위치 안 겹치도록
+			FVector randomLoc = spawnCenter + camRight * distSide(rng) + FVector::Up * distUp(rng);
+
+			switch(selected_item)
+			{
+
+				case 0 :
+					spawnedActor = FObjectFactory::SpawnColider<ASphere>(randomLoc, { 1.0f, 1.0f, 1.0f });
+					break;
+				case 1 :
+					spawnedActor = FObjectFactory::SpawnColider<ACube>(randomLoc, { 1.0f, 1.0f, 1.0f });
+					break;
+				case 2 :
+					spawnedActor = FObjectFactory::SpawnColider<ACircle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+					break;
+				case 3 : 
+					spawnedActor = FObjectFactory::SpawnColider<ARectangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+					break;
+				case 4 :
+					spawnedActor = FObjectFactory::SpawnColider<ATriangle>(randomLoc, { 1.0f, 1.0f, 1.0f });
+					break;
+				case 5 :
+					spawnedActor = FObjectFactory::SpawnActor<APointLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+					break;
+				case 6:
+					spawnedActor = FObjectFactory::SpawnActor<ASpotLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+					break;
+				case 7:
+					spawnedActor = FObjectFactory::SpawnActor<ADirectionalLight>(randomLoc, { 0.2f, 0.2f, 0.2f });
+					break;
+				case 8:
+				{
+					ParticleSubUVDesc explosionsubuvdesc = {};
+					explosionsubuvdesc.ColumnCnt = 6;
+					explosionsubuvdesc.RowCnt = 6;
+					explosionsubuvdesc.LastIndex = 33;
+					explosionsubuvdesc.Duration = 3.f;
+					explosionsubuvdesc.bIsLoop = false;
+
+					spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Explosion", explosionsubuvdesc);
+					spawnedActor->SetScale(FVector(3.f, 3.f, 3.f));
+					spawnedActor->SetLocation(randomLoc);
+					break;
+				}
+				case 9:
+				{
+					ParticleSubUVDesc firesubuvdesc = {};
+					firesubuvdesc.ColumnCnt = 1;
+					firesubuvdesc.RowCnt = 32;
+					firesubuvdesc.LastIndex = 32;
+					firesubuvdesc.Duration = 3.f;
+					firesubuvdesc.bIsLoop = true;
+
+					spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Fire", firesubuvdesc);
+					spawnedActor->SetScale(FVector(0.2f, 0.2f, 0.2f));
+					spawnedActor->SetLocation(randomLoc);
+					break;
+				}
+				default :
+					break;
+			}
+			if (spawnedActor) {
+				UE_LOG("%s Spawned!", spawnedActor->GetFName().ToString().c_str());
+			}
+
+			if (spawnedActor && items[selected_item] != "SubUV")
+			{
+				// 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
+				ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
+				label->SetScale(FVector(0.25f, 0.25f, 0.25f));
+				label->SetTarget(spawnedActor);
+				label->SetText(std::to_wstring(spawnedActor->GetID()));
+			}
+		}
+			
+	}
+
+	ImGui::End();
+}
+
+void UIPanel_Picking::Render()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_FirstUseEver);
+	ImGui::Begin(GetName().c_str(), &bIsOpen);
+	
+	// Picked Primitive Editor
+	AActor* pickedActor = PICK.pickedObjcect;
+	
+	if (pickedActor)
+	{
+		AGizmoAxis* gizmo = dynamic_cast<AGizmoAxis*>(pickedActor); //기즈모는 uid 없어서 해야됨
+		if (gizmo)
+		{
+			pickedActor = gizmo->GetTargetActor();
+		}
+
+		if (pickedActor)
+		{
+			string uid = std::to_string(pickedActor->GetID());
+			//string cid = string(pickedActor->GetClass()->Name);
+			// 디버그 정보 표시
+			ImGui::Text("UUID: %s", uid.c_str());
+			//ImGui::Text("ClassName: %s", cid.c_str());
+	
+			ImGui::PushItemWidth(-1.0f);
+
+			// 선형 색상 편집
+			FLinearColor color = pickedActor->GetColor();
+			if (color.a <= 0.0f)
+			{
+				color = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+
+			ImGui::Text("Linear Color");
+			if (ImGui::ColorEdit4(("##Linear Color##" + uid).c_str(), &color.r, ImGuiColorEditFlags_Float))
+			{
+				if (color.a <= 0.0f)
+				{
+					color.a = 1.0f;
+				}
+				pickedActor->SetColor(color);
+				if (PICK.pickedObjcect && !dynamic_cast<AGizmoAxis*>(PICK.pickedObjcect.Get()))
+				{
+					PICK.pickedObjcect->SetColor(color);
+				}
+			}
+	
+			// 위치 편집
+			FVector loc = pickedActor->GetLocation();
+			ImGui::Text("Location");
+			if (ImGui::DragFloat3(("##Location##" + uid).c_str(), &loc.X, 0.01f))
+			{
+				pickedActor->SetLocation(loc);
+			}
+
+			// 회전 편집 및 실시간 동기화
+			static float s_euler[3] = { 0.0f, 0.0f, 0.0f };
+			static FString LastActorID;
+			static FQuaternion LastQuat = FQuaternion::Identity;
+
+			if (LastActorID != uid ||
+				(LastQuat - pickedActor->GetRotation()).Length() > 1e-6f)
+			{
+				FVector eulerRad = FQuaternion::ToEuler(pickedActor->GetRotation());
+				s_euler[0] = eulerRad.X * (180.0f / Global::PI);
+				s_euler[1] = eulerRad.Y * (180.0f / Global::PI);
+				s_euler[2] = eulerRad.Z * (180.0f / Global::PI);
+				LastActorID = uid;
+			}
+
+			ImGui::Text("Rotation");
+			// 위젯 조작 시에만 각도를 라디안으로 변환하여 적용
+			if (ImGui::DragFloat3(("##Rotation##" + uid).c_str(), s_euler, 0.3f))
+			{
+				FQuaternion newRot = FQuaternion::FromEulerDegrees(s_euler[0], s_euler[1], s_euler[2]);
+				pickedActor->SetRotation(newRot);
+				LastQuat = newRot;
+			}
+	
+			// Scale Editor
+			FVector scale = pickedActor->GetScale();
+			ImGui::Text("Scale");
+			if (ImGui::DragFloat3(("##Scale##" + uid).c_str(), &scale.X, 0.01f))
+			{
+				pickedActor->SetScale(scale);
+			}
+
+			// Light 관련 코드라면
+			if (pickedActor->GetClass()->Name == "ASpotLight") {
+				ASpotLight *light = Cast<ASpotLight>(pickedActor);
+				float angle = light->GetAngle();
+				ImGui::Text("Angle");
+				if (ImGui::SliderFloat("##Angle", &angle, 1.0f, 60.0f))
+					light->SetAngle(angle);
+				float length = light->GetLength();
+				ImGui::Text("Length");
+				if (ImGui::SliderFloat("##Length", &length, 0.1f, 30.0f))
+					light->SetLength(length);
+			}
+
+			if (pickedActor->GetClass()->Name == "APointLight") {
+				APointLight* light = Cast<APointLight>(pickedActor);
+				float radius = light->GetRadius();
+				ImGui::Text("Radius");
+				if (ImGui::SliderFloat("##Radius", &radius, 1.0f, 40.0f))
+					light->SetRadius(radius);
+			}
+
+			// 삭제버튼
+			if (ImGui::Button("Delete"))
+			{
+				pickedActor->Destroy();
+
+				PICK.pickedObjcect = nullptr;
+				if (AGizmo::MainGizmo)
+				{
+					AGizmo::MainGizmo->SetTargetActor(nullptr);
+				}
+			}
+
+			ImGui::PopItemWidth();
+		}
+	}
+	
+	ImGui::End();
+}
+
+void UIPanel_SceneManager::Render()
+{
+	ImGui::Begin(GetName().c_str(), &bIsOpen);
+	if (ImGui::TreeNodeEx("Primitives", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		for (UObject* Object : OBJECT.GUObjectArray)
+		{
+			AActor* Actor = Cast<AActor, UObject>(Object);
+
+			// isSelected 판단: 현재 기즈모가 붙어 있는 Actor가 이 Actor인가?
+			bool isSelected =
+				AGizmo::MainGizmo &&
+				AGizmo::MainGizmo->GetTargetActor() == Actor;
+
+			if (Actor->Primitive != EPrimitive::None && Actor->Primitive != EPrimitive::Gizmo)
+			{
+				if (ImGui::Selectable(Object->GetName().c_str(), isSelected))
+				{
+					if (isSelected)
+					{
+						PICK.pickedObjcect = Cast<AActor, UObject>(Object);
+						AGizmo::MainGizmo->SetTargetActor(PICK.pickedObjcect);
+
+					}
+					else
+					{
+						PICK.pickedObjcect = Actor;
+						AGizmo::MainGizmo->SetTargetActor(Actor);
+					}
+				}
+			}
+		}
+		ImGui::TreePop();
+	}
+	ImGui::End();
+}

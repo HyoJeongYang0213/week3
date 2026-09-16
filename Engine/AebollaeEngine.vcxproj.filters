@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{1946C81C-7D67-1EE8-E6E4-4149845270A3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Gizmo">
+      <UniqueIdentifier>{261C6E1D-19D6-C58D-7333-627E0727A51C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{343F86AC-616E-9A8F-959B-5C95D5D28941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{6C8E1683-89B2-32D7-CC78-427B51F93153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{4B25704D-8E3A-C32B-8B61-47FA6EE813BE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\DirectXTex">
+      <UniqueIdentifier>{F0B11013-9F25-166C-0E10-CFE95689F2B4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\ImGui">
+      <UniqueIdentifier>{7FAA66C1-C262-D31D-BE9F-ADC9477F9DBE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\json">
+      <UniqueIdentifier>{C7BD737F-CDDC-D71D-FBD1-AED8F41B738D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\json\nlohmann">
+      <UniqueIdentifier>{9098522B-4405-18D3-086D-21EFFC1EB55E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{AA5099A4-7C04-9222-E989-E368A97A3AAE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{E999AE50-54C3-C246-580E-4B540B0FD104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{A50D525E-1F34-EC2F-6D3B-BFE7EF357922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{C250CFDD-9492-41D4-4F3F-7C1BBC892CB5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Geometry">
+      <UniqueIdentifier>{F60384EF-6FE6-E70C-C5FB-163017395B6F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shader">
+      <UniqueIdentifier>{FC092799-1647-E538-CFC8-01B92B877647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{02F634BB-5AE4-BC9F-B2CD-FEE7A48673FC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Renderer">
+      <UniqueIdentifier>{265c975b-fc7c-4c20-8d74-3de795fb3c4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Resource">
+      <UniqueIdentifier>{4ba12593-0dcb-4bb2-9686-76c24295cb5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Global">
+      <UniqueIdentifier>{88fc93bb-abcc-4727-b49c-40caa7c11a54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Light">
+      <UniqueIdentifier>{2fa5a235-6d74-4150-98a7-2146478a9523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\UI">
+      <UniqueIdentifier>{5271FF71-156D-86DB-EB50-FCAC245D183B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor\Light">
+      <UniqueIdentifier>{2fa5a235-6d74-4150-98a7-2146478a9523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Core">
+      <UniqueIdentifier>{b5615d2c-02a0-4611-ad17-a47a4e7cd51e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{2275a017-eb42-4fad-b423-d21f4b1224ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{551991c0-52e0-4091-a867-2b78bcf11b73}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Actor\AActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ASkySphere.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ASphere.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\AWorldAxes.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Gizmo\AGizmo.h">
+      <Filter>Actor\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="App\ConsoleWindow.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="App\GameManager.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Containers.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\enums.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Global.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ObjectManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\TemplateLibrary.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UEngineStatics.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UObject.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\WeakObjectPtr.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\DirectXTex\DirectXTex.h">
+      <Filter>Library\DirectXTex</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imconfig.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imgui.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imgui_impl_dx11.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imgui_impl_win32.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imgui_internal.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imstb_rectpack.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imstb_textedit.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\ImGui\imstb_truetype.h">
+      <Filter>Library\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\json\nlohmann\json.hpp">
+      <Filter>Library\json\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\FQuaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\FVector.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Intersection.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\FMatrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Transform.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\ACollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CollisionManager.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Camera.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\PickingManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\CircleGenerator.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SaveLoadManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Pointers.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FName.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\FNamePool.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Mesh.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FBoundingBox.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Global\FLinearColor.h">
+      <Filter>Render\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Global\FVertexSimple.h">
+      <Filter>Render\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Global\GraphicsEnums.h">
+      <Filter>Render\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Global\ShaderConstants.h">
+      <Filter>Render\Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\UBillboard.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\UParticleSubUVComp.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ALight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\APointLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ASpotLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\Bulb.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ADirectionalLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\UBillboard.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\UParticleSubUVComp.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ALight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\APointLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ASpotLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\Bulb.h">
+      <Filter>Resources\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Light\ADirectionalLight.h">
+      <Filter>Actor\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorSettings.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Core\GraphicsPipeline.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Core\PipelineCache.h">
+      <Filter>Render\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Core\RenderContext.h">
+      <Filter>Render\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Core\RenderDevice.h">
+      <Filter>Render\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Core\RenderResources.h">
+      <Filter>Render\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Core\RenderSystem.h">
+      <Filter>Render\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Renderer\FGizmoRenderer.h">
+      <Filter>Render\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Renderer\FLineBatchRenderer.h">
+      <Filter>Render\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Renderer\FMeshRenderer.h">
+      <Filter>Render\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Renderer\FOutlineRenderer.h">
+      <Filter>Render\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\ConstantBuffer.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\IndexBuffer.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\Material.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\RenderMesh.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\Texture.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\VertexBuffer.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Resource\VertexShader.h">
+      <Filter>Render\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FGrid.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ATextActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\FIntPoint.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FontMeshGenerator.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\GizmoVertex.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\IUIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\SphereVertex.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\PrimitiveVertex.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Engine\pch.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Actor\AActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\ASkySphere.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\AWorldAxes.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Gizmo\AGizmo.cpp">
+      <Filter>Actor\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="App\ConsoleWindow.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="App\GameManager.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ObjectManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UObject.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_demo.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_draw.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_impl_dx11.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_impl_win32.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_tables.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_widgets.cpp">
+      <Filter>Library\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Math\FQuaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\FVector.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Intersection.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\FMatrix.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\ACollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CollisionManager.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Camera.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\PickingManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources\Geometry\CircleGenerator.cpp">
+      <Filter>Resources\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SaveLoadManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SceneManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIManager.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIPanel.cpp">
+      <Filter>Actor\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FNamePool.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FName.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\FGrid.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Mesh.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Renderer\FLineBatchRenderer.cpp">
+      <Filter>Render\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\UBillboard.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\APointLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ALight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ASpotLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FName.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\UBillboard.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\APointLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ALight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ASpotLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp">
+      <Filter>Actor\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorSettings.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Core\RenderContext.cpp">
+      <Filter>Render\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Core\RenderDevice.cpp">
+      <Filter>Render\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Core\RenderResources.cpp">
+      <Filter>Render\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Core\RenderSystem.cpp">
+      <Filter>Render\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\FontMeshGenerator.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\InputManager.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Engine\pch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Library\DirectXTex\DirectXTex.inl">
+      <Filter>Library\DirectXTex</Filter>
+    </None>
+    <None Include="Resources\Shader\Constants.hlsli">
+      <Filter>Resources\Shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Library\DirectXTex\DirectXTex.lib">
+      <Filter>Library\DirectXTex</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\OutlineVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\FontPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\FontVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\LinePS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\LineVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\MeshPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\MeshVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SkyPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SkyVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SubUVVS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SubUVPS.hlsl">
+      <Filter>Resources\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\aebollae_icon.ico" />
+  </ItemGroup>
+</Project>

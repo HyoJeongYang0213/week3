@@ -1,0 +1,348 @@
+﻿#include "pch.h"
+#include "SaveLoadManager.h"
+
+#include "TemplateLibrary.h"
+#include "ObjectManager.h"
+#include "Containers.h"
+#include "UEngineStatics.h"
+
+#include "AActor.h"
+#include "AGizmo.h"
+#include "ATextActor.h"
+#include "ADirectionalLight.h"
+#include "APointLight.h"
+#include "ASpotLight.h"
+#include "UParticleSubUVComp.h"
+
+// file input stream
+#include <fstream>
+#include <filesystem>
+
+
+// Version 상수 처리 
+constexpr int CURRENT_SCENE_VERSION = 1;
+
+#include <nlohmann/json.hpp>
+#include <ConsoleWindow.h>
+
+// 알파벳 순서가 아닌 input 순서로 push하기 위함
+using json = nlohmann::ordered_json;
+
+SaveLoadManager& SaveLoadManager::GetInstance()
+{
+    static SaveLoadManager instance;
+    return instance;
+}
+
+// 타입 이름 String으로 받아서 Spawn
+TMap<string, SaveLoadManager::CreatorFunc>& SaveLoadManager::GetActorCreatorRegistry()
+{
+    static TMap<string, CreatorFunc> registry;
+
+    // 처음 호출 시에만 ACube, ASphere 등록
+    if (registry.empty())
+    {
+        // "Cube" -> 상자 생성
+        registry["Cube"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ACube>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "Sphere" -> 구 생성
+        registry["Sphere"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ASphere>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "Circle" -> 원 생성
+        registry["Circle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ACircle>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "Rectangle" -> 사각형 생성
+        registry["Rectangle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ARectangle>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "Triangle" -> 삼각형 생성
+        registry["Triangle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ATriangle>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "DirectionalLight" 
+        registry["DirectionalLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnActor<ADirectionalLight>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "SpotLight" 
+        registry["SpotLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnActor<ASpotLight>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "PointLight" 
+        registry["PointLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnActor<APointLight>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "SebUV"
+        registry["SubUV"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+
+                AActor* actor = FObjectFactory::SpawnActor<UParticleSubUVComp>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+    };
+    return registry;
+}
+
+// EPrimitive (0, 1 ...) -> Str (Sphere, Cube ...)
+string SaveLoadManager::EPrimitiveToStr(EPrimitive prim)
+{
+    switch (prim)
+    {
+        case EPrimitive::Cube : return "Cube";
+        case EPrimitive::Sphere : return "Sphere";
+        case EPrimitive::Circle : return "Circle";
+        case EPrimitive::Rectangle : return "Rectangle";
+        case EPrimitive::Triangle : return "Triangle";
+        case EPrimitive::Gizmo : return "Gizmo";
+        case EPrimitive::DirectionalLight: return "DirectionalLight";
+        case EPrimitive::PointLight: return "PointLight";
+        case EPrimitive::SpotLight: return "SpotLight";
+        case EPrimitive::SubUV: return "SubUV";
+        default : return "None";
+    }
+}
+
+
+
+////////////////////////////
+/////////// SAVE ///////////
+////////////////////////////
+
+// 데이터 저장 - 직렬화(객체 -> json)
+void SaveLoadManager::SaveScene(const FWString& path)
+{
+    json sceneJson;
+
+    sceneJson["Version"] = CURRENT_SCENE_VERSION;
+    sceneJson["NextUUID"] = UEngineStatics::PeekUUID() - 1;
+    
+    // DEBUG
+    // OutputDebugStringA(("Current working dir: " + std::filesystem::current_path().string() + "\n").c_str());
+    
+    json objectsJson = json::object(); // key, value 형식으로 저장하기 위함
+    
+    int index = 0;
+
+    for (UObject* obj : OBJECT.GUObjectArray)
+    {
+        AActor* actor = dynamic_cast<AActor*>(obj);
+        if (!actor) continue;
+        if (actor->IsEditorOnly()) continue;
+
+        EPrimitive type = actor->GetPrimitive();
+        if (type == EPrimitive::None) continue;
+        
+        FVector location = actor->GetLocation();    // location 저장
+        FVector euler = FQuaternion::ToEuler(actor->GetRotation());    // rotation 저장
+        FVector scale = actor->GetScale();          // scale 저장
+        FLinearColor color = actor->GetColor();     // color 저장
+        
+        json objJson;
+        // objJson["UUID"]     = actor->GetID();
+        objJson["Location"] = { location.X, location.Y, location.Z }; // {x,y,z}-> [x,y,z] 형태로 저장됨
+        objJson["Rotation"] = { euler.X, euler.Y, euler.Z };
+        objJson["Scale"]    = { scale.X, scale.Y, scale.Z };
+        // objJson["Class"]    = string(actor->GetObjClassName()); // ACube, ASphere ...
+        objJson["Type"]     = EPrimitiveToStr(type);           // Sphere -> "Sphere", Cube -> "Cube"
+        objJson["Color"] = { color.r, color.g, color.b, color.a };
+        
+        if (APointLight* point = Cast<APointLight>(actor)) {
+            objJson["Radius"] = point->GetRadius();
+        }
+        else if (ASpotLight * spot = Cast<ASpotLight>(actor)) {
+            objJson["Angle"] = spot->GetAngle();
+            objJson["Length"] = spot->GetLength();
+        }
+        else if (ADirectionalLight* direct = Cast<ADirectionalLight>(actor)) {
+            objJson["Length"] = direct->GetLength();
+        }
+        
+        if (UParticleSubUVComp* subUV = Cast<UParticleSubUVComp>(actor)) {
+            ParticleSubUVDesc desc = subUV->GetDesc();
+            objJson["Texture"] = subUV->GetTextureName();
+            objJson["ColumnCnt"] = desc.ColumnCnt;
+            objJson["RowCnt"] = desc.RowCnt;
+            objJson["FirstIndex"] = desc.FirstIndex;
+            objJson["LastIndex"] = desc.LastIndex;
+            objJson["PlayRate"] = desc.PlayRate;
+            objJson["Duration"] = desc.Duration;
+            objJson["bIsLoop"] = desc.bIsLoop;
+        }
+
+        objectsJson[std::to_string(index)] = objJson; // 0 -> "0", 1 -> "1" ...
+        ++index;
+    }
+    
+    sceneJson["Primitives"] = objectsJson;
+    
+    std::ofstream file(path);
+    
+    if (!file.is_open())
+    {
+        UE_LOG("[Error] Failed to Save objects!");
+        assert(false && "Failed to Save objects!\n");
+        return;
+    }
+    
+    file << sceneJson.dump(4); // json 객체 -> string으로 변환 (4칸 들여쓰기)
+    UE_LOG("Success to Save objects!");
+    file.close();
+}
+
+
+
+////////////////////////////
+/////////// LOAD ///////////
+////////////////////////////
+
+// 데이터 로드 - 역직렬화(json -> 객체)
+TArray<UObject*> SaveLoadManager::LoadScene(const FWString& path)
+{
+    TArray<UObject*> loadedObjects;
+
+    std::ifstream file(path);
+
+    if (!file.is_open())
+    {
+        UE_LOG("[Error] Failed to Load objects!");
+        assert(false && "Failed to Load objects!\n");
+        OutputDebugStringW((L"Failed to open: " + path + L"\n").c_str());  // 추가
+
+        return loadedObjects; // {} 빈 배열 return
+    }
+
+    json sceneJson;
+
+    // Parsing Check
+    try
+    {
+        file >> sceneJson; // Load
+    }
+    catch(const std::exception& e)
+    {
+        OutputDebugStringA(("Parse failed : " + string(e.what())).c_str());
+        UE_LOG("[Error] Parse failed : %s", string(e.what()).c_str());
+        return loadedObjects; // {} 빈 배열 return
+
+    }
+
+    // Format Version Check
+    if (!sceneJson.contains("Version") ||
+        sceneJson["Version"].get<int>() != CURRENT_SCENE_VERSION)
+    {
+        OutputDebugStringA("Scene Version mismatch!");
+        UE_LOG("[Warning] Scene Version mismatch!");
+        return loadedObjects; // {} 로드 중단, 빈 배열 return
+    }
+
+    PICK.pickedObjcect = nullptr;
+
+    if (AGizmo::MainGizmo)
+    {
+        AGizmo::MainGizmo->SetTargetActor(nullptr);
+    }
+
+    // 기존 Scene에 있던 Objects Clear
+    OBJECT.DestoryAllSceneActor();
+
+
+    // 함수 Load 및 람다 등록
+    auto& registry = GetActorCreatorRegistry();
+
+    for (json objJson : sceneJson["Primitives"]){
+
+        string Class = objJson["Type"];  // Cube, Sphere ...
+
+        auto it = registry.find(Class);
+
+        // 등록되지 않은 AActor면 패스 (EX. Gizmo ...)
+        if(it == registry.end())
+            continue;
+
+        // auto uuid       = objJson["UUID"]; 
+        auto location   = objJson["Location"];
+        auto rotation   = objJson["Rotation"];
+        auto scale      = objJson["Scale"];
+        auto color      = objJson["Color"];
+        
+        // 명시적 형변환 (float) 하여 x, y, z 값 가져오기
+        FVector loc(location[0].get<float>(), location[1].get<float>(), location[2].get<float>());
+        FQuaternion rat = FQuaternion::FromEuler(rotation[0].get<float>(), rotation[1].get<float>(), rotation[2].get<float>());
+        FVector sc(scale[0].get<float>(), scale[1].get<float>(), scale[2].get<float>());
+        FLinearColor lc(color[0].get<float>(), color[1].get<float>(), color[2].get<float>(), color[3].get<float>());
+        
+        AActor* actor = it->second(loc, rat, sc);
+        actor->SetColor(lc);
+
+        if (APointLight* point = Cast<APointLight>(actor)) {
+            if (objJson.contains("Radius")) point->SetRadius(objJson["Radius"].get<float>());
+        }
+        else if (ASpotLight* spot = Cast<ASpotLight>(actor)) {
+            if (objJson.contains("Angle")) spot->SetAngle(objJson["Angle"].get<float>());
+            if (objJson.contains("Length")) spot->SetLength(objJson["Length"].get<float>());
+        }
+        else if (ADirectionalLight* direct = Cast<ADirectionalLight>(actor)) {
+            if (objJson.contains("Length")) direct->SetLength(objJson["Length"].get<float>());
+        }
+
+        if (UParticleSubUVComp* subUV = Cast<UParticleSubUVComp>(actor)) {
+            ParticleSubUVDesc desc = subUV->GetDesc();
+            if (objJson.contains("Texture")) subUV->SetTextureName(objJson["Texture"].get<FString>());
+            
+            if (objJson.contains("ColumnCnt")) desc.ColumnCnt = objJson["ColumnCnt"].get<int32>();
+            if (objJson.contains("RowCnt")) desc.RowCnt = objJson["RowCnt"].get<int32>();
+            if (objJson.contains("FirstIndex")) desc.FirstIndex = objJson["FirstIndex"].get<int32>();
+            if (objJson.contains("LastIndex")) desc.LastIndex = objJson["LastIndex"].get<int32>();
+            if (objJson.contains("PlayRate")) desc.PlayRate = objJson["PlayRate"].get<float>();
+            if (objJson.contains("Duration")) desc.Duration = objJson["Duration"].get<float>();
+            if (objJson.contains("bIsLoop")) desc.bIsLoop = objJson["bIsLoop"].get<bool>();
+            subUV->SetDesc(desc);
+        }
+
+        loadedObjects.push_back(actor);
+
+        ATextActor* label = FObjectFactory::SpawnActor<ATextActor>();
+        label->SetScale(FVector(0.25f, 0.25f, 0.25f));
+        label->SetTarget(actor);
+        label->SetText(std::to_wstring(actor->GetID()));
+    }
+    UE_LOG("Success to Load objects!");
+
+    return loadedObjects;
+
+}

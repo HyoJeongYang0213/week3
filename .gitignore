@@ -59,3 +59,10 @@ $RECYCLE.BIN/
 Project1/PresentationImages/1_Core_Architecture.jpg
 Project1/PresentationImages/2_Renderer_Actor_Mesh.jpg
 Project1/PresentationImages/3_Picking_Gizmo.jpg
+
+Project1/.vscode/
+Project1/imgui.ini
+Project1/editor.ini
+
+// 로컬에서 생성되는 SCENE 파일 추적 제외(현재 포함된 MyScene.Scene만 유지)
+*.Scene

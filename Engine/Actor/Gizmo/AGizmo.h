@@ -1,0 +1,149 @@
+﻿#pragma once
+
+#include "WeakObjectPtr.h"
+#include "AActor.h"
+#include "FVertexSimple.h"
+
+struct FRay;
+
+
+// ---------------------------
+//			AGizmoAxis
+// ---------------------------
+// AActor를 상속받아 IsPicked(정점 피킹) 및 트랜스폼/버퍼를 그대로 활용하는 기즈모 축 액터
+class AGizmoAxis : public AActor
+{
+	DECLARE_CLASS(AGizmoAxis, AActor)
+
+public:
+	AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis = EGizmoAxis::Y);
+
+	void Update(float DeltaTime, const Transform& parentTransform);
+
+	EGizmoAxis GetAxis() const { return Axis; }
+	void Picked(); // 피킹되었을 때의 처리
+
+
+	virtual void Pressed() override;
+	virtual void Released() override;
+
+	FString GetRenderMeshName() const override
+	{
+		switch (*mode)
+		{
+		case EGizmoMode::Translation:
+			return "GizmoLocation";
+		case EGizmoMode::Rotation:
+			return "GizmoRotate";
+		case EGizmoMode::Scale:
+			return "GizmoScale";
+		}
+		return "";
+	}
+
+	void SetTargetActor(AActor* inTarget)
+	{
+		TargetActor = inTarget;
+		if (TargetActor)
+		{
+			transform.SetParent(&TargetActor->GetTransform(), false);
+		}
+		else
+		{
+			transform.SetParent(nullptr, false);
+		}
+	}
+	AActor* GetTargetActor() const { return TargetActor; }
+
+	void SetHovered(bool inHovered)
+	{
+		bHovered = inHovered;
+	}
+	bool GetHovered() const { return bHovered; }
+
+	virtual bool IsEditorOnly() const override { return true; }
+
+	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
+	bool GetIsLocal() const { return bIsLocal; }
+
+	FLinearColor GetDisplayColor() const;
+
+	FLinearColor srcColor;
+
+private:
+	EGizmoAxis Axis = EGizmoAxis::None;
+	TWeakObjectPtr<AActor> TargetActor;
+	FVector planeNormal; 
+	FVector currentAxisDir;
+	FVector dragStartPoint;
+	FVector dragStartActorLocation;
+	FQuaternion dragStartActorRotation;
+	FVector dragStartActorScale;
+	bool bSelected = false;
+	bool bHovered = false;
+	bool bIsLocal = true;
+	float currentDragDist = 0.0f;
+
+	EGizmoMode* mode;
+};
+
+
+// ---------------------------
+//			AGizmo
+// ---------------------------
+
+// 씬에 단 하나 생성되어 피킹된 액터에 부착되는 통합 기즈모 액터
+class AGizmo : public AActor
+{
+	DECLARE_CLASS(AGizmo, AActor)
+
+public:
+	//씬의 메인 기즈모 인스턴스
+	static inline AGizmo* MainGizmo = nullptr;
+
+	AGizmo();
+
+	~AGizmo() override;
+
+	virtual void Update(float DeltaTime) override;
+	virtual int GetRenderPriority() const override { return 100; }
+
+	// 타겟 액터 설정 (피킹된 액터 연결)
+	void SetTargetActor(AActor* inTarget);
+	AActor* GetTargetActor() const { return TargetActor; }
+
+	void SetGizmoMode(EGizmoMode inMode);
+	EGizmoMode GetGizmoMode() const { return GizMode; }
+	void ChangeGizmoMode();
+
+	void SetSelectedAxis(EGizmoAxis inAxis) { SelectedAxis = inAxis; }
+	EGizmoAxis GetSelectedAxis() const { return SelectedAxis; }
+
+	//광선(Ray)과 기즈모 축들 간의 피킹 검사: 가장 가까이 클릭된 축 반환
+	EGizmoAxis PickAxis(const FRay& ray, float& outDist);
+
+
+	// 3개의 기즈모 축 객체 목록 반환
+	const TArray<AGizmoAxis*>& GetAxes() const { return Axes; }
+
+	bool GetIsLocal() const { return bIsLocal; }
+	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
+
+	virtual bool IsEditorOnly() const override { return true; }
+
+private:
+	TWeakObjectPtr<AActor> TargetActor;
+	EGizmoMode GizMode = EGizmoMode::Translation;
+	EGizmoAxis SelectedAxis = EGizmoAxis::None;
+	bool bIsLocal = true;
+
+	// 3개의 기즈모 축 액터 (X, Y, Z)
+	TArray<AGizmoAxis*> Axes;
+
+
+
+};
+
+inline FLinearColor Highlighting(const FLinearColor& color) {
+	return FLinearColor::LatteYellow;
+}

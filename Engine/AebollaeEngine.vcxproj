@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0DB858A2-F984-B3AD-229E-A1550ECAE83B}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>AebollaeEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>AebollaeEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\Build\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\Build\$(Configuration)\</IntDir>
+    <TargetName>AebollaeEngine</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\Build\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\Build\$(Configuration)\</IntDir>
+    <TargetName>AebollaeEngine</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)Input;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)Input;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ProjectReference>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+      <ObjectFileOutput>$(OutDir)Shader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)Input;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir);$(SolutionDir)Actor;$(SolutionDir)Actor\Light;$(SolutionDir)Actor\Gizmo;$(SolutionDir)App;$(SolutionDir)Core;$(SolutionDir)Library;$(SolutionDir)Library\DirectXTex;$(SolutionDir)Library\ImGui;$(SolutionDir)Library\json;$(SolutionDir)Math;$(SolutionDir)Physics;$(SolutionDir)Render;$(SolutionDir)Render\Core;$(SolutionDir)Render\Resource;$(SolutionDir)Render\Global;$(SolutionDir)Render\Renderer;$(SolutionDir)Resources\Geometry;$(SolutionDir)Resources;$(SolutionDir)Resources\Shader;$(SolutionDir)Resources\Textures;$(SolutionDir)Scenes;$(SolutionDir)Input;$(SolutionDir)UI;$(SolutionDir)Editor;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ProjectReference>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+      <ObjectFileOutput>$(OutDir)Shader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Engine\pch.h" />
+    <ClInclude Include="Actor\AActor.h" />
+    <ClInclude Include="Actor\ASkySphere.h" />
+    <ClInclude Include="Actor\ASphere.h" />
+    <ClInclude Include="Actor\ATextActor.h" />
+    <ClInclude Include="Actor\AWorldAxes.h" />
+    <ClInclude Include="Actor\Gizmo\AGizmo.h" />
+    <ClInclude Include="Actor\UBillboard.h" />
+    <ClInclude Include="Actor\UParticleSubUVComp.h" />
+    <ClInclude Include="Actor\Light\ADirectionalLight.h" />
+    <ClInclude Include="Actor\Light\ALight.h" />
+    <ClInclude Include="Actor\Light\APointLight.h" />
+    <ClInclude Include="Actor\Light\ASpotLight.h" />
+    <ClInclude Include="App\ConsoleWindow.h" />
+    <ClInclude Include="App\GameManager.h" />
+    <ClInclude Include="Core\Containers.h" />
+    <ClInclude Include="Core\enums.h" />
+    <ClInclude Include="Core\FName.h" />
+    <ClInclude Include="Core\FNamePool.h" />
+    <ClInclude Include="Core\Global.h" />
+    <ClInclude Include="Core\ObjectManager.h" />
+    <ClInclude Include="Core\Pointers.h" />
+    <ClInclude Include="Core\TemplateLibrary.h" />
+    <ClInclude Include="Core\UEngineStatics.h" />
+    <ClInclude Include="Core\UObject.h" />
+    <ClInclude Include="Core\WeakObjectPtr.h" />
+    <ClInclude Include="Editor\EditorSettings.h" />
+    <ClInclude Include="Input\InputManager.h" />
+    <ClInclude Include="Library\DirectXTex\DirectXTex.h" />
+    <ClInclude Include="Library\ImGui\imconfig.h" />
+    <ClInclude Include="Library\ImGui\imgui.h" />
+    <ClInclude Include="Library\ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="Library\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="Library\ImGui\imgui_internal.h" />
+    <ClInclude Include="Library\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="Library\ImGui\imstb_textedit.h" />
+    <ClInclude Include="Library\ImGui\imstb_truetype.h" />
+    <ClInclude Include="Library\json\nlohmann\json.hpp" />
+    <ClInclude Include="Math\FIntPoint.h" />
+    <ClInclude Include="Math\FQuaternion.h" />
+    <ClInclude Include="Math\FVector.h" />
+    <ClInclude Include="Math\Intersection.h" />
+    <ClInclude Include="Math\FMatrix.h" />
+    <ClInclude Include="Math\Transform.h" />
+    <ClInclude Include="Physics\ACollider.h" />
+    <ClInclude Include="Physics\CollisionManager.h" />
+    <ClInclude Include="Render\Camera.h" />
+    <ClInclude Include="Render\Core\GraphicsPipeline.h" />
+    <ClInclude Include="Render\Core\PipelineCache.h" />
+    <ClInclude Include="Render\Core\RenderContext.h" />
+    <ClInclude Include="Render\Core\RenderDevice.h" />
+    <ClInclude Include="Render\Core\RenderResources.h" />
+    <ClInclude Include="Render\Core\RenderSystem.h" />
+    <ClInclude Include="Render\FBoundingBox.h" />
+    <ClInclude Include="Render\FGrid.h" />
+    <ClInclude Include="Render\FontMeshGenerator.h" />
+    <ClInclude Include="Render\Global\FLinearColor.h" />
+    <ClInclude Include="Render\Global\FVertexSimple.h" />
+    <ClInclude Include="Render\Global\GraphicsEnums.h" />
+    <ClInclude Include="Render\Global\ShaderConstants.h" />
+    <ClInclude Include="Render\Mesh.h" />
+    <ClInclude Include="Render\PickingManager.h" />
+    <ClInclude Include="Render\Renderer\FGizmoRenderer.h" />
+    <ClInclude Include="Render\Renderer\FLineBatchRenderer.h" />
+    <ClInclude Include="Render\Renderer\FMeshRenderer.h" />
+    <ClInclude Include="Render\Renderer\FOutlineRenderer.h" />
+    <ClInclude Include="Render\Resource\ConstantBuffer.h" />
+    <ClInclude Include="Render\Resource\IndexBuffer.h" />
+    <ClInclude Include="Render\Resource\Material.h" />
+    <ClInclude Include="Render\Resource\RenderMesh.h" />
+    <ClInclude Include="Render\Resource\Texture.h" />
+    <ClInclude Include="Render\Resource\VertexBuffer.h" />
+    <ClInclude Include="Render\Resource\VertexShader.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Resources\Geometry\Bulb.h" />
+    <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
+    <ClInclude Include="Resources\Geometry\GizmoVertex.h" />
+    <ClInclude Include="Resources\Geometry\PrimitiveVertex.h" />
+    <ClInclude Include="Resources\Geometry\SphereVertex.h" />
+    <ClInclude Include="Scenes\SaveLoadManager.h" />
+    <ClInclude Include="Scenes\Scene.h" />
+    <ClInclude Include="Scenes\SceneManager.h" />
+    <ClInclude Include="UI\IUIPanel.h" />
+    <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="UI\UIPanel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Engine\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Actor\AActor.cpp" />
+    <ClCompile Include="Actor\ASkySphere.cpp" />
+    <ClCompile Include="Actor\AWorldAxes.cpp" />
+    <ClCompile Include="Actor\Gizmo\AGizmo.cpp" />
+    <ClCompile Include="Actor\UBillboard.cpp" />
+    <ClCompile Include="Actor\UParticleSubUVComp.cpp" />
+    <ClCompile Include="Actor\Light\ADirectionalLight.cpp" />
+    <ClCompile Include="Actor\Light\ALight.cpp" />
+    <ClCompile Include="Actor\Light\APointLight.cpp" />
+    <ClCompile Include="Actor\Light\ASpotLight.cpp" />
+    <ClCompile Include="App\ConsoleWindow.cpp" />
+    <ClCompile Include="App\GameManager.cpp" />
+    <ClCompile Include="Core\FName.cpp" />
+    <ClCompile Include="Core\FNamePool.cpp" />
+    <ClCompile Include="Core\ObjectManager.cpp" />
+    <ClCompile Include="Core\UObject.cpp" />
+    <ClCompile Include="Editor\EditorSettings.cpp" />
+    <ClCompile Include="Input\InputManager.cpp" />
+    <ClCompile Include="Library\ImGui\imgui.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_demo.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_draw.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_impl_win32.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_tables.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Library\ImGui\imgui_widgets.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Math\FQuaternion.cpp" />
+    <ClCompile Include="Math\FVector.cpp" />
+    <ClCompile Include="Math\Intersection.cpp" />
+    <ClCompile Include="Math\FMatrix.cpp" />
+    <ClCompile Include="Physics\ACollider.cpp" />
+    <ClCompile Include="Physics\CollisionManager.cpp" />
+    <ClCompile Include="Render\Camera.cpp" />
+    <ClCompile Include="Render\Core\RenderContext.cpp" />
+    <ClCompile Include="Render\Core\RenderDevice.cpp" />
+    <ClCompile Include="Render\Core\RenderResources.cpp" />
+    <ClCompile Include="Render\Core\RenderSystem.cpp" />
+    <ClCompile Include="Render\FontMeshGenerator.cpp" />
+    <ClCompile Include="Render\Mesh.cpp" />
+    <ClCompile Include="Render\PickingManager.cpp" />
+    <ClCompile Include="Render\FGrid.cpp" />
+    <ClCompile Include="Render\Renderer\FLineBatchRenderer.cpp" />
+    <ClCompile Include="Resources\Geometry\CircleGenerator.cpp" />
+    <ClCompile Include="Scenes\SaveLoadManager.cpp" />
+    <ClCompile Include="Scenes\Scene.cpp" />
+    <ClCompile Include="Scenes\SceneManager.cpp" />
+    <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="UI\UIPanel.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Library\DirectXTex\DirectXTex.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Library\DirectXTex\DirectXTex.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shader\Constants.hlsli" />
+    <FxCompile Include="Resources\Shader\MeshPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainPS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainPS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\MeshVS.hlsl">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\FontPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainPS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainPS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\LinePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainPS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainPS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\LineVS.hlsl">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SkyPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainPS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainPS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SkyVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\Shader\OutlineVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\FontVS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SubUVPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainPS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainPS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\SubUVVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\aebollae_icon.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
