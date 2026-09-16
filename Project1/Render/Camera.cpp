@@ -60,7 +60,7 @@ FMatrix Camera::GetViewMatrix() const
 
 FMatrix Camera::GetProjectionMatrix(float aspectRatio) const
 {
-	if (ProjectionMode == Orthographic) {
+	if (ProjectionMode == EProjectionMode::Orthographic) {
 		return FMatrix::Orthographic(OrthoWidth, OrthoWidth/aspectRatio, NearZ, FarZ);
 	}
 	else {
@@ -73,9 +73,17 @@ void Camera::Update()
 {
 	//카메라 이동 처리
 	float currentSpeed = speed * DELTA;
-
-	if (INPUT.GetKey('W')) MoveForward(currentSpeed);
-	if (INPUT.GetKey('S')) MoveForward(-currentSpeed);
+	float ZoomSpeed = currentSpeed * 0.2f;
+	if (ProjectionMode == EProjectionMode::Perspective)
+	{
+		if (INPUT.GetKey('W')) MoveForward(currentSpeed);
+		if (INPUT.GetKey('S')) MoveForward(-currentSpeed);
+	}
+	else if (ProjectionMode == EProjectionMode::Orthographic)
+	{
+		if (INPUT.GetKey('W')) UpdateOrthoWidth(ZoomSpeed);
+		if (INPUT.GetKey('S')) UpdateOrthoWidth(-ZoomSpeed);
+	}
 	if (INPUT.GetKey('D')) MoveRight(currentSpeed);
 	if (INPUT.GetKey('A')) MoveRight(-currentSpeed);
 	if (INPUT.GetKey('Q')) MoveWorldUp(-currentSpeed);
@@ -86,8 +94,23 @@ void Camera::Update()
 		FIntPoint delta = INPUT.GetMouseDelta();
 		Rotate(delta.X * rotationSpeed, delta.Y * rotationSpeed);
 	}
-
 	// 카메라 줌인/줌아웃 처리
 	float wheelDelta = INPUT.GetMouseWheelDelta();
 	if (wheelDelta) MoveForward(wheelDelta * wheelSpeed);
 }
+
+void Camera::UpdateOrthoWidth(float ZoomSpeed)
+{
+	if (MinOrthoWidth > OrthoWidth)
+	{
+		OrthoWidth = MinOrthoWidth;
+		return;
+	}
+	else if (OrthoWidth > MaxOrthoWidth)
+	{
+		OrthoWidth = MaxOrthoWidth;
+		return;
+	}
+	OrthoWidth *= (1 - ZoomSpeed);
+}
+

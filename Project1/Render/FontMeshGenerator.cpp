@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "FontMeshGenerator.h"
 #include "FVertexSImple.h"
-#include "Sphere.h"
+#include "PrimitiveVertex.h"
 
 namespace
 {

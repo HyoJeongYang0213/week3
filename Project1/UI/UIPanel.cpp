@@ -42,14 +42,12 @@ void UIPanel_SceneCamera::Render()
 	// 카메라 디버그 섹션
 	ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.4f, 1.0f), "[ Camera Controls ]");
 	Camera& cam = CAMERA;
-
 	ImGui::PushItemWidth(200.0f);
-
-	// 카메라 직교투영 여부 선택 체크박스
-	bool isOrtho = (cam.GetProjectionMode() == Orthographic);
-	if (ImGui::Checkbox("Orthographic", &isOrtho)) {
-		cam.SetProjectionMode(isOrtho ? Orthographic : Perspective);
-	}
+    // 카메라 직교투영 여부 선택 체크박스
+    bool isOrtho = (cam.GetProjectionMode() == EProjectionMode::Orthographic);
+    if (ImGui::Checkbox("Orthographic", &isOrtho)) {
+        cam.SetProjectionMode(isOrtho ? EProjectionMode::Orthographic : EProjectionMode::Perspective);
+    }
 
 	// 에디터 뷰 모드 선택 콤보박스
 	int ViewMode = static_cast<int>(cam.ViewMode);
@@ -58,13 +56,24 @@ void UIPanel_SceneCamera::Render()
 		cam.ViewMode = static_cast<EViewMode>(ViewMode);
 	}
 
-	// 카메라 시야각 조절 슬라이더
-	float fov = cam.GetFOV();
-	if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
-		cam.SetFOV(fov);
-	
-	// 카메라 위치 조절 슬라이더
-	FVector camLoc = cam.GetLocation();
+    // 카메라 시야각 조절 슬라이더
+    if (cam.GetProjectionMode() == EProjectionMode::Perspective)
+    {
+        float fov = cam.GetFOV();
+        if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
+            cam.SetFOV(fov);
+        ImGui::Text("FOV: %.3f", cam.GetFOV());
+    }
+    else
+    {
+        float OrthoWidth = cam.GetOrthoWidth();
+        if (ImGui::SliderFloat("Ortho Width", &OrthoWidth, 5.0f, 100.0f))
+            cam.SetOrthoWidth(OrthoWidth);
+        ImGui::Text("Ortho Width: %.3f", cam.GetOrthoWidth());
+    }
+    
+    // 카메라 위치 조절 슬라이더
+    FVector camLoc = cam.GetLocation();
 	if (ImGui::DragFloat3("Cam Pos", &camLoc.x, 0.05f, -20.0f, 20.0f))
 	{
 		cam.SetLocation(camLoc);

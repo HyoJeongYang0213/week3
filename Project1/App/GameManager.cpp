@@ -125,7 +125,7 @@ void GameManager::Update()
 void GameManager::Render()
 {
 	// 프레임 버퍼 클리어 및 뷰포트 설정
-	constexpr float ClearColor[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	constexpr float ClearColor[] = { 0.8f, 0.8f, 0.9f, 1.0f };
 	CONTEXT.SetRenderTarget(RENDER.GetBackBufferRTV(), &RENDER.GetDepthStencilView());
 	CONTEXT.SetViewport(RENDER.GetViewport());
 	CONTEXT.ClearRenderTarget(RENDER.GetBackBufferRTV(), ClearColor);

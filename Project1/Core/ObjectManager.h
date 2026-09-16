@@ -124,24 +124,24 @@ public:
 		return nullptr;
 	}
 
-	Mesh* GetOrCreateMesh(const FString& name, const std::span<const FVector>& Vertices)
+	Mesh* GetOrCreateMesh(const FString& name, const std::span<const FVector>& Vertices, const std::span<const uint32>& Indicies = {})
 	{
 		auto it = AllMeshMap.find(name);
 		if (it != AllMeshMap.end())
 			return it->second;
 
-		Mesh* newMesh = new Mesh(Vertices);
+		Mesh* newMesh = new Mesh(Vertices, Indicies);
 		AllMeshMap[name] = newMesh;
 		return newMesh;
 	}
 
-	Mesh* GetOrCreateMesh(const FString& name, const std::span<const FVertexData>& Vertices)
+	Mesh* GetOrCreateMesh(const FString& name, const std::span<const FVertexData>& Vertices, const std::span<const uint32>& Indicies = {})
 	{
 		auto it = AllMeshMap.find(name);
 		if (it != AllMeshMap.end())
 			return it->second;
 
-		Mesh* newMesh = new Mesh(Vertices);
+		Mesh* newMesh = new Mesh(Vertices, Indicies);
 		AllMeshMap[name] = newMesh;
 		return newMesh;
 	}
