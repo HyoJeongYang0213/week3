@@ -259,105 +259,103 @@ FString UIPanel_SceneCamera::SaveSceneFileDialog()
 				{
 					fs::create_directories(scenePath);
 				}
-				else
+				
+				int cur_max = 0;
+
+				// std::filesystem의 directory_iterator로 매 directory_entry 순회
+				for (const fs::directory_entry& entry : fs::directory_iterator(scenePath))
 				{
-					int cur_max = 0;
-
-					// std::filesystem의 directory_iterator로 매 directory_entry 순회
-					for (const fs::directory_entry& entry : fs::directory_iterator(scenePath))
+					// 확장자가 '.Scene'인 경우
+					if (entry.path().extension() == ".Scene")
 					{
-						// 확장자가 '.Scene'인 경우
-						if (entry.path().extension() == ".Scene")
+						// stem에 파일명 저장
+						FString stem = entry.path().stem().string();
+
+						// 파일명이 Scene으로 시작할 경우
+						if (stem.starts_with("Scene"))
 						{
-							// stem에 파일명 저장
-							FString stem = entry.path().stem().string();
-
-							// 파일명이 Scene으로 시작할 경우
-							if (stem.starts_with("Scene"))
+							// Scene 뒷자리를 자름
+							FString bh = stem.substr(5);
+							if (!bh.empty())
 							{
-								// Scene 뒷자리를 자름
-								FString bh = stem.substr(5);
-								if (!bh.empty())
+								bool bIsEveryCharDigit = true;
+
+								for (char c : bh)
 								{
-									bool bIsEveryCharDigit = true;
-
-									for (char c : bh)
+									if (!isdigit(c))
 									{
-										if (!isdigit(c))
-										{
-											bIsEveryCharDigit = false;
-											break;
-										}
+										bIsEveryCharDigit = false;
+										break;
 									}
+								}
 
-									// bh가 다 숫자로 이루어져 있다면
-									if (bIsEveryCharDigit)
-									{
-										int idx = std::stoi(bh);
-										cur_max = (cur_max > idx) ? cur_max : idx;
-									}
+								// bh가 다 숫자로 이루어져 있다면
+								if (bIsEveryCharDigit)
+								{
+									int idx = std::stoi(bh);
+									cur_max = (cur_max > idx) ? cur_max : idx;
 								}
 							}
 						}
 					}
-					FWString fn;
-					if (cur_max < 9)
-						fn = L"Scene0" + std::to_wstring(cur_max + 1);
-					else
-						fn = L"Scene" + std::to_wstring(cur_max + 1);
+				}
+				FWString fn;
+				if (cur_max < 9)
+					fn = L"Scene0" + std::to_wstring(cur_max + 1);
+				else
+					fn = L"Scene" + std::to_wstring(cur_max + 1);
 
-					hr = pfd->SetFileName(fn.c_str());
+				hr = pfd->SetFileName(fn.c_str());
 
-                    // SetFileName 성공?
-                    if (SUCCEEDED(hr))
-                    {
-                        std::wstring scenePathW = scenePath.wstring();
+                // SetFileName 성공?
+                if (SUCCEEDED(hr))
+                {
+                    std::wstring scenePathW = scenePath.wstring();
 
-						hr = SHCreateItemFromParsingName(
-							scenePathW.c_str(),
-							nullptr,
-							IID_PPV_ARGS(&psiRoot)
-						);
+					hr = SHCreateItemFromParsingName(
+						scenePathW.c_str(),
+						nullptr,
+						IID_PPV_ARGS(&psiRoot)
+					);
 
-						// SHCreateItemFromParsingName 성공?
+					// SHCreateItemFromParsingName 성공?
+					if (SUCCEEDED(hr))
+					{
+						hr = pfd->SetFolder(psiRoot);
+
+						// SetFolder 성공?
 						if (SUCCEEDED(hr))
 						{
-							hr = pfd->SetFolder(psiRoot);
+							hr = pfd->Show(hwnd);
 
-							// SetFolder 성공?
+							// Show 성공 ?
 							if (SUCCEEDED(hr))
 							{
-								hr = pfd->Show(hwnd);
+								IShellItem* psiResult;
+								hr = pfd->GetResult(&psiResult);
 
-								// Show 성공 ?
+								// GetResult 성공 ?
 								if (SUCCEEDED(hr))
 								{
-									IShellItem* psiResult;
-									hr = pfd->GetResult(&psiResult);
+									PWSTR pszFilePath = NULL;
+									hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
-									// GetResult 성공 ?
+									// GetDisplayName 성공 ?
 									if (SUCCEEDED(hr))
 									{
-										PWSTR pszFilePath = NULL;
-										hr = psiResult->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+										// PWSTR를 FString(std::string)으로 변환
+										// wchar_t* to string
+										int wideLength = static_cast<int>(wcslen(pszFilePath));
+										int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
 
-										// GetDisplayName 성공 ?
-										if (SUCCEEDED(hr))
+										if (sizeNeeded > 0)
 										{
-											// PWSTR를 FString(std::string)으로 변환
-											// wchar_t* to string
-											int wideLength = static_cast<int>(wcslen(pszFilePath));
-											int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, nullptr, 0, nullptr, nullptr);
-
-											if (sizeNeeded > 0)
-											{
-												result.resize(sizeNeeded);
-												WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
-											}
+											result.resize(sizeNeeded);
+											WideCharToMultiByte(CP_UTF8, 0, pszFilePath, wideLength, result.data(), sizeNeeded, nullptr, nullptr);
 										}
-
-										CoTaskMemFree(pszFilePath);
 									}
+
+									CoTaskMemFree(pszFilePath);
 								}
 							}
 						}
@@ -414,15 +412,18 @@ void UIPanel_Spawn::Render()
 
 	FVector spawnCenter = camLocation + camForward * spawnDistance;
 
-	FVector randomLoc = spawnCenter + camRight * distSide(rng) + worldUp * distUp(rng);
-
 	if (ImGui::Button("Spawn"))
 	{
 		for (int i=0; i<spawnCount; i++)
 		{	
 			AActor* spawnedActor = nullptr;
+
+			// 위치 안 겹치도록
+			FVector randomLoc = spawnCenter + camRight * distSide(rng) + worldUp * distUp(rng);
+
 			switch(selected_item)
 			{
+
 				case 0 :
 					spawnedActor = FObjectFactory::SpawnColider<ASphere>(randomLoc, { 1.0f, 1.0f, 1.0f });
 					break;
