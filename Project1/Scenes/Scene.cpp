@@ -126,16 +126,20 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 			}
 			else if (ASkySphere* SkySphere = Cast<ASkySphere>(objects[i]))
 			{
-				Transform SkyTransform = SkySphere->GetTransform();
-				SkyTransform.SetLocation(CAMERA.GetLocation());
+				if (CAMERA.GetProjectionMode() == EProjectionMode::Perspective)
+				{
+					Transform SkyTransform = SkySphere->GetTransform();
+					SkyTransform.SetLocation(CAMERA.GetLocation());
 
-				ObjectData.Add(FMeshRenderData{
-					.Mesh = *RESOURCES.GetMesh("SkySphere"),
-					.Material = SkyMaterial,
-					.World = SkyTransform.GetWorldMatrix(),
-					.Color = SkySphere->GetColor(),
-					.bSelected = false,
-					.bWireFrame = CAMERA.ViewMode == EViewMode::Wireframe });
+					ObjectData.Add(FMeshRenderData{
+						.Mesh = *RESOURCES.GetMesh("SkySphere"),
+						.Material = SkyMaterial,
+						.World = SkyTransform.GetWorldMatrix(),
+						.Color = SkySphere->GetColor(),
+						.bSelected = false,
+						.bWireFrame = CAMERA.ViewMode == EViewMode::Wireframe });
+				}
+
 			}
 			else if (AWorldAxes* WorldAxes = Cast<AWorldAxes>(objects[i]))
 			{

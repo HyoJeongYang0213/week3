@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "UBillboard.h"
+#include "PrimitiveVertex.h"
 
 UBillboard::UBillboard()
 {
@@ -9,6 +10,7 @@ UBillboard::UBillboard()
 UBillboard::UBillboard(const FString& InTextureName) : UBillboard()
 {
 	TextureName = InTextureName;
+	SetMesh(OBJECT.GetOrCreateMesh("Billboard", quad_vertices, quad_indices));
 }
 
 void UBillboard::Update(float DeltaTime)

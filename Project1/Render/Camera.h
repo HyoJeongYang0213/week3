@@ -5,7 +5,7 @@
 
 class CameraBuffer;
 
-enum {
+enum class EProjectionMode{
 	Perspective,
 	Orthographic,
 };
@@ -58,17 +58,22 @@ public:
 	void SetRotationSpeed(float inRotSpeed) { rotationSpeed = inRotSpeed; }
 	float& GetRotationSpeedRef() { return rotationSpeed; }
 
+	float GetWheelSpeed() const { return wheelSpeed; }
+	void SetWheelSpeed(float inWheelSpeed) { wheelSpeed = inWheelSpeed; }
+	float& GetWheelSpeedRef() { return wheelSpeed; }
+
 	float GetFOV() const { return fov; }
 	void SetFOV(float inFov) { fov = inFov; }
 
 	FMatrix GetViewMatrix() const;
 	FMatrix GetProjectionMatrix(float aspectRatio) const;
 
-	void SetProjectionMode(int mode) { ProjectionMode = mode; }
-	int GetProjectionMode() { return ProjectionMode; }
+	void SetProjectionMode(EProjectionMode mode) { ProjectionMode = mode; }
+	EProjectionMode GetProjectionMode() { return ProjectionMode; }
 
 	void SetOrthoWidth(float w) { OrthoWidth = w; }
-	float GetOrthWidth() { return OrthoWidth; }
+	float GetOrthoWidth() { return OrthoWidth; }
+	void UpdateOrthoWidth(float CurrentSpeed);
 
 	void SetNear(float inNear) { NearZ = inNear; }
 	void SetFar(float inFar) { FarZ = inFar; }
@@ -83,14 +88,18 @@ public:
 private:
 	Transform transform;
 
-	int ProjectionMode = Perspective;
+	EProjectionMode ProjectionMode = EProjectionMode::Perspective;
 	
-	float OrthoWidth = 10.0f;
+	float OrthoWidth = 25.0f;
+	float MinOrthoWidth = 5.0f;
+	float MaxOrthoWidth = 100.f;
 
 	float fov = 60.0f;
 	float NearZ = 0.1f;
 	float FarZ = 1000.0f;
+
 	float speed = 2.0f;
 	float rotationSpeed = 0.08f;
+	float wheelSpeed = 1.0f;
 };
 

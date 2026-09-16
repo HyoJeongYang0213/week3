@@ -1,11 +1,14 @@
 #include "pch.h"
 #include "SaveLoadManager.h"
+
 #include "TemplateLibrary.h"
 #include "ObjectManager.h"
 #include "Containers.h"
-#include "AActor.h"
-#include "ATextActor.h"
 #include "UEngineStatics.h"
+
+#include "AActor.h"
+#include "AGizmo.h"
+#include "ATextActor.h"
 #include "ADirectionalLight.h"
 #include "APointLight.h"
 #include "ASpotLight.h"
@@ -232,9 +235,6 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
 {
     TArray<UObject*> loadedObjects;
 
-    // DEBUG
-    // OutputDebugStringA(("Current working dir: " + std::filesystem::current_path().string() + "\n").c_str());
-
     std::ifstream file(path);
 
     if (!file.is_open())
@@ -259,6 +259,13 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         UE_LOG("[Error] Parse failed : %s", string(e.what()).c_str());
         return loadedObjects; // {} 빈 배열 return
 
+    }
+
+    PICK.pickedObjcect = nullptr;
+
+    if (AGizmo::MainGizmo)
+    {
+        AGizmo::MainGizmo->SetTargetActor(nullptr);
     }
 
     // 기존 Scene에 있던 Objects Clear

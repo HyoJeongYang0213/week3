@@ -57,20 +57,6 @@ using namespace std;
 #include "Containers.h"
 
 // 매크로 정의 (키보드, 마우스, 시간, 씬)
-#define KEY_PRESS(k) (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyDown(k))
-#define KEY_DOWN(k) (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyPressed(k, false))
-#define KEY_UP(k) (!ImGui::GetIO().WantCaptureKeyboard && ImGui::IsKeyReleased(k))
-
-// 0 : 좌클릭, 1: 우클릭, 2 : 중간클릭 (UI 창 바깥 게임 화면 클릭만 인식)
-#define MOUSE_PRESS(k) (!ImGui::GetIO().WantCaptureMouse && ImGui::IsMouseDown(k))
-#define MOUSE_CLICK(k) (!ImGui::GetIO().WantCaptureMouse && ImGui::IsMouseClicked(k))
-#define MOUSE_DBCLICK(k) (!ImGui::GetIO().WantCaptureMouse && ImGui::IsMouseDoubleClicked(k))
-#define MOUSE_UP(k) (!ImGui::GetIO().WantCaptureMouse && ImGui::IsMouseReleased(k))
-
-// 마우스 좌표 매크로 (ImVec2 및 x, y 성분)
-#define MOUSE_POS (ImGui::GetIO().MousePos)
-#define MOUSE_POS_X (ImGui::GetIO().MousePos.x)
-#define MOUSE_POS_Y (ImGui::GetIO().MousePos.y)
 
 #define SCENE SceneManager::GetInstance()
 #define DELTA ImGui::GetIO().DeltaTime
@@ -87,6 +73,7 @@ using namespace std;
 #define GM GameManager::GetInstance()
 #define NAMEPOOL FNamePool::GetInstance()
 
+#define INPUT InputManager::GetInstance()
 #define IMGUI UIManager::GetInstance()
 #define SAVELOAD SaveLoadManager::GetInstance()
 #define LINEBATCH FLineBatchRenderer::GetInstance()
@@ -104,6 +91,9 @@ using namespace std;
 //Scene Header
 #include "Scene.h"
 #include "SceneManager.h"
+
+// Input Header
+#include "InputManager.h"
 
 //UI Header
 #include "UIManager.h"
