@@ -14,14 +14,14 @@ void RenderResources::RegisterDefaultResources()
 	FWString ExecutableDirectory = filesystem::path(Buffer).parent_path();
 
 	CreateMesh("Cube", cube_vertices, cube_indices);
-	CreateMesh("Sphere", CreateSphereVertices(0.5f, 20, 20, false));
+	CreateMesh("Sphere", sphere_vertices, sphere_indices);
 	CreateMesh("Triangle", triangle_vertices, trianlge_indices);
 	CreateMesh("Rectangle", rectangle_vertices, rectangle_indices);
 	CreateMesh("Circle", CircleGenerator::MakeCircle(32, 1.0f, 1.0f, 0.0f, 1.0f));
-	CreateMesh("GizmoLocation", arrow_vertices);
-	CreateMesh("GizmoRotate", rotate_ring_vertices);
-	CreateMesh("GizmoScale", scale_axis_vertices);
-	CreateMesh("SkySphere", skysphere_vertices);
+	CreateMesh("GizmoLocation", arrow_vertices, arrow_indices);
+	CreateMesh("GizmoRotate", rotate_ring_vertices, rotate_ring_indices);
+	CreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
+	CreateMesh("SkySphere", skysphere_vertices, skysphere_indices);
 	CreateMesh("Billboard", quad_vertices, quad_indices);
 	CreateMesh("LightBulb", CreateSphereVertices(0.5f, 20, 20, false));
 

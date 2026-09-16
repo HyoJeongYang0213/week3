@@ -45,30 +45,30 @@ void ACollider::Released() {}
 
 ACube::ACube(const FLinearColor &inColor) : ACollider(inColor) {
   SetMesh(OBJECT.GetOrCreateMesh("Cube", cube_vertices, cube_indices));
-  Primitive = EPrimitive::Cube;
+  SetPrimitive(EPrimitive::Cube);
 }
 
 ASphere::ASphere(const FLinearColor &inColor) : ACollider(inColor) {
   // 구체 정점 최초 계산 후 캐시
-  static const TArray<FVertexData> sphereVertices =
-      CreateSphereVertices(0.5f, 20, 20, false);
-  SetMesh(OBJECT.GetOrCreateMesh("Sphere", sphereVertices));
-  Primitive = EPrimitive::Sphere;
+  //static const TArray<FVertexData> sphereVertices =
+  //    CreateSphereVertices(0.5f, 20, 20, false);
+  SetMesh(OBJECT.GetOrCreateMesh("Sphere", sphere_vertices, sphere_indices));
+  SetPrimitive(EPrimitive::Sphere);
 }
 
 ATriangle::ATriangle(const FLinearColor &inColor) : ACollider(inColor) {
   SetMesh(OBJECT.GetOrCreateMesh("Triangle", triangle_vertices, trianlge_indices));
-  Primitive = EPrimitive::Triangle;
+  SetPrimitive(EPrimitive::Triangle);
 }
 
 ARectangle::ARectangle(const FLinearColor &inColor) : ACollider(inColor) {
   SetMesh(OBJECT.GetOrCreateMesh("Rectangle", rectangle_vertices, rectangle_indices));
-  Primitive = EPrimitive::Rectangle;
+  SetPrimitive(EPrimitive::Rectangle);
 }
 
 ACircle::ACircle(const FLinearColor &inColor) : ACollider(inColor) {
   TArray<FVertexData> circle_vertices =
       CircleGenerator::MakeCircle(32, 1.0f, 1.0f, 0.0f, 1.0f);
   SetMesh(OBJECT.GetOrCreateMesh("Circle", circle_vertices));
-  Primitive = EPrimitive::Circle;
+  SetPrimitive(EPrimitive::Circle);
 }
