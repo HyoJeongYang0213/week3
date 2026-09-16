@@ -26,7 +26,7 @@ void UIPanel_Debug::Render()
 {
 	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
 
-	ImGui::Begin(GetName().c_str(), &bIsOpen, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin(GetName().c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("DirectX 11 & ImGui Active");
 	ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
 	ImGui::Text("[ Used Memory ] %u bytes", OBJECT.TotalAllocationBytes);
@@ -37,7 +37,7 @@ void UIPanel_Debug::Render()
 void UIPanel_SceneCamera::Render()
 {
 	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_FirstUseEver);
-	ImGui::Begin(GetName().c_str(), &bIsOpen);
+	ImGui::Begin(GetName().c_str());
 
 	// 카메라 디버그 섹션
 	ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.4f, 1.0f), "[ Camera Controls ]");
@@ -372,7 +372,7 @@ FString UIPanel_SceneCamera::SaveSceneFileDialog()
 void UIPanel_Spawn::Render()
 {
 	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_FirstUseEver);
-	ImGui::Begin(GetName().c_str(), &bIsOpen);
+	ImGui::Begin(GetName().c_str());
 
 	ImGui::PushItemWidth(-1.0f);
 
@@ -492,7 +492,7 @@ void UIPanel_Spawn::Render()
 void UIPanel_Picking::Render()
 {
 	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_FirstUseEver);
-	ImGui::Begin(GetName().c_str(), &bIsOpen);
+	ImGui::Begin(GetName().c_str());
 	
 	// Picked Primitive Editor
 	AActor* pickedActor = PICK.pickedObjcect;
@@ -619,7 +619,7 @@ void UIPanel_Picking::Render()
 
 void UIPanel_SceneManager::Render()
 {
-	ImGui::Begin(GetName().c_str(), &bIsOpen);
+	ImGui::Begin(GetName().c_str());
 	if (ImGui::TreeNode("Primitives"))
 	{
 		int32 Selected = -1;
