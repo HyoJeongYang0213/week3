@@ -111,6 +111,8 @@ AActor* PickingManager::Pick()
 			return closest;
 		}
 	}
+	pickedObjcect = nullptr;
+
 	return nullptr;
 }
 

@@ -68,7 +68,7 @@ public:
 	EProjectionMode GetProjectionMode() { return ProjectionMode; }
 
 	void SetOrthoWidth(float w) { OrthoWidth = w; }
-	float GetOrthWidth() { return OrthoWidth; }
+	float GetOrthoWidth() { return OrthoWidth; }
 	void UpdateOrthoWidth(float CurrentSpeed);
 
 	void Update();
@@ -83,7 +83,7 @@ private:
 
 	EProjectionMode ProjectionMode = EProjectionMode::Perspective;
 	
-	float OrthoWidth = 50.0f;
+	float OrthoWidth = 25.0f;
 	float MinOrthoWidth = 5.0f;
 	float MaxOrthoWidth = 100.f;
 

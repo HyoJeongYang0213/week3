@@ -59,10 +59,20 @@ void UIPanel_Camera::Render()
 	}
 
     // 카메라 시야각 조절 슬라이더
-    float fov = cam.GetFOV();
-    if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
-        cam.SetFOV(fov);
-    ImGui::Text("FOV: %.3f", cam.GetFOV());
+    if (cam.GetProjectionMode() == EProjectionMode::Perspective)
+    {
+        float fov = cam.GetFOV();
+        if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
+            cam.SetFOV(fov);
+        ImGui::Text("FOV: %.3f", cam.GetFOV());
+    }
+    else
+    {
+        float OrthoWidth = cam.GetOrthoWidth();
+        if (ImGui::SliderFloat("Ortho Width", &OrthoWidth, 5.0f, 100.0f))
+            cam.SetOrthoWidth(OrthoWidth);
+        ImGui::Text("Ortho Width: %.3f", cam.GetOrthoWidth());
+    }
     
     // 카메라 위치 조절 슬라이더
     FVector camLoc = cam.GetLocation();
