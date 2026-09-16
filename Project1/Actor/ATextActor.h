@@ -50,7 +50,7 @@ public:
 		Vertices.Reserve(Geometry.Indices.Num());
 		for (uint32 Index : Geometry.Indices)
 		{
-			if (Index < Geometry.Vertices.Num())
+			if (Index < static_cast<uint32>(Geometry.Vertices.Num()))
 			{
 				const FVertexData& Vertex = Geometry.Vertices[static_cast<size_t>(Index)];
 				Vertices.Add(FVector(Vertex.x, Vertex.y, Vertex.z));
