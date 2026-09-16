@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <cmath>
 
 //  - Up       : Y축 ( yaw )
@@ -41,10 +41,12 @@ struct FQuaternion
     static FQuaternion FromAxisAngle(const FVector& axis, float angleRad);
     
     // pitch, yaw, roll 단위 : radian
-    static FQuaternion FromEuler(float pitch, float yaw, float roll);
+    static FQuaternion FromEuler(float Roll, float Pitch, float Yaw);
+
+    static FQuaternion FromEulerDegrees(float Roll, float Pitch, float Yaw);
 
     // 쿼터니언 -> 오일러 (디버그, UI 출력용)
-    static FVector ToEuler(const FQuaternion& q);
+    static FVector ToEuler(const FQuaternion& Q);
 
     // 보간
     static FQuaternion Slerp(const FQuaternion& a, FQuaternion b, float t);

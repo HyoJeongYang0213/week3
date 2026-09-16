@@ -62,7 +62,7 @@ FontGeometry FontMeshGenerator::Generate(const std::wstring& text, float glyphAd
 
 		for (int j = 0; j < 4; ++j)
 		{
-			quad[j].x += xOffset;
+			quad[j].y += xOffset;
 		}
 
 		// 4. UV 적용

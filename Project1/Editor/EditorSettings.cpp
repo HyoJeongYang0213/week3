@@ -35,23 +35,19 @@ void EditorSettings::Load()
 	Camera& cam = CAMERA;
 
 	// Camera
-	cam.SetFOV(ReadFloat("Camera", "FOV", "60.0"));
+	cam.SetFOVX(ReadFloat("Camera", "FOV", "60.0"));
 	cam.SetSpeed(ReadFloat("Camera", "MoveSpeed", "2.0"));
 	cam.SetRotationSpeed(ReadFloat("Camera", "MouseSensitivity", "0.2"));
 
 	FVector location(
-		ReadFloat("Camera", "PositionX", "3.336"),
-		ReadFloat("Camera", "PositionY", "3.282"),
-		ReadFloat("Camera", "PositionZ", "-4.715")
+		ReadFloat("Camera", "PositionX", std::to_string(CAMERA.DefaultLocation.X).c_str()),
+		ReadFloat("Camera", "PositionY", std::to_string(CAMERA.DefaultLocation.Y).c_str()),
+		ReadFloat("Camera", "PositionZ", std::to_string(CAMERA.DefaultLocation.Z).c_str())
 	);
-	cam.SetLocation(location);
+	cam.Location = location;
 
-	FVector rotation(
-		ReadFloat("Camera", "Pitch", "0.391"),
-		ReadFloat("Camera", "Yaw", "-0.468"),
-		ReadFloat("Camera", "Roll", "0.0")
-	);
-	cam.SetRotation(FQuaternion::FromEuler(rotation.x, rotation.y, rotation.z));
+	cam.Yaw = ReadFloat("Camera", "Yaw", std::to_string(CAMERA.DefaultYaw).c_str());
+	cam.Pitch = ReadFloat("Camera", "Pitch", std::to_string(CAMERA.DefaultPitch).c_str());
 
 	cam.SetProjectionMode(ReadInt("Camera", "ProjectionMode", "0"));
 	cam.ViewMode = static_cast<EViewMode>(ReadInt("Camera", "ViewMode", "0"));
@@ -70,19 +66,17 @@ void EditorSettings::Save()
 	Camera& cam = CAMERA;
 
 	// Camera
-	WriteFloat("Camera", "FOV", cam.GetFOV());
+	WriteFloat("Camera", "FOV", cam.GetFOVX());
 	WriteFloat("Camera", "MoveSpeed", cam.GetSpeed());
 	WriteFloat("Camera", "MouseSensitivity", cam.GetRotationSpeed());
 
-	FVector location = cam.GetLocation();
-	WriteFloat("Camera", "PositionX", location.x);
-	WriteFloat("Camera", "PositionY", location.y);
-	WriteFloat("Camera", "PositionZ", location.z);
+	FVector location = cam.Location;
+	WriteFloat("Camera", "PositionX", location.X);
+	WriteFloat("Camera", "PositionY", location.Y);
+	WriteFloat("Camera", "PositionZ", location.Z);
 
-	FVector rotation = FQuaternion::ToEuler(cam.GetRotation());
-	WriteFloat("Camera", "Pitch", rotation.x);
-	WriteFloat("Camera", "Yaw", rotation.y);
-	WriteFloat("Camera", "Roll", rotation.z);
+	WriteFloat("Camera", "Yaw", cam.Yaw);
+	WriteFloat("Camera", "Pitch", cam.Pitch);
 
 	WriteInt("Camera", "ProjectionMode", cam.GetProjectionMode());
 	WriteInt("Camera", "ViewMode", static_cast<int>(cam.ViewMode));

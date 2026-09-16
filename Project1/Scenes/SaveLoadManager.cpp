@@ -125,9 +125,9 @@ void SaveLoadManager::SaveScene(const FString& path)
         
         json objJson;
         // objJson["UUID"]     = actor->GetID();
-        objJson["Location"] = { location.x, location.y, location.z }; // {x,y,z}-> [x,y,z] 형태로 저장됨
-        objJson["Rotation"] = { euler.x, euler.y, euler.z };
-        objJson["Scale"]    = { scale.x, scale.y, scale.z };
+        objJson["Location"] = { location.X, location.Y, location.Z }; // {x,y,z}-> [x,y,z] 형태로 저장됨
+        objJson["Rotation"] = { euler.X, euler.Y, euler.Z };
+        objJson["Scale"]    = { scale.X, scale.Y, scale.Z };
         // objJson["Class"]    = string(actor->GetObjClassName()); // ACube, ASphere ...
         objJson["Type"]     = EPrimitiveToStr(type);           // Sphere -> "Sphere", Cube -> "Cube"
         objJson["Color"] = { color.r, color.g, color.b, color.a };

@@ -34,7 +34,7 @@ void Scene::Update(float DeltaTime)
 		}
 	}
 	PICK.Update();
-	Grid.Update(CAMERA.GetLocation());
+	Grid.Update(CAMERA.Location);
 
 	// 삭제 예약 된 객체 정리
 	OBJECT.ProcessPendingDestroy();
@@ -42,8 +42,8 @@ void Scene::Update(float DeltaTime)
 
 void Scene::Render()
 {
-	FMatrix ViewProjection = CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(RENDER.GetViewport().Width / RENDER.GetViewport().Height);
-	FVector CameraLocation = CAMERA.GetLocation();
+	FMatrix ViewProjection = CAMERA.GetViewProjectionMatrix(RENDER.GetViewport().Width / RENDER.GetViewport().Height);
+	FVector CameraLocation = CAMERA.Location;
 
 	CONTEXT.UpdateConstantBuffer(
 		FrameBuffer, 
@@ -124,7 +124,7 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 			else if (ASkySphere* SkySphere = Cast<ASkySphere>(objects[i]))
 			{
 				Transform SkyTransform = SkySphere->GetTransform();
-				SkyTransform.SetLocation(CAMERA.GetLocation());
+				SkyTransform.SetLocation(CAMERA.Location);
 
 				ObjectData.Add(FMeshRenderData{
 					.Mesh = *RESOURCES.GetMesh("SkySphere"),

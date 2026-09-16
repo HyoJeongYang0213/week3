@@ -88,10 +88,10 @@ inline TArray<FVertexData> CreateSphereVertices(float radius = 0.5f, int slices 
 inline const FVertexData font_quad_vertices[] =
 {
 	// Position              Color          UV                   Normal
-	{ -0.5f,  0.5f, 0,      1,1,1,1,       33.0f / 128, 0,         -1,  1, 0 }, // 좌상
-	{ 0.5f,  0.5f, 0,      1,1,1,1,       34.0f / 128, 0,          1,  1, 0 }, // 우상
-	{ -0.5f, -0.5f, 0,      1,1,1,1,       33.0f / 128, 1.0f / 128,  -1, -1, 0 }, // 좌하
-	{ 0.5f, -0.5f, 0,      1,1,1,1,       34.0f / 128, 1.0f / 128,   1, -1, 0 }, // 우하
+	{ 0.0f, -0.5f,  0.5f,      1,1,1,1,       33.0f / 128, 0,         -1,  1, 0 }, // 좌상
+	{ 0.0f, 0.5f,  0.5f,      1,1,1,1,       34.0f / 128, 0,          1,  1, 0 }, // 우상
+	{ 0.0f, -0.5f, -0.5f,      1,1,1,1,       33.0f / 128, 1.0f / 128,  -1, -1, 0 }, // 좌하
+	{ 0.0f, 0.5f, -0.5f,      1,1,1,1,       34.0f / 128, 1.0f / 128,   1, -1, 0 }, // 우하
 };
 
 inline const uint32 font_quad_indices[] = { 0, 1, 2, 2, 1, 3 };
@@ -2751,10 +2751,10 @@ inline const TArray<FVertexData> arrow_vertices =
 
 inline const TArray<FVertexData> quad_vertices =
 {
-	{ -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-left (red)
-	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f }, // Bottom-right (green)
-	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f }, // Top-left (blue)
-	{ 1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f }, // Top-right (red)
+	{ 0.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-left (red)
+	{ 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f }, // Bottom-right (green)
+	{ 0.0f, -1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f }, // Top-left (blue)
+	{ 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f }, // Top-right (red)
 };
 
 inline const TArray<uint32> quad_indices = { 0, 2, 1, 1, 2, 3 };

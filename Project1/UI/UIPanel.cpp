@@ -59,23 +59,23 @@ void UIPanel_SceneCamera::Render()
 	}
 
 	// 카메라 시야각 조절 슬라이더
-	float fov = cam.GetFOV();
+	float fov = cam.GetFOVX();
 	if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
-		cam.SetFOV(fov);
+		cam.SetFOVX(fov);
 	
 	// 카메라 위치 조절 슬라이더
-	FVector camLoc = cam.GetLocation();
-	if (ImGui::DragFloat3("Cam Pos", &camLoc.x, 0.05f, -20.0f, 20.0f))
+	FVector camLoc = cam.Location;
+	if (ImGui::DragFloat3("Cam Pos", &camLoc.X, 0.05f, -20.0f, 20.0f))
 	{
-		cam.SetLocation(camLoc);
+		cam.Location = camLoc;
 	}
 
 	// 카메라 각도 조절 슬라이더
-	FVector camEuler = FQuaternion::ToEuler(cam.GetRotation());
-	if (ImGui::DragFloat3("Cam Rot", &camEuler.x, 0.01f, -3.14f, 3.14f))
-	{
-		cam.SetRotation(FQuaternion::FromEuler(camEuler.x, camEuler.y, camEuler.z));
-	}
+	ImGui::SetNextItemWidth(100.0f);
+	ImGui::DragFloat("Yaw", &cam.Yaw, 0.1f);
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(100.0f);
+	ImGui::DragFloat("Pitch", &cam.Pitch, 0.1f, -89.0f, 89.0f);
 
 	//카메라 이동 속도 및 회전 마우스 감도 조절 슬라이더
 	ImGui::SliderFloat("Move Speed", &cam.GetSpeedRef(), 0.5f, 20.0f, "%.1f");
@@ -84,8 +84,9 @@ void UIPanel_SceneCamera::Render()
 	// 카메라 설정 리셋 버튼
 	if (ImGui::Button("Reset Camera"))
 	{
-		cam.SetLocation(FVector(3.336f, 3.282f, -4.715f));
-		cam.SetRotation(FQuaternion::FromEuler(0.391f, -0.468f, 0.0f));
+		cam.Location = CAMERA.DefaultLocation;
+		cam.Pitch = CAMERA.DefaultPitch;
+		cam.Yaw = CAMERA.DefaultYaw;
 	}
 	
 	Scene* scene = SCENE.GetCurrentScene();
@@ -391,7 +392,7 @@ void UIPanel_Spawn::Render()
 
 	// 난수 생성 및 범위 설정 -> spawn 위치 지정을 위해
 	// 화면 안에 spawn 되도록 수정
-	FVector camLocation = CAMERA.GetLocation();
+	FVector camLocation = CAMERA.Location;
 	FVector camForward = CAMERA.GetForward();
 
 	static std::mt19937 rng(std::random_device{}());
@@ -539,7 +540,7 @@ void UIPanel_Picking::Render()
 			// 위치 편집
 			FVector loc = pickedActor->GetLocation();
 			ImGui::Text("Location");
-			if (ImGui::DragFloat3(("##Location##" + uid).c_str(), &loc.x, 0.01f))
+			if (ImGui::DragFloat3(("##Location##" + uid).c_str(), &loc.X, 0.01f))
 			{
 				pickedActor->SetLocation(loc);
 			}
@@ -553,15 +554,15 @@ void UIPanel_Picking::Render()
 			if (uid != s_lastActorID || !s_isEditingInImGui)
 			{
 				FVector eulerRad = FQuaternion::ToEuler(pickedActor->GetRotation());
-				s_euler[0] = eulerRad.x * (180.0f / Global::PI);
-				s_euler[1] = eulerRad.y * (180.0f / Global::PI);
-				s_euler[2] = eulerRad.z * (180.0f / Global::PI);
+				s_euler[0] = eulerRad.X * (180.0f / Global::PI);
+				s_euler[1] = eulerRad.Y * (180.0f / Global::PI);
+				s_euler[2] = eulerRad.Z * (180.0f / Global::PI);
 				s_lastActorID = uid;
 			}
 
 			ImGui::Text("Rotation");
 			// 위젯 조작 시에만 각도를 라디안으로 변환하여 적용
-			if (ImGui::DragFloat3(("##Rotation##" + uid).c_str(), s_euler, 1.0))
+			if (ImGui::DragFloat3(("##Rotation##" + uid).c_str(), s_euler, 0.3f))
 			{
 				s_isEditingInImGui = true;
 				FQuaternion newRot = FQuaternion::FromEuler(
@@ -575,7 +576,7 @@ void UIPanel_Picking::Render()
 			// Scale Editor
 			FVector scale = pickedActor->GetScale();
 			ImGui::Text("Scale");
-			if (ImGui::DragFloat3(("##Scale##" + uid).c_str(), &scale.x, 0.01f))
+			if (ImGui::DragFloat3(("##Scale##" + uid).c_str(), &scale.X, 0.01f))
 			{
 				pickedActor->SetScale(scale);
 			}

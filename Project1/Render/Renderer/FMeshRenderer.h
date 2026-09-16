@@ -19,8 +19,8 @@ struct FMeshRenderData
 	FLinearColor Color;
 	bool bSelected = false;
 	bool bWireFrame = false;
-	FVector2D UVScale;
-	FVector2D UVOffset;
+	FVector2 UVScale;
+	FVector2 UVOffset;
 };
 
 class FMeshRenderer final

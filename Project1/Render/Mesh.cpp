@@ -48,16 +48,16 @@ void Mesh::ComputeLocalBoundingBox()
 {
 	if (Vertices.empty()) return;
 
-	BoundingBox.minX = BoundingBox.maxX = Vertices[0].x;
-	BoundingBox.minY = BoundingBox.maxY = Vertices[0].y;
-	BoundingBox.minZ = BoundingBox.maxZ = Vertices[0].z;
+	BoundingBox.minX = BoundingBox.maxX = Vertices[0].X;
+	BoundingBox.minY = BoundingBox.maxY = Vertices[0].Y;
+	BoundingBox.minZ = BoundingBox.maxZ = Vertices[0].Z;
 
 	for (auto vertice : Vertices) {
-		BoundingBox.minX = min(BoundingBox.minX, vertice.x);
-		BoundingBox.maxX = max(BoundingBox.maxX, vertice.x);
-		BoundingBox.minY = min(BoundingBox.minY, vertice.y);
-		BoundingBox.maxY = max(BoundingBox.maxY, vertice.y);
-		BoundingBox.minZ = min(BoundingBox.minZ, vertice.z);
-		BoundingBox.maxZ = max(BoundingBox.maxZ, vertice.z);
+		BoundingBox.minX = min(BoundingBox.minX, vertice.X);
+		BoundingBox.maxX = max(BoundingBox.maxX, vertice.X);
+		BoundingBox.minY = min(BoundingBox.minY, vertice.Y);
+		BoundingBox.maxY = max(BoundingBox.maxY, vertice.Y);
+		BoundingBox.minZ = min(BoundingBox.minZ, vertice.Z);
+		BoundingBox.maxZ = max(BoundingBox.maxZ, vertice.Z);
 	}
 }

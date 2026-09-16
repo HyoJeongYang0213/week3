@@ -7,26 +7,19 @@
 
 FRay PickingManager::ScreenToWorldRay(float mouseX, float mouseY, float screenW, float screenH) const
 {
-	// NDC -> View 
 	float ndcX = 2.0f * mouseX / screenW - 1.0f;
 	float ndcY = -2.0f * mouseY / screenH + 1.0f;
 
-	FMatrix proj = CAMERA.GetProjectionMatrix(screenW / screenH);
+	FMatrix InvVP = CAMERA.GetViewProjectionMatrix(screenW / screenH).Inverse();
 
-	float viewX = ndcX / proj.M[0][0];
-	float viewY = ndcY / proj.M[1][1];
+	// 개념 코드: 4차원 행벡터 연산
+	FVector4 NearH = FVector4(ndcX, ndcY, 0.0f, 1.0f) * InvVP;
+	FVector4 FarH = FVector4(ndcX, ndcY, 1.0f, 1.0f) * InvVP;
 
-	FMatrix view = CAMERA.GetViewMatrix();
-	FMatrix invView = view.InverseAffine();
+	FVector NearWorld = FVector{ NearH.X, NearH.Y, NearH.Z } / NearH.W;
+	FVector FarWorld = FVector{ FarH.X, FarH.Y, FarH.Z } / FarH.W;
 
-	// View -> World
-	FVector viewDirection(viewX, viewY, 1.0f);
-	FVector worldDirection = TransformDirection(viewDirection, invView);
-	worldDirection.Normalize();
-
-	FVector worldOrigin = CAMERA.GetLocation();
-
-	return FRay{ worldOrigin, worldDirection };
+	return FRay{ NearWorld, (FarWorld - NearWorld).Normalized() };
 }
 
 FRay PickingManager::ScreenToWorldRay() const

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "FVector.h"
 #include "FMatrix.h"
@@ -29,7 +29,7 @@ public:
 	// 오일러를 입력으로 받는 생성자
 	Transform(const FVector& InLocation, const FVector& InRotation = FVector(0.0f, 0.0f, 0.0f), const FVector& InScale = FVector(1.0f, 1.0f, 1.0f))
 		: Location(InLocation)
-		, Rotation(FQuaternion::FromEuler(InRotation.x, InRotation.y, InRotation.z))
+		, Rotation(FQuaternion::FromEuler(InRotation.X, InRotation.Y, InRotation.Z))
 		, Scale(InScale)
 		, WorldMat(FMatrix::Identity())
 	{
@@ -72,7 +72,7 @@ public:
 	void SetLocation(const FVector& InLocation) { Location = InLocation; UpdateWorldMatrix(); }
 	void SetRotationEuler(const FVector& InRotation)
 	{
-		Rotation = FQuaternion::FromEuler(InRotation.x, InRotation.y, InRotation.z);
+		Rotation = FQuaternion::FromEuler(InRotation.X, InRotation.Y, InRotation.Z);
 		UpdateWorldMatrix();
 	}
 	void SetRotation(const FQuaternion& InRotation) { Rotation = InRotation; UpdateWorldMatrix(); }
@@ -86,27 +86,9 @@ public:
 	void SetWorldMatrix(const FMatrix& InWorldMatrix) { WorldMat = InWorldMatrix; }
 	const FMatrix& GetWorldMatrix() const { return WorldMat; }
 
-	FVector Forward() const //현재 상태에서 앞 (+Z)
-	{
-		FVector v(WorldMat.M[2][0], WorldMat.M[2][1], WorldMat.M[2][2]);
-		v.Normalize();
-		return v;
-	}
-
-	FVector Up() const //현재 상태에서 위 (+Y)
-	{
-		FVector v(WorldMat.M[1][0], WorldMat.M[1][1], WorldMat.M[1][2]);
-		v.Normalize();
-		return v;
-	}
-
-	FVector Right() const//현재 상태에서 오른쪽 (+X)
-	{
-		FVector v(WorldMat.M[0][0], WorldMat.M[0][1], WorldMat.M[0][2]);
-		v.Normalize();
-		return v;
-	}
-
+	FVector Forward() const { return FVector{ WorldMat.M[0][0], WorldMat.M[0][1], WorldMat.M[0][2] }.Normalized(); }
+	FVector Right() const { return FVector{ WorldMat.M[1][0], WorldMat.M[1][1], WorldMat.M[1][2] }.Normalized(); }
+	FVector Up() const { return FVector{ WorldMat.M[2][0], WorldMat.M[2][1], WorldMat.M[2][2] }.Normalized(); }
 
 public:
 	FVector Location;

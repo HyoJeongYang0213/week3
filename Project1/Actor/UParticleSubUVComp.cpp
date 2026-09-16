@@ -40,14 +40,14 @@ void UParticleSubUVComp::Update(float DeltaTime)
 	UpdateUVCoordinate();
 }
 
-FVector2D UParticleSubUVComp::GetSubUVScale()
+FVector2 UParticleSubUVComp::GetSubUVScale()
 {
-	return FVector2D(CellSizeU, CellSizeV);
+	return FVector2(CellSizeU, CellSizeV);
 }
 
-FVector2D UParticleSubUVComp::GetSubUVOffset()
+FVector2 UParticleSubUVComp::GetSubUVOffset()
 {
-	return FVector2D(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
+	return FVector2(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
 }
 
 void UParticleSubUVComp::Initialize()
