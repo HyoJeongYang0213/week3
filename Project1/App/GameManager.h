@@ -11,6 +11,8 @@ private:
 
 	void Update();
 	void Render();
+
+	void BuildImGuiLayout();
 	
 public:
 	GameManager();

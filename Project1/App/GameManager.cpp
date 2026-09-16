@@ -27,7 +27,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			UINT height = HIWORD(lParam);
 
 			RENDER.Resize(width, height);
-			ConsoleWindow::GetInstance().RequestResize();
 		}
 		break;
 	}
@@ -89,7 +88,12 @@ void GameManager::InitImgui()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	
+	ImGui::GetStyle().ScaleAllSizes(1.3f);
+	ImGui::GetStyle().FontScaleDpi = 1.3f;
 	ImGui::StyleColorsDark();
+
 	ImGui_ImplWin32_Init((void*)m_mainWindow);
 	ImGui_ImplDX11_Init(&DEVICE.GetNativeDevice(), &CONTEXT.GetNativeContext());
 }
@@ -100,6 +104,7 @@ void GameManager::mainLoop()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+	BuildImGuiLayout();
 
 	// 게임 로직 업데이트
 	Update();
@@ -123,13 +128,12 @@ void GameManager::Render()
 	CONTEXT.ClearRenderTarget(RENDER.GetBackBufferRTV(), ClearColor);
 	CONTEXT.ClearDepthStencil(RENDER.GetDepthStencilView());
 
-	ConsoleWindow::GetInstance().DrawConsole();
-
 	// 씬 오브젝트 렌더링
 	SCENE.Render();
 
 	// 임구이 렌더링
 	IMGUI.RenderAll();
+	ConsoleWindow::GetInstance().DrawConsole();
 	ImGui::Render();
 
 	ImDrawData* drawData = ImGui::GetDrawData();
@@ -140,6 +144,42 @@ void GameManager::Render()
 
 	// 스왑체인 버퍼 교체
 	RENDER.SwapBuffer();
+}
+
+void GameManager::BuildImGuiLayout()
+{
+	ImGuiViewport* Viewport = ImGui::GetMainViewport();
+	ImGuiID DockSpaceID = ImGui::GetID("DockSpace");
+
+	static bool bFirstTime = true;
+	if (bFirstTime)
+	{
+		ImGui::DockBuilderAddNode(DockSpaceID, ImGuiDockNodeFlags_DockSpace);
+		ImGui::DockBuilderSetNodeSize(DockSpaceID, Viewport->Size);
+
+		ImGuiID MainID = DockSpaceID;
+
+		ImGuiID SceneCameraID = ImGui::DockBuilderSplitNode(MainID, ImGuiDir_Left, 0.2f, nullptr, &MainID);
+
+		ImGuiID RightID = ImGui::DockBuilderSplitNode(MainID, ImGuiDir_Right, 0.2f, nullptr, &MainID);
+		ImGuiID SceneManagerID = ImGui::DockBuilderSplitNode(RightID, ImGuiDir_Up, 0.22f, nullptr, &RightID);
+		ImGuiID SpawnID = ImGui::DockBuilderSplitNode(RightID, ImGuiDir_Up, 0.25f, nullptr, &RightID);
+		ImGuiID PickingID = RightID;
+
+		ImGuiID DebugConsoleID = ImGui::DockBuilderSplitNode(MainID, ImGuiDir_Down, 0.15f, nullptr, &MainID);
+
+		ImGui::DockBuilderDockWindow("Scene & Camera", SceneCameraID);
+		ImGui::DockBuilderDockWindow("Scene Manager", SceneManagerID);
+		ImGui::DockBuilderDockWindow("Spawn Primitives", SpawnID);
+		ImGui::DockBuilderDockWindow("Inspector", PickingID);
+		ImGui::DockBuilderDockWindow("Console", DebugConsoleID);
+		ImGui::DockBuilderDockWindow("Engine Debug Info", DebugConsoleID);
+
+		ImGui::DockBuilderFinish(DockSpaceID);
+
+		bFirstTime = false;
+	}
+	ImGui::DockSpaceOverViewport(DockSpaceID, Viewport, ImGuiDockNodeFlags_PassthruCentralNode);
 }
 
 void GameManager::ReleaseAll()
