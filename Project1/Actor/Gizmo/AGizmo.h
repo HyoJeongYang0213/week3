@@ -58,6 +58,8 @@ public:
 	}
 	bool GetHovered() const { return bHovered; }
 
+	virtual bool IsEditorOnly() const override { return true; }
+
 	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
 	bool GetIsLocal() const { return bIsLocal; }
 
@@ -119,6 +121,8 @@ public:
 
 	bool GetIsLocal() const { return bIsLocal; }
 	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
+
+	virtual bool IsEditorOnly() const override { return true; }
 
 private:
 	TWeakObjectPtr<AActor> TargetActor;

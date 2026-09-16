@@ -225,7 +225,8 @@ void UIPanel_SaveLoad::Render()
     if (ImGui::Button("New Scene"))
 	{
         // Collider만 삭제 (Grid, World Axis Gizmo 삭제되지 않도록)
-		OBJECT.DestroyAllColliders();
+		OBJECT.DestoryAllSceneActor();
+
 		PICK.pickedObjcect = nullptr;
 		if (AGizmo::MainGizmo)
 		{

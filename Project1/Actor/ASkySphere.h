@@ -32,4 +32,6 @@ public:
 		return false;
 	}
 
+	virtual bool IsEditorOnly() const override { return true; }
+
 };
