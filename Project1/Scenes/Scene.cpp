@@ -25,6 +25,8 @@ Scene::Scene(): FrameBuffer(DEVICE.CreateConstantBuffer(sizeof(FrameConstants)))
 
 void Scene::Update(float DeltaTime)
 {
+	PICK.Update();
+
 	auto& Objects = OBJECT.GUObjectArray;
 	for (size_t i = 0; i < Objects.size(); ++i)
 	{
@@ -33,7 +35,7 @@ void Scene::Update(float DeltaTime)
 			Objects[i]->Update(DeltaTime);
 		}
 	}
-	PICK.Update();
+	
 	Grid.Update(CAMERA.GetLocation());
 
 	// 삭제 예약 된 객체 정리
