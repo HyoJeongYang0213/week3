@@ -47,7 +47,13 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 	float dist = (gizmoPos - camPos).Length();
 	float scaleFactor = dist * 0.1f;
 
-	transform.SetScale(FVector(scaleFactor, scaleFactor, scaleFactor));
+	float ScaleAxisFactor = scaleFactor;
+	if (mode && *mode == EGizmoMode::Scale && bSelected)
+	{
+		ScaleAxisFactor = scaleFactor + currentDragDist;
+	}
+
+	transform.SetScale(FVector(scaleFactor, ScaleAxisFactor, scaleFactor));
 
 	FMatrix S = FMatrix::Scale(transform.Scale);
 	FMatrix R = transform.Rotation.ToMatrix();
