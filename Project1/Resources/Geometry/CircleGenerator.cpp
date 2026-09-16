@@ -17,12 +17,12 @@ TArray<FVertexData> CircleGenerator::MakeCircle(int segmentCount, float r, float
         vertices.Add({ 0.0f, 0.0f, 0.0f, r, g, b, a });
         
         // 다음 둘레점
-        vertices.Add({ cosf(theta2), sinf(theta2), 0.0f, r, g, b, a });
+        vertices.Add({ 0.0f, cosf(theta2), sinf(theta2), r, g, b, a });
 
         // 현재 둘레점
-        vertices.Add({ cosf(theta1), sinf(theta1), 0.0f, r, g, b, a });
+        vertices.Add({ 0.0f, cosf(theta1), sinf(theta1), r, g, b, a });
     }
-    for (int32 i = segmentCount - 1; i << segmentCount >= 0; --i)
+    for (int32 i = segmentCount - 1; i >= 0; --i)
     {
         float theta1 = (2.0f * Global::PI * i) / segmentCount;
         float theta2 = (2.0f * Global::PI * (i + 1)) / segmentCount;
@@ -31,10 +31,10 @@ TArray<FVertexData> CircleGenerator::MakeCircle(int segmentCount, float r, float
         vertices.Add({ 0.0f, 0.0f, 0.0f, b, r, g, a });
 
         // 현재 둘레점
-        vertices.Add({ cosf(theta1), sinf(theta1), 0.0f, b, r, g, a });
+        vertices.Add({ 0.0f, cosf(theta1), sinf(theta1), b, r, g, a });
 
         // 다음 둘레점
-        vertices.Add({ cosf(theta2), sinf(theta2), 0.0f, b, r, g, a });
+        vertices.Add({ 0.0f, cosf(theta2), sinf(theta2), b, r, g, a });
 
         
     }

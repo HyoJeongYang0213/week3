@@ -29,7 +29,7 @@ float4 mainPS(PS_INPUT input) : SV_TARGET
     float distance = length(input.worldPosition - CameraPos);
     
     // fov 기반
-    float h = abs(CameraPos.y - input.worldPosition.y);
+    float h = abs(CameraPos.z);
     float fadeEnd = min(20.0f * sqrt(h), 80.0f);
     float fadeStart = fadeEnd * 0.3f;
 

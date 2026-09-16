@@ -1,72 +1,40 @@
 ﻿#include "pch.h"
 #include "Camera.h"
 #include "Global.h"
-#include "Transform.h"
-
 
 Camera::Camera()
 {
 	//기본 카메라 위치 및 회전 설정
-	transform.SetLocation(FVector(3.336f, 3.282f, -4.715f));
-	transform.SetRotation(FQuaternion::FromEuler(0.391f, -0.468f, 0.0f));
+	Location = DefaultLocation;
+	Pitch = DefaultPitch;
+	Yaw = DefaultYaw;
 }
 
-void Camera::Rotate(float deltaYaw, float deltaPitch)
+void Camera::MoveForward(float delta)
 {
-	/////////////////
-	//// 쿼터니언 ////
-	////////////////
-
-	float yawRad   = deltaYaw   * (Global::PI / 180.0f);
-	float pitchRad = deltaPitch * (Global::PI / 180.0f);
-
-	// yaw : 월드 Y축 기준
-	// pitch : 카메라 로컬 X축 기준
-	FQuaternion qYaw   = FQuaternion::FromAxisAngle(FVector(0.0f, 1.0f, 0.0f), yawRad);
-	FQuaternion qPitch = FQuaternion::FromAxisAngle(FVector(1.0f, 0.0f, 0.0f), pitchRad);
-
-	FQuaternion newRot = qYaw * transform.GetRotation() * qPitch;
-	transform.SetRotation(newRot.Normalized());
-}
-	///////////////
-	//// 오일러 ////
-	///////////////
-
-	// float deltaYawRad = deltaYaw * (Global::PI / 180.0f);
-	// float deltaPitchRad = deltaPitch * (Global::PI / 180.0f);
-
-	// FQuaternion rot = transform.GetRotation();
-	// rot.y += deltaYawRad;
-	// rot.x += deltaPitchRad;
-
-	// // 짐벌락 방지 (-89도 ~ +89도)
-	// float maxPitch = 89.0f * (Global::PI / 180.0f);
-	// if (rot.x > maxPitch)
-	// 	rot.x = maxPitch;
-	// if (rot.x < -maxPitch)
-	// 	rot.x = -maxPitch;
-
-	// transform.SetRotation(rot);
-
-
-FMatrix Camera::GetViewMatrix() const
-{
-	const FVector& eye = transform.GetLocation();
-	FVector target = eye + transform.Forward();
-	FVector up = transform.Up();
-
-	return FMatrix::LookAt(eye, target, up);
+	Location += GetForward() * delta;
 }
 
-FMatrix Camera::GetProjectionMatrix(float aspectRatio) const
+void Camera::MoveRight(float delta)
 {
-	if (ProjectionMode == EProjectionMode::Orthographic) {
-		return FMatrix::Orthographic(OrthoWidth, OrthoWidth/aspectRatio, NearZ, FarZ);
-	}
-	else {
-		float fovRadians = fov * (Global::PI / 180.0f);
-		return FMatrix::PerspectiveFov(fovRadians, aspectRatio, NearZ, FarZ);
-	}
+	Location += GetRight() * delta;
+}
+
+void Camera::MoveWorldUp(float delta)
+{
+	Location += FVector::Up * delta;
+}
+
+FMatrix Camera::GetViewProjectionMatrix(float Aspect) const
+{
+	static FMatrix UEViewToD3D = { {
+		{ 0, 0, 1, 0 },
+		{ 1, 0, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 0, 0, 1 }
+	} };
+
+	return GetViewMatrix() * UEViewToD3D * GetProjectionMatrix(Aspect);
 }
 
 void Camera::Update()
@@ -92,7 +60,7 @@ void Camera::Update()
 	//카메라 회전 처리
 	if (INPUT.GetMouseButton(MouseButton::RIGHT)) {
 		FIntPoint delta = INPUT.GetMouseDelta();
-		Rotate(delta.X * rotationSpeed, delta.Y * rotationSpeed);
+		Rotate(delta.X * rotationSpeed, -delta.Y * rotationSpeed);
 	}
 
 	// 카메라 줌인/줌아웃 처리
@@ -124,5 +92,25 @@ void Camera::UpdateOrthoWidth(float ZoomSpeed)
 		return;
 	}
 	OrthoWidth *= (1 - ZoomSpeed);
+}
+
+FMatrix Camera::GetViewMatrix() const
+{
+	const FVector& Eye = Location;
+	FVector Target = Eye + GetForward();
+	FVector Up = GetUp();
+
+	return FMatrix::LookAt(Eye, Target, Up);
+}
+
+FMatrix Camera::GetProjectionMatrix(float Aspect) const
+{
+	if (ProjectionMode == EProjectionMode::Orthographic) {
+		return FMatrix::Orthographic(OrthoWidth, OrthoWidth / Aspect, NearZ, FarZ);
+	}
+	else {
+		float fovRadians = FovX * (Global::PI / 180.0f);
+		return FMatrix::PerspectiveFov(fovRadians, Aspect, NearZ, FarZ);
+	}
 }
 

@@ -13,7 +13,7 @@ void RenderSystem::Initialize(HWND Window)
 		.BufferDesc = {
 			.Width = 0u,
 			.Height = 0u,
-			.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+			.Format = DXGI_FORMAT_B8G8R8A8_UNORM,
 		},
 		.SampleDesc = {
 			.Count = 1u,
@@ -75,6 +75,7 @@ void RenderSystem::Resize(UINT Width, UINT Height)
 	Context.Context->OMSetRenderTargets(0, nullptr, nullptr);
 
 	BackBufferRTV.Reset();
+	BackBufferUNormRTV.Reset();
 	BackBuffer.Reset();
 	DepthStencilBuffer.Reset();
 	DepthStencilView.Reset();
@@ -98,7 +99,18 @@ void RenderSystem::CreateSwapChainResources(UINT Width, UINT Height)
 	};
 
 	SwapChain->GetBuffer(0u, IID_PPV_ARGS(&BackBuffer));
-	NativeDevice->CreateRenderTargetView(BackBuffer.Get(), nullptr, &BackBufferRTV);
+
+	D3D11_RENDER_TARGET_VIEW_DESC SRGBDesc{
+		.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+		.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D,
+	};
+	NativeDevice->CreateRenderTargetView(BackBuffer.Get(), &SRGBDesc, &BackBufferRTV);
+
+	D3D11_RENDER_TARGET_VIEW_DESC UNormDesc{
+		.Format = DXGI_FORMAT_B8G8R8A8_UNORM,
+		.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D,
+	};
+	NativeDevice->CreateRenderTargetView(BackBuffer.Get(), &UNormDesc, &BackBufferUNormRTV);
 
 	const D3D11_TEXTURE2D_DESC DepthStencilDesc{
 		.Width = Width,

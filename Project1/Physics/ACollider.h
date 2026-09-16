@@ -76,8 +76,8 @@ public:
   virtual void Released() override;
   virtual float GetInertia() const {
     return Mass *
-           (transform.Scale.x * transform.Scale.x +
-            transform.Scale.y * transform.Scale.y) /
+           (transform.Scale.X * transform.Scale.X +
+            transform.Scale.Y * transform.Scale.Y) /
            12.0f;
   }
 
@@ -118,7 +118,7 @@ class ASphere : public ACollider {
 public:
   ASphere(const FLinearColor &inColor = FLinearColor(0.0f, 0.0f, 0.0f, 0.0f));
 
-  float GetRadius() const { return transform.Scale.x * 0.5f; }
+  float GetRadius() const { return transform.Scale.X * 0.5f; }
   virtual float GetInertia() const override {
     float r = GetRadius();
     return 0.5f * Mass * r * r;

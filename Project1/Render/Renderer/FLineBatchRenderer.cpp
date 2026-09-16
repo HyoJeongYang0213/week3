@@ -9,11 +9,11 @@ void FLineBatchRenderer::AddLine(const FVector& Start, const FVector& End, const
 	Indices.Add(static_cast<uint32>(Vertices.size() + 1));
 
 	FVertexData v0;
-	v0.x = Start.x; v0.y = Start.y; v0.z = Start.z;
+	v0.x = Start.X; v0.y = Start.Y; v0.z = Start.Z;
 	v0.r = Color.r; v0.g = Color.g; v0.b = Color.b; v0.a = Color.a;
 
 	FVertexData v1;
-	v1.x = End.x; v1.y = End.y; v1.z = End.z;
+	v1.x = End.X; v1.y = End.Y; v1.z = End.Z;
 	v1.r = Color.r; v1.g = Color.g; v1.b = Color.b; v1.a = Color.a;
 
 	float overlayFlag = bOverlay ? 1.0f : 0.0f;
@@ -83,7 +83,7 @@ void FLineBatchRenderer::AddBox(const FVector Corners[8], const FLinearColor& Co
 	// 점 8개부터 넣기
 	for (int i = 0; i < 8; i++) {
 		FVertexData v;
-		v.x = Corners[i].x; v.y = Corners[i].y; v.z = Corners[i].z;
+		v.x = Corners[i].X; v.y = Corners[i].Y; v.z = Corners[i].Z;
 		v.r = Color.r; v.g = Color.g; v.b = Color.b; v.a = Color.a;
 		v.u = (bOverlay ? 1.0f : 0.0f);
 		Vertices.Add(v);

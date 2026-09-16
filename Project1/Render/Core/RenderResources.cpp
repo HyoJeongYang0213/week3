@@ -25,7 +25,9 @@ void RenderResources::RegisterDefaultResources()
 	CreateMesh("GizmoLocation", arrow_vertices, arrow_indices);
 	CreateMesh("GizmoRotate", rotate_ring_vertices, rotate_ring_indices);
 	CreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
-	CreateMesh("SkySphere", skysphere_vertices, skysphere_indices);
+	auto skysphere_indices_reverse = skysphere_indices;
+	ranges::reverse(skysphere_indices_reverse);
+	CreateMesh("SkySphere", skysphere_vertices, skysphere_indices_reverse);
 	CreateMesh("Billboard", quad_vertices, quad_indices);
 	CreateMesh("LightBulb", CreateBulbVertices());
 
@@ -46,9 +48,9 @@ void RenderResources::RegisterDefaultResources()
 	CreatePixelShader(PixelShaderType::Font, ExecutableDirectory + L"\\Shader\\FontPS.cso");
 	CreatePixelShader(PixelShaderType::SubUV, ExecutableDirectory + L"\\Shader\\SubUVPS.cso");
 
-	CreateTexture("SkyTexture", L"Resources\\Textures\\sky.jpg"); // TODO: 릴리즈 시 수정
+	CreateTexture("SkyTexture", L"Resources\\Textures\\sky.jpg", true); // TODO: 릴리즈 시 수정
 	CreateTexture("FontAtlas", L"Resources\\Textures\\Pretendard-Regular.dds"); // TODO: 릴리즈 시 수정
-	CreateTexture("Explosion", L"Resources\\Textures\\Explosion.PNG"); // TODO: 릴리즈 시 
+	CreateTexture("Explosion", L"Resources\\Textures\\Explosion.PNG", true); // TODO: 릴리즈 시 
 	CreateTexture("Fire", L"Resources\\Textures\\fire.png"); // TODO: 릴리즈 시 수정
 
 
@@ -135,22 +137,29 @@ const Texture* RenderResources::GetTexture(const FString& Name)
 	return nullptr;
 }
 
-const Texture& RenderResources::CreateTexture(const FString& Name, const FWString& FileName)
+const Texture& RenderResources::CreateTexture(const FString& Name, const FWString& FileName, bool bSRGB)
 {
 	const bool bDDS = std::filesystem::path(FileName).extension() == L".dds";
 
+	Textures[Name] = Texture{};
+
 	DirectX::ScratchImage Image;
+	DirectX::TexMetadata Metadata;
 	if (bDDS)
 	{
-		DirectX::LoadFromDDSFile(FileName.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, Image);
+		DirectX::LoadFromDDSFile(FileName.c_str(), DirectX::DDS_FLAGS_NONE, &Metadata, Image);
 	}
 	else
 	{
-		DirectX::LoadFromWICFile(FileName.c_str(), DirectX::WIC_FLAGS_NONE, nullptr, Image);
+		DirectX::LoadFromWICFile(FileName.c_str(), DirectX::WIC_FLAGS_IGNORE_SRGB, &Metadata, Image);
 	}
 
-	Textures[Name] = Texture{};
-	DirectX::CreateShaderResourceView(&Device.GetNativeDevice(), Image.GetImages(), Image.GetImageCount(), Image.GetMetadata(), &Textures[Name]->SRV);
+	Metadata.format = bSRGB 
+		? DirectX::MakeSRGB(Metadata.format) 
+		: DirectX::MakeLinear(Metadata.format);
+	Image.OverrideFormat(Metadata.format);
+
+	DirectX::CreateShaderResourceView(&Device.GetNativeDevice(), Image.GetImages(), Image.GetImageCount(), Metadata, &Textures[Name]->SRV);
 
 	return *Textures[Name];
 }

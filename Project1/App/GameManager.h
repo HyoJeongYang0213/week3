@@ -12,6 +12,7 @@ private:
 	void Update();
 	void Render();
 
+	void SetImGuiStyle();
 	void BuildImGuiLayout();
 	
 public:

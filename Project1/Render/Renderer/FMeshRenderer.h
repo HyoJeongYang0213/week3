@@ -19,8 +19,8 @@ struct FMeshRenderData
 	FLinearColor Color;
 	bool bSelected = false;
 	bool bWireFrame = false;
-	FVector2D UVScale;
-	FVector2D UVOffset;
+	FVector2 UVScale;
+	FVector2 UVOffset;
 };
 
 class FMeshRenderer final
@@ -78,7 +78,7 @@ inline void FMeshRenderer::Render(const ConstantBuffer& FrameBuffer, const TArra
 			.World = World.Transpose(),
 		});
 		CONTEXT.UpdateConstantBuffer(ColorBuffer, ColorConstants{
-			.CustomColor = Color,
+			.CustomColor = bSelected && CAMERA.ViewMode == EViewMode::Wireframe ? FLinearColor::LatteYellow : Color,
 			.UseTexture = false,
 		});
 		CONTEXT.UpdateConstantBuffer(SubUVBuffer, SubUVConstants{

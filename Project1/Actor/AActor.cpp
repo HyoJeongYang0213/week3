@@ -56,17 +56,17 @@ FBoundingBox AActor::GetWorldBoundingBox() const
     // 월드좌표 내 [min, max] 범위 구하기 
     for (int i = 1; i < 8; i++) {
         FVector p = TransformPoint(localedges[i], world);
-        wmin.x = min(wmin.x, p.x);
-        wmax.x = max(wmax.x, p.x);
-        wmin.y = min(wmin.y, p.y);
-        wmax.y = max(wmax.y, p.y);
-        wmin.z = min(wmin.z, p.z);
-        wmax.z = max(wmax.z, p.z);
+        wmin.X = min(wmin.X, p.X);
+        wmax.X = max(wmax.X, p.X);
+        wmin.Y = min(wmin.Y, p.Y);
+        wmax.Y = max(wmax.Y, p.Y);
+        wmin.Z = min(wmin.Z, p.Z);
+        wmax.Z = max(wmax.Z, p.Z);
     }
 
     return FBoundingBox{
-    wmin.x, wmin.y, wmin.z,
-    wmax.x, wmax.y, wmax.z
+    wmin.X, wmin.Y, wmin.Z,
+    wmax.X, wmax.Y, wmax.Z
     };
 }
 

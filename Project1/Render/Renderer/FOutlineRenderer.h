@@ -69,5 +69,13 @@ inline void FOutlineRenderer::Render(const ConstantBuffer& FrameBuffer, const FO
 		.UseTexture = false });
 
 	CONTEXT.SetMesh(*Data.Mesh);
-	CONTEXT.Draw(Data.Mesh->GetVertexBuffer().GetCount());
+
+	if (Data.Mesh->IsIndexed())
+	{
+		CONTEXT.DrawIndexed(Data.Mesh->GetIndexBuffer()->GetCount());
+	}
+	else
+	{
+		CONTEXT.Draw(Data.Mesh->GetVertexBuffer().GetCount());
+	}
 }

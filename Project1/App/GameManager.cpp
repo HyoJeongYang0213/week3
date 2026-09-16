@@ -91,10 +91,8 @@ void GameManager::InitImgui()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	
-	ImGui::GetStyle().ScaleAllSizes(1.3f);
-	ImGui::GetStyle().FontScaleDpi = 1.3f;
-	ImGui::StyleColorsDark();
+
+	SetImGuiStyle();
 
 	ImGui_ImplWin32_Init((void*)m_mainWindow);
 	ImGui_ImplDX11_Init(&DEVICE.GetNativeDevice(), &CONTEXT.GetNativeContext());
@@ -138,6 +136,8 @@ void GameManager::Render()
 	// 임구이 렌더링
 	IMGUI.RenderAll();
 	ConsoleWindow::GetInstance().DrawConsole();
+
+	CONTEXT.SetRenderTarget(RENDER.GetBackBufferUNormRTV(), &RENDER.GetDepthStencilView());
 	ImGui::Render();
 
 	ImDrawData* drawData = ImGui::GetDrawData();
@@ -148,6 +148,121 @@ void GameManager::Render()
 
 	// 스왑체인 버퍼 교체
 	RENDER.SwapBuffer();
+}
+
+void GameManager::SetImGuiStyle()
+{
+	ImGuiStyle& Style = ImGui::GetStyle();
+	Style.ScaleAllSizes(1.3f);
+	Style.FontScaleDpi = 1.3f;
+
+	ImVec4* Colors = Style.Colors;
+	// Catppuccin Mocha Palette
+	// --------------------------------------------------------
+	const ImVec4 base = ImVec4(0.117f, 0.117f, 0.172f, 0.4f); // #1e1e2e
+	const ImVec4 mantle = ImVec4(0.109f, 0.109f, 0.156f, 0.4f); // #181825
+	const ImVec4 surface0 = ImVec4(0.200f, 0.207f, 0.286f, 0.4f); // #313244
+	const ImVec4 surface1 = ImVec4(0.247f, 0.254f, 0.337f, 0.4f); // #3f4056
+	const ImVec4 surface2 = ImVec4(0.290f, 0.301f, 0.388f, 0.4f); // #4a4d63
+	const ImVec4 surface2Opaque = ImVec4(0.290f, 0.301f, 0.388f, 0.9f); // #4a4d63
+	const ImVec4 overlay0 = ImVec4(0.396f, 0.403f, 0.486f, 1.0f); // #65677c
+	const ImVec4 overlay1 = ImVec4(0.498f, 0.518f, 0.612f, 1.0f); // #7f849c
+	const ImVec4 overlay2 = ImVec4(0.576f, 0.584f, 0.654f, 1.0f); // #9399b2
+	const ImVec4 text = ImVec4(0.803f, 0.815f, 0.878f, 1.0f); // #cdd6f4
+	const ImVec4 subtext0 = ImVec4(0.639f, 0.658f, 0.764f, 1.0f); // #a3a8c3
+	const ImVec4 mauve = ImVec4(0.796f, 0.698f, 0.972f, 1.0f); // #cba6f7
+	const ImVec4 peach = ImVec4(0.980f, 0.709f, 0.572f, 1.0f); // #fab387
+	const ImVec4 yellow = ImVec4(0.980f, 0.913f, 0.596f, 1.0f); // #f9e2af
+	const ImVec4 green = ImVec4(0.650f, 0.890f, 0.631f, 1.0f); // #a6e3a1
+	const ImVec4 teal = ImVec4(0.580f, 0.886f, 0.819f, 1.0f); // #94e2d5
+	const ImVec4 sapphire = ImVec4(0.458f, 0.784f, 0.878f, 1.0f); // #74c7ec
+	const ImVec4 blue = ImVec4(0.533f, 0.698f, 0.976f, 1.0f); // #89b4fa
+	const ImVec4 lavender = ImVec4(0.709f, 0.764f, 0.980f, 1.0f); // #b4befe
+
+	// Main window and backgrounds
+	Colors[ImGuiCol_WindowBg] = surface0;
+	Colors[ImGuiCol_ChildBg] = surface0;
+	Colors[ImGuiCol_PopupBg] = surface2Opaque;
+	Colors[ImGuiCol_Border] = surface1;
+	Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	Colors[ImGuiCol_FrameBg] = base;
+	Colors[ImGuiCol_FrameBgHovered] = surface1;
+	Colors[ImGuiCol_FrameBgActive] = surface2;
+	Colors[ImGuiCol_TitleBg] = mantle;
+	Colors[ImGuiCol_TitleBgActive] = surface0;
+	Colors[ImGuiCol_TitleBgCollapsed] = mantle;
+	Colors[ImGuiCol_MenuBarBg] = surface0;
+	Colors[ImGuiCol_ScrollbarBg] = surface0;
+	Colors[ImGuiCol_ScrollbarGrab] = surface2;
+	Colors[ImGuiCol_ScrollbarGrabHovered] = overlay0;
+	Colors[ImGuiCol_ScrollbarGrabActive] = overlay2;
+	Colors[ImGuiCol_CheckMark] = mauve;
+	Colors[ImGuiCol_CheckboxSelectedBg] = base;
+	Colors[ImGuiCol_SliderGrab] = overlay2;
+	Colors[ImGuiCol_SliderGrabActive] = mauve;
+	Colors[ImGuiCol_Button] = base;
+	Colors[ImGuiCol_ButtonHovered] = surface1;
+	Colors[ImGuiCol_ButtonActive] = mauve;
+	Colors[ImGuiCol_Header] = surface0;
+	Colors[ImGuiCol_HeaderHovered] = surface1;
+	Colors[ImGuiCol_HeaderActive] = surface2;
+	Colors[ImGuiCol_Separator] = surface1;
+	Colors[ImGuiCol_SeparatorHovered] = mauve;
+	Colors[ImGuiCol_SeparatorActive] = mauve;
+	Colors[ImGuiCol_ResizeGrip] = surface2;
+	Colors[ImGuiCol_ResizeGripHovered] = mauve;
+	Colors[ImGuiCol_ResizeGripActive] = mauve;
+	Colors[ImGuiCol_Tab] = surface0;
+	Colors[ImGuiCol_TabHovered] = surface1;
+	Colors[ImGuiCol_TabActive] = surface2;
+	Colors[ImGuiCol_TabUnfocused] = surface0;
+	Colors[ImGuiCol_TabUnfocusedActive] = surface1;
+	Colors[ImGuiCol_TabDimmedSelectedOverline] = mauve;
+	Colors[ImGuiCol_TabSelectedOverline] = mauve;
+	Colors[ImGuiCol_DockingPreview] = mauve;
+	Colors[ImGuiCol_DockingEmptyBg] = base;
+	Colors[ImGuiCol_PlotLines] = blue;
+	Colors[ImGuiCol_PlotLinesHovered] = peach;
+	Colors[ImGuiCol_PlotHistogram] = teal;
+	Colors[ImGuiCol_PlotHistogramHovered] = green;
+	Colors[ImGuiCol_TableHeaderBg] = surface0;
+	Colors[ImGuiCol_TableBorderStrong] = surface1;
+	Colors[ImGuiCol_TableBorderLight] = surface0;
+	Colors[ImGuiCol_TableRowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	Colors[ImGuiCol_TableRowBgAlt] = ImVec4(1.0f, 1.0f, 1.0f, 0.06f);
+	Colors[ImGuiCol_TextSelectedBg] = surface2;
+	Colors[ImGuiCol_DragDropTarget] = yellow;
+	Colors[ImGuiCol_NavHighlight] = mauve;
+	Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
+	Colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.8f, 0.8f, 0.8f, 0.2f);
+	Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.35f);
+	Colors[ImGuiCol_Text] = text;
+	Colors[ImGuiCol_TextDisabled] = subtext0;
+
+	// Rounded corners
+	Style.WindowRounding = 6.0f;
+	Style.ChildRounding = 6.0f;
+	Style.FrameRounding = 4.0f;
+	Style.PopupRounding = 4.0f;
+	Style.ScrollbarRounding = 9.0f;
+	Style.GrabRounding = 4.0f;
+	Style.TabRounding = 4.0f;
+
+	// Padding and spacing
+	Style.WindowPadding = ImVec2(8.0f, 8.0f);
+	Style.FramePadding = ImVec2(5.0f, 3.0f);
+	Style.ItemSpacing = ImVec2(8.0f, 4.0f);
+	Style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
+	Style.IndentSpacing = 21.0f;
+	Style.ScrollbarSize = 14.0f;
+	Style.GrabMinSize = 10.0f;
+
+	// Borders
+	Style.WindowBorderSize = 1.0f;
+	Style.ChildBorderSize = 1.0f;
+	Style.PopupBorderSize = 1.0f;
+	Style.FrameBorderSize = 0.0f;
+	Style.TabBorderSize = 0.0f;
 }
 
 void GameManager::BuildImGuiLayout()

@@ -16,18 +16,14 @@ FRay PickingManager::ScreenToWorldRay() const
 	float ndcX = 2.0f * mousePos.X / screenW - 1.0f;
 	float ndcY = -2.0f * mousePos.Y / screenH + 1.0f;
 
-
 	FMatrix proj = CAMERA.GetProjectionMatrix(screenW / screenH);
 
 	float ViewX = ndcX / proj.M[0][0];
 	float ViewY = ndcY / proj.M[1][1];
 
-	FMatrix ViewMatrix = CAMERA.GetViewMatrix();
-	FMatrix InvViewMatrix = ViewMatrix.InverseAffine();
+	FVector RayOrigin = CAMERA.Location;
 
-	FVector RayOrigin = CAMERA.GetLocation();
 	FVector RayDirection;
-
 	if (CAMERA.GetProjectionMode() == EProjectionMode::Orthographic)
 	{
 		RayOrigin += CAMERA.GetRight() * ViewX + CAMERA.GetUp() * ViewY;
@@ -35,9 +31,15 @@ FRay PickingManager::ScreenToWorldRay() const
 	}
 	else if (CAMERA.GetProjectionMode() == EProjectionMode::Perspective)
 	{
-		// View -> World
-		FVector ViewDirection(ViewX, ViewY, 1.0f);
-		RayDirection = TransformDirection(ViewDirection, InvViewMatrix);
+		FMatrix InvVP = CAMERA.GetViewProjectionMatrix(screenW / screenH).Inverse();
+
+		FVector4 NearH = FVector4(ndcX, ndcY, 0.0f, 1.0f) * InvVP;
+		FVector4 FarH = FVector4(ndcX, ndcY, 1.0f, 1.0f) * InvVP;
+
+		FVector NearWorld = FVector{ NearH.X, NearH.Y, NearH.Z } / NearH.W;
+		FVector FarWorld = FVector{ FarH.X, FarH.Y, FarH.Z } / FarH.W;
+
+		RayDirection = FarWorld - NearWorld;
 	}
 	RayDirection.Normalize();
 

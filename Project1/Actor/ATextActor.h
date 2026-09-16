@@ -113,8 +113,8 @@ private:
 
 		FVector labelPos(
 			(box.minX + box.maxX) * 0.5f,
-			box.maxY + LabelPadding,
-			(box.minZ + box.maxZ) * 0.5f
+			(box.minY + box.maxY) * 0.5f,
+			box.maxZ + LabelPadding
 		);
 
 		SetLocation(labelPos);

@@ -22,8 +22,8 @@ public:
 	UParticleSubUVComp(); 
 	UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc);
 	virtual void Update(float DeltaTime) override;
-	FVector2D GetSubUVScale();
-	FVector2D GetSubUVOffset();
+	FVector2 GetSubUVScale();
+	FVector2 GetSubUVOffset();
 	void SetDesc(const ParticleSubUVDesc& Insc);
 	const ParticleSubUVDesc & GetDesc() { return Desc; }
 

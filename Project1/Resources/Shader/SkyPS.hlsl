@@ -11,8 +11,8 @@ SamplerState MainSampler : register(s0);
 float4 mainPS(PS_INPUT input) : SV_TARGET
 {
     float3 dir = normalize(input.localPos);
-    float u = 0.5f + atan2(dir.x, dir.z) / 6.2831853f;
-    float v = 0.5f - asin(clamp(dir.y, -1.0f, 1.0f)) / 3.1415926f;
+    float u = 0.5f + atan2(dir.x, dir.y) / 6.2831853f;
+    float v = 0.5f - asin(clamp(dir.z, -1.0f, 1.0f)) / 3.1415926f;
     
     return MainTexture.Sample(MainSampler, float2(u, v));
 }

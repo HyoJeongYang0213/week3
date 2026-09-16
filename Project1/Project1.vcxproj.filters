@@ -76,6 +76,9 @@
     <Filter Include="Editor">
       <UniqueIdentifier>{2275a017-eb42-4fad-b423-d21f4b1224ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{551991c0-52e0-4091-a867-2b78bcf11b73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Project1\pch.h" />
@@ -184,9 +187,6 @@
     <ClInclude Include="Resources\Geometry\CircleGenerator.h">
       <Filter>Resources\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\Geometry\Sphere.h">
-      <Filter>Resources\Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\SaveLoadManager.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -244,7 +244,6 @@
     <ClInclude Include="Actor\Light\ADirectionalLight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
     <ClInclude Include="Actor\UBillboard.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -321,6 +320,36 @@
       <Filter>Render\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Render\FGrid.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ATextActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\FIntPoint.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\FontMeshGenerator.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\GizmoVertex.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\InputManager.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\IUIPanel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\SphereVertex.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Geometry\PrimitiveVertex.h">
       <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
@@ -414,9 +443,6 @@
     <ClCompile Include="UI\UIPanel.cpp">
       <Filter>Actor\UI</Filter>
     </ClCompile>
-    <ClCompile Include="FontMeshGenerator.cpp">
-      <Filter>Resources\Geometry</Filter>
-    </ClCompile>
     <ClCompile Include="Core\FNamePool.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -485,6 +511,12 @@
     </ClCompile>
     <ClCompile Include="Render\Core\RenderSystem.cpp">
       <Filter>Render\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\FontMeshGenerator.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\InputManager.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

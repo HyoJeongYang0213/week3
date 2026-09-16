@@ -14,23 +14,22 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 	OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices, rotate_ring_indices);
 	OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
 
-
 	transform.SetScale({ 0.7f, 0.7f, 0.7f });
 	transform.SetLocation({ 0.0f, 0.0f, 0.0f });
 
 	switch (Axis)
 	{
 	case EGizmoAxis::X:
-		Color = FLinearColor::Red;
+		Color = FLinearColor::LatteRed;
 		transform.SetRotationEuler({ 0.0f, 0.0f, -DirectX::XM_PIDIV2 });
 		break;
 	case EGizmoAxis::Y:
-		Color = FLinearColor::Green;
+		Color = FLinearColor::LatteGreen;
 		transform.SetRotationEuler({ 0.0f, 0.0f, 0.0f });
 		break;
 	case EGizmoAxis::Z:
-		Color = FLinearColor::Blue;
-		transform.SetRotationEuler({ DirectX::XM_PIDIV2, 0.0f, 0.0f });
+		Color = FLinearColor::LatteBlue;
+		transform.SetRotationEuler({ -DirectX::XM_PIDIV2, 0.0f, 0.0f });
 		break;
 	default:
 		Color = FLinearColor::White;
@@ -42,22 +41,19 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 
 void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 {
-	FVector camPos = CAMERA.GetLocation();
+	FVector camPos = CAMERA.Location;
 	FVector gizmoPos = parentTransform.Location;
 
 	float dist = (gizmoPos - camPos).Length();
-	float scaleFactor = dist * 0.15f;
+	float scaleFactor = dist * 0.0015f * CAMERA.GetFOVX();
 
-	float baseThickness = (std::max)(0.7f * scaleFactor, 0.05f); //최소 0.05 이상
-	float axisLength = baseThickness;
-
+	float ScaleAxisFactor = scaleFactor;
 	if (mode && *mode == EGizmoMode::Scale && bSelected)
 	{
-		axisLength = baseThickness + currentDragDist;
-		axisLength = (std::max)(axisLength, baseThickness * 0.1f);
+		ScaleAxisFactor = scaleFactor + currentDragDist;
 	}
 
-	transform.SetScale(FVector(baseThickness, axisLength, baseThickness));
+	transform.SetScale(FVector(scaleFactor, ScaleAxisFactor, scaleFactor));
 
 	FMatrix S = FMatrix::Scale(transform.Scale);
 	FMatrix R = transform.Rotation.ToMatrix();
@@ -182,16 +178,16 @@ void AGizmoAxis::Pressed()
 			FVector newScale = dragStartActorScale;
 			switch (Axis)
 			{
-			case EGizmoAxis::X: newScale.x += moveDist; break;
-			case EGizmoAxis::Y: newScale.y += moveDist; break;
-			case EGizmoAxis::Z: newScale.z += moveDist; break;
+			case EGizmoAxis::X: newScale.X += moveDist; break;
+			case EGizmoAxis::Y: newScale.Y += moveDist; break;
+			case EGizmoAxis::Z: newScale.Z += moveDist; break;
 			default: break;
 			}
 
 			// 최소 크기 제한 (음수 또는 0 방지)
-			newScale.x = (std::max)(newScale.x, 0.05f);
-			newScale.y = (std::max)(newScale.y, 0.05f);
-			newScale.z = (std::max)(newScale.z, 0.05f);
+			newScale.X = (std::max)(newScale.X, 0.05f);
+			newScale.Y = (std::max)(newScale.Y, 0.05f);
+			newScale.Z = (std::max)(newScale.Z, 0.05f);
 
 			//TargetActor->SetScale(newScale);
 			TargetActor->ApplyGizmoScale(newScale, moveDist);
@@ -225,9 +221,15 @@ void AGizmoAxis::Released()
 
 FLinearColor AGizmoAxis::GetDisplayColor() const
 {
-	return (bHovered || bSelected)
-		? Highlighting(srcColor)
-		: srcColor;
+	if (bHovered)
+	{
+		return FLinearColor::LatteYellow;
+	}
+	else if (bSelected)
+	{
+		return FLinearColor{ 0.8f, 0.8f, 0.0f, 1.0f };
+	}
+	return srcColor;
 }
 
 AGizmo::AGizmo()

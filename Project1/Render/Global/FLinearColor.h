@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 struct FLinearColor
 {
@@ -22,6 +22,10 @@ struct FLinearColor
 	static const FLinearColor LightGray;
 	static const FLinearColor Gray;
 	static const FLinearColor DarkGray;
+	static const FLinearColor LatteRed;
+	static const FLinearColor LatteGreen;
+	static const FLinearColor LatteBlue;
+	static const FLinearColor LatteYellow;
 };
 
 inline constexpr FLinearColor FLinearColor::Red     { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -35,3 +39,7 @@ inline constexpr FLinearColor FLinearColor::Magenta { 1.0f, 0.0f, 1.0f, 1.0f };
 inline constexpr FLinearColor FLinearColor::LightGray { 0.7f, 0.7f, 0.7f, 1.0f };
 inline constexpr FLinearColor FLinearColor::Gray    { 0.5f, 0.5f, 0.5f, 1.0f };
 inline constexpr FLinearColor FLinearColor::DarkGray{ 0.3f, 0.3f, 0.3f, 1.0f };
+inline constexpr FLinearColor FLinearColor::LatteRed{ 0.645f, 0.005f, 0.041f, 1.0f };
+inline constexpr FLinearColor FLinearColor::LatteGreen{ 0.051f, 0.352f, 0.024f, 1.0f };
+inline constexpr FLinearColor FLinearColor::LatteBlue{ 0.013f, 0.133f, 0.913f, 1.0f };
+inline constexpr FLinearColor FLinearColor::LatteYellow{ 0.738f, 0.270f, 0.012f, 1.0f };

@@ -31,6 +31,7 @@ public:
 
 	const D3D11_VIEWPORT& GetViewport() const { return Viewport; }
 	ID3D11RenderTargetView& GetBackBufferRTV() const { return *BackBufferRTV.Get(); }
+	ID3D11RenderTargetView& GetBackBufferUNormRTV() const { return *BackBufferUNormRTV.Get(); }
 	ID3D11DepthStencilView& GetDepthStencilView() const { return *DepthStencilView.Get(); }
 	void SwapBuffer() { SwapChain->Present(0, 0); }
 
@@ -51,6 +52,7 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain;
 	D3D11_VIEWPORT Viewport{};
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> BackBufferRTV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> BackBufferUNormRTV;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> BackBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DepthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DepthStencilBuffer;

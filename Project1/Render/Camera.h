@@ -1,7 +1,9 @@
 ﻿#pragma once
 
-#include "Transform.h"
 #include "Containers.h"
+#include "FMatrix.h"
+#include "FQuaternion.h"
+#include "FVector.h"
 
 class CameraBuffer;
 
@@ -28,25 +30,24 @@ public:
 	Camera(const Camera&) = delete;
 	Camera& operator=(const Camera&) = delete;
 
-	Transform& GetTransform() { return transform; }
-	const Transform& GetTransform() const { return transform; }
-	void SetTransform(const Transform& inTransform) { transform = inTransform; }
+	static constexpr FVector DefaultLocation{ -4.715f, 3.336f, 3.282f };
+	static constexpr float DefaultYaw = -36.809f;
+	static constexpr float DefaultPitch = -23.668f;
 
-	const FVector& GetLocation() const { return transform.GetLocation(); }
-	void SetLocation(const FVector& loc) { transform.SetLocation(loc); }
+	FVector GetForward() const { return GetRotation().RotateVector(FVector::Forward); }
+	FVector GetRight() const { return GetRotation().RotateVector(FVector::Right); }
+	FVector GetUp() const { return GetRotation().RotateVector(FVector::Up); }
+	FQuaternion GetRotation() const { return FQuaternion::FromEulerDegrees(0.0f, Pitch, Yaw); }
 
-	const FQuaternion& GetRotation() const { return transform.GetRotation(); }
-	void SetRotation(const FQuaternion& rot) { transform.SetRotation(rot); }
-
-	FVector GetForward() const { return transform.Forward(); }
-	FVector GetRight() const { return transform.Right(); }
-	FVector GetUp() const { return transform.Up(); }
-
-	void Rotate(float deltaYaw, float deltaPitch);
-
-	void MoveForward(float delta) { transform.SetLocation(transform.GetLocation() + GetForward() * delta); }
-	void MoveRight(float delta) { transform.SetLocation(transform.GetLocation() + GetRight() * delta); }
-	void MoveWorldUp(float delta) { transform.SetLocation(transform.GetLocation() + FVector(0.0f, 1.0f, 0.0f) * delta); }
+	void Rotate(float DeltaYaw, float DeltaPitch) {
+		Yaw += DeltaYaw;
+		Pitch += DeltaPitch;
+		if (Pitch > 89.0f) Pitch = 89.0f;
+		if (Pitch < -89.0f) Pitch = -89.0f;
+	}
+	void MoveForward(float delta);
+	void MoveRight(float delta);
+	void MoveWorldUp(float delta);
 
 	float GetNear() const { return NearZ; }
 	float GetFar() const { return FarZ; }
@@ -62,11 +63,12 @@ public:
 	void SetWheelSpeed(float inWheelSpeed) { wheelSpeed = inWheelSpeed; }
 	float& GetWheelSpeedRef() { return wheelSpeed; }
 
-	float GetFOV() const { return fov; }
-	void SetFOV(float inFov) { fov = inFov; }
+	float GetFOVX() const { return FovX; }
+	void SetFOVX(float InFovX) { FovX = InFovX; }
 
+	FMatrix GetViewProjectionMatrix(float Aspect) const;
 	FMatrix GetViewMatrix() const;
-	FMatrix GetProjectionMatrix(float aspectRatio) const;
+	FMatrix GetProjectionMatrix(float Aspect) const;
 
 	void SetProjectionMode(EProjectionMode mode) { ProjectionMode = mode; }
 	EProjectionMode GetProjectionMode() { return ProjectionMode; }
@@ -80,21 +82,24 @@ public:
 
 	void Update();
 
+	FVector Location{ 0.0f, 0.0f, 0.0f };
+	float Yaw = 0.0f;
+	float Pitch = 0.0f;
+
 	EViewMode ViewMode = EViewMode::Unlit;
 
 	EEngineShowFlags ShowFlags =
 		EEngineShowFlags::SF_Primitives |
 		EEngineShowFlags::SF_BillboardText;
-private:
-	Transform transform;
 
+private:
 	EProjectionMode ProjectionMode = EProjectionMode::Perspective;
 	
 	float OrthoWidth = 25.0f;
 	float MinOrthoWidth = 5.0f;
 	float MaxOrthoWidth = 100.f;
 
-	float fov = 60.0f;
+	float FovX = 60.0f;
 	float NearZ = 0.1f;
 	float FarZ = 1000.0f;
 

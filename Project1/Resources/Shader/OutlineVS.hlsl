@@ -58,7 +58,7 @@ PS_INPUT mainVS(VS_INPUT input)
 
 	output.position = clipPos;
 	output.worldPosition = worldPos.xyz;
-	output.color = float4(1.0f, 1.0f, 0.0f, 1.0f);
+    output.color = float4(0.738f, 0.270f, 0.012f, 1.0f);
 	output.uv = input.uv;
 	output.normal = norm;
 	return output;

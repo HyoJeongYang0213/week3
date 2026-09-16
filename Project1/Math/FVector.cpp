@@ -1,11 +1,9 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "FVector.h"
-
-FVector::FVector(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 
 float FVector::LengthSquared() const
 {
-	return x * x + y * y + z * z;
+	return X * X + Y * Y + Z * Z;
 }
 
 float FVector::Length() const
@@ -18,9 +16,9 @@ void FVector::Normalize()
 	float length = Length();
 	if (length > 0)
 	{
-		x /= length;
-		y /= length;
-		z /= length;
+		X /= length;
+		Y /= length;
+		Z /= length;
 	}
 }
 
@@ -29,7 +27,7 @@ FVector FVector::Normalized() const
 	float length = Length();
 	if (length > 0.0f)
 	{
-		return FVector(x / length, y / length, z / length);
+		return FVector(X / length, Y / length, Z / length);
 	}
 	return FVector(0.0f, 0.0f, 0.0f);
 }
@@ -38,22 +36,22 @@ FVector FVector::Normalized() const
 
 float FVector::Dot(const FVector& other) const
 {
-	return x * other.x + y * other.y + z * other.z;
+	return X * other.X + Y * other.Y + Z * other.Z;
 }
 
 FVector FVector::operator+(const FVector& other) const
 {
-	return FVector(x + other.x, y + other.y, z + other.z);
+	return FVector(X + other.X, Y + other.Y, Z + other.Z);
 }
 
 FVector FVector::operator-(const FVector& other) const
 {
-	return FVector(x - other.x, y - other.y, z - other.z);
+	return FVector(X - other.X, Y - other.Y, Z - other.Z);
 }
 
 FVector FVector::operator*(float scalar) const
 {
-	return FVector(x * scalar, y * scalar, z * scalar);
+	return FVector(X * scalar, Y * scalar, Z * scalar);
 }
 
 FVector FVector::operator/(float scalar) const
@@ -63,16 +61,16 @@ FVector FVector::operator/(float scalar) const
 
 FVector& FVector::operator+=(const FVector& other)
 {
-	x += other.x;
-	y += other.y;
-	z += other.z;
+	X += other.X;
+	Y += other.Y;
+	Z += other.Z;
 	return *this;
 }
 
 FVector& FVector::operator-=(const FVector& other)
 {
-	x -= other.x;
-	y -= other.y;
-	z -= other.z;
+	X -= other.X;
+	Y -= other.Y;
+	Z -= other.Z;
 	return *this;
 }

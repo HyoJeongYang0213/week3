@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "CollisionManager.h"
 #include "ObjectManager.h"
 
@@ -16,8 +16,8 @@ OBB MakeOBB(const ACollider* collider)
 	box.axis[0] = FVector(cs, sn, 0.0f);
 	box.axis[1] = FVector(-sn, cs, 0.0f);
 
-	box.half[0] = collider->GetScale().x * 0.5f;
-	box.half[1] = collider->GetScale().y * 0.5f;
+	box.half[0] = collider->GetScale().X * 0.5f;
+	box.half[1] = collider->GetScale().Y * 0.5f;
 
 	// 중심에서 두 축 방향으로 간 네 점. 반시계 순서는 회전해도 유지된다
 	FVector ex = box.axis[0] * box.half[0];
@@ -60,7 +60,7 @@ namespace
 		float cs = cos(angle);
 		float sn = sin(angle);
 
-		return FVector(d.x * cs + d.y * sn, -d.x * sn + d.y * cs, 0.0f);
+		return FVector(d.X * cs + d.Y * sn, -d.X * sn + d.Y * cs, 0.0f);
 	}
 
 	FVector ToWorld(const ACollider* body, const FVector& local)
@@ -69,7 +69,7 @@ namespace
 		float cs = cos(angle);
 		float sn = sin(angle);
 
-		return body->GetLocation() + FVector(local.x * cs - local.y * sn, local.x * sn + local.y * cs, 0.0f);
+		return body->GetLocation() + FVector(local.X * cs - local.Y * sn, local.X * sn + local.Y * cs, 0.0f);
 	}
 
 	// box의 면 중 dir과 가장 잘 맞는(내적이 가장 큰) 면의 번호
@@ -462,7 +462,7 @@ TArray<CollisionInfo> CollisionManager::CheckCollisionAll(float t)
 	}
 
 	sort(abinfos.begin(), abinfos.end(), [](const auto& a, const auto& b) {
-		return a.second.AverageContactPoint().y < b.second.AverageContactPoint().y;
+		return a.second.AverageContactPoint().Y < b.second.AverageContactPoint().Y;
 		});
 
 	for (auto& [ab, info] : abinfos)
@@ -600,7 +600,7 @@ CollisionInfo CollisionManager::CheckCollisionCircleCircle(ACollider* a, ACollid
 	// 충돌 감지
 	FVector diff = a->GetLocation() - b->GetLocation();
 	float dist = diff.Length();
-	float radiusSum = (a->GetScale().x / 2 + b->GetScale().x / 2);
+	float radiusSum = (a->GetScale().X / 2 + b->GetScale().X / 2);
 	bool isCollision = dist < radiusSum;
 
 	// 중심이 매우 겹침 (추후 수정)
@@ -617,8 +617,8 @@ CollisionInfo CollisionManager::CheckCollisionCircleCircle(ACollider* a, ACollid
 	float penetration = radiusSum - dist;
 
 	// 충돌 지점
-	FVector pointA = a->GetLocation() - normal * a->GetScale().x / 2;
-	FVector pointB = b->GetLocation() + normal * b->GetScale().x / 2;
+	FVector pointA = a->GetLocation() - normal * a->GetScale().X / 2;
+	FVector pointB = b->GetLocation() + normal * b->GetScale().X / 2;
 
 	CollisionInfo info;
 	info.normal = normal;
@@ -670,7 +670,7 @@ CollisionInfo CollisionManager::CheckCollisionRectangleRectangle(ACollider* a, A
 CollisionInfo CollisionManager::CheckCollisionCircleRectangle(ACollider* a, ACollider* b)
 {
 	OBB box = MakeOBB(b);
-	float radius = a->GetScale().x / 2;
+	float radius = a->GetScale().X / 2;
 
 	// 원 중심을 사각형의 로컬 좌표계로. 여기선 사각형이 축 정렬이라 회전을 안 따져도 된다.
 	FVector toCenter = a->GetLocation() - box.center;

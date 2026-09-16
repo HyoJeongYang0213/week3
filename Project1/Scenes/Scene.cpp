@@ -35,8 +35,8 @@ void Scene::Update(float DeltaTime)
 			Objects[i]->Update(DeltaTime);
 		}
 	}
-	
-	Grid.Update(CAMERA.GetLocation());
+	PICK.Update();
+	Grid.Update(CAMERA.Location);
 
 	// 삭제 예약 된 객체 정리
 	OBJECT.ProcessPendingDestroy();
@@ -44,8 +44,8 @@ void Scene::Update(float DeltaTime)
 
 void Scene::Render()
 {
-	FMatrix ViewProjection = CAMERA.GetViewMatrix() * CAMERA.GetProjectionMatrix(RENDER.GetViewport().Width / RENDER.GetViewport().Height);
-	FVector CameraLocation = CAMERA.GetLocation();
+	FMatrix ViewProjection = CAMERA.GetViewProjectionMatrix(RENDER.GetViewport().Width / RENDER.GetViewport().Height);
+	FVector CameraLocation = CAMERA.Location;
 
 	CONTEXT.UpdateConstantBuffer(
 		FrameBuffer, 
@@ -59,7 +59,10 @@ void Scene::Render()
 	TArray<FMeshRenderData> TextData;
 	CollectRenderData(ObjectData, TextData);
 
-	MeshRenderer.Render(FrameBuffer, ObjectData);
+	if ((CAMERA.ShowFlags & EEngineShowFlags::SF_Primitives) != EEngineShowFlags::SF_None)
+	{
+		MeshRenderer.Render(FrameBuffer, ObjectData);
+	}
 
 	LINEBATCH.Render(FrameBuffer);
 
@@ -83,8 +86,12 @@ void Scene::Render()
 	}
 	LINEBATCH.Render(FrameBuffer, false);
 
-	MeshRenderer.Render(FrameBuffer, TextData, false);
+	if ((CAMERA.ShowFlags & EEngineShowFlags::SF_BillboardText) != EEngineShowFlags::SF_None)
+	{
+		MeshRenderer.Render(FrameBuffer, TextData, false);
+	}
 
+	CONTEXT.ClearDepthStencil(RENDER.GetDepthStencilView());
 	RenderGizmo();
 }
 
@@ -129,7 +136,7 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 				if (CAMERA.GetProjectionMode() == EProjectionMode::Perspective)
 				{
 					Transform SkyTransform = SkySphere->GetTransform();
-					SkyTransform.SetLocation(CAMERA.GetLocation());
+					SkyTransform.SetLocation(CAMERA.Location);
 
 					ObjectData.Add(FMeshRenderData{
 						.Mesh = *RESOURCES.GetMesh("SkySphere"),
@@ -192,11 +199,11 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.Material = ParticleSubUVMaterial,
 					.World = ParticleSubUV->GetTransform().GetWorldMatrix(),
 					.Color = ParticleSubUV->GetColor(),
-					.bSelected = false,
+					.bSelected = ParticleSubUV->IsSelected(),
 					.bWireFrame = false,
 					.UVScale = ParticleSubUV->GetSubUVScale(),
 					.UVOffset = ParticleSubUV->GetSubUVOffset()
-					});
+				});
 			}
 			else if (UBillboard* Billboard = Cast<UBillboard>(objects[i]))
 			{
@@ -214,9 +221,9 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.Material = BillboardMaterial,
 					.World = Billboard->GetTransform().GetWorldMatrix(),
 					.Color = Billboard->GetColor(),
-					.bSelected = false,
+					.bSelected = Billboard->IsSelected(),
 					.bWireFrame = false,
-					});
+				});
 			}
 		}
 	}

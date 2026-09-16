@@ -111,7 +111,7 @@ public:
 			if (!c) continue;
 			if (c->GetPrimitive() == EPrimitive::Sphere)
 			{
-				if ((c->GetLocation() - point).Length() <= c->GetScale().x * 0.5f)
+				if ((c->GetLocation() - point).Length() <= c->GetScale().X * 0.5f)
 				{
 					return c;
 				}
@@ -119,10 +119,10 @@ public:
 			else if (c->GetPrimitive() == EPrimitive::Cube)
 			{
 				FVector loc = c->GetLocation();
-				float halfX = c->GetScale().x * 0.5f;
-				float halfY = c->GetScale().y * 0.5f;
-				if (point.x >= loc.x - halfX && point.x <= loc.x + halfX &&
-					point.y >= loc.y - halfY && point.y <= loc.y + halfY)
+				float halfX = c->GetScale().X * 0.5f;
+				float halfY = c->GetScale().Y * 0.5f;
+				if (point.X >= loc.X - halfX && point.X <= loc.X + halfX &&
+					point.Y >= loc.Y - halfY && point.Y <= loc.Y + halfY)
 				{
 					return c;
 				}
