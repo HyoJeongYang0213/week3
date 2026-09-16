@@ -547,30 +547,26 @@ void UIPanel_Picking::Render()
 
 			// 회전 편집 및 실시간 동기화
 			static float s_euler[3] = { 0.0f, 0.0f, 0.0f };
-			static string s_lastActorID;
-			static bool s_isEditingInImGui = false;
+			static FString LastActorID;
+			static FQuaternion LastQuat = FQuaternion::Identity;
 
-			// 대상 변경 또는 위젯 미조작 시 기즈모 변환값 실시간 반영
-			if (uid != s_lastActorID || !s_isEditingInImGui)
+			if (LastActorID != uid ||
+				(LastQuat - pickedActor->GetRotation()).Length() > 1e-6f)
 			{
 				FVector eulerRad = FQuaternion::ToEuler(pickedActor->GetRotation());
 				s_euler[0] = eulerRad.X * (180.0f / Global::PI);
 				s_euler[1] = eulerRad.Y * (180.0f / Global::PI);
 				s_euler[2] = eulerRad.Z * (180.0f / Global::PI);
-				s_lastActorID = uid;
+				LastActorID = uid;
 			}
 
 			ImGui::Text("Rotation");
 			// 위젯 조작 시에만 각도를 라디안으로 변환하여 적용
 			if (ImGui::DragFloat3(("##Rotation##" + uid).c_str(), s_euler, 0.3f))
 			{
-				s_isEditingInImGui = true;
-				FQuaternion newRot = FQuaternion::FromEuler(
-					s_euler[0] * (Global::PI / 180.0f),
-					s_euler[1] * (Global::PI / 180.0f),
-					s_euler[2] * (Global::PI / 180.0f)
-				);
+				FQuaternion newRot = FQuaternion::FromEulerDegrees(s_euler[0], s_euler[1], s_euler[2]);
 				pickedActor->SetRotation(newRot);
+				LastQuat = newRot;
 			}
 	
 			// Scale Editor

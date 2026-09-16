@@ -67,6 +67,11 @@ FQuaternion FQuaternion::Inverse() const
 	return q;
 }
 
+FQuaternion FQuaternion::operator-(const FQuaternion& rhs) const
+{
+	return FQuaternion(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+}
+
 // 회전 합성 (this * rhs) EX. world = parent * local
 FQuaternion FQuaternion::operator*(const FQuaternion& rhs) const
 {

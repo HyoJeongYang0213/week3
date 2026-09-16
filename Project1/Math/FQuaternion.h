@@ -26,6 +26,8 @@ struct FQuaternion
     FQuaternion Conjugate() const;
     FQuaternion Inverse() const;
     
+	FQuaternion operator-(const FQuaternion& rhs) const;
+
     // 회전 합성
     FQuaternion operator*(const FQuaternion& rhs) const;
     FQuaternion& operator*=(const FQuaternion& rhs);
