@@ -47,7 +47,7 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 	float dist = (gizmoPos - camPos).Length();
 	float scaleFactor = dist * 0.1f;
 
-	transform.SetScale(FVector(scaleFactor * 0.8f, scaleFactor, scaleFactor * 0.8f));
+	transform.SetScale(FVector(scaleFactor, scaleFactor, scaleFactor));
 
 	FMatrix S = FMatrix::Scale(transform.Scale);
 	FMatrix R = transform.Rotation.ToMatrix();
