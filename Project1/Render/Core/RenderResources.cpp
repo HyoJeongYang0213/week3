@@ -6,6 +6,7 @@
 #include "RenderMesh.h"
 #include "VertexShader.h"
 #include "Texture.h"
+#include "Bulb.h"
 
 void RenderResources::RegisterDefaultResources()
 {
@@ -23,7 +24,7 @@ void RenderResources::RegisterDefaultResources()
 	CreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
 	CreateMesh("SkySphere", skysphere_vertices, skysphere_indices);
 	CreateMesh("Billboard", quad_vertices, quad_indices);
-	CreateMesh("LightBulb", CreateSphereVertices(0.5f, 20, 20, false));
+	CreateMesh("LightBulb", CreateBulbVertices());
 
 	VertexShaders.Resize(static_cast<int>(VertexShaderType::Count));
 	PixelShaders.Resize(static_cast<int>(PixelShaderType::Count));
