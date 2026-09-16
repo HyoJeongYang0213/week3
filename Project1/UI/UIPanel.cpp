@@ -69,6 +69,8 @@ void UIPanel_SceneCamera::Render()
 		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
 	}
 
+	ImGui::SliderFloat("Grid Interval", &SCENE.GetCurrentScene()->GetGrid().CellSize, 0.15f, 2.0f);
+
 	ImGui::Separator();
 
 	ImGui::Text("[ Camera Options ]");
