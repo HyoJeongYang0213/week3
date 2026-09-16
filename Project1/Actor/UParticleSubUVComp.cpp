@@ -32,7 +32,8 @@ void UParticleSubUVComp::Update(float DeltaTime)
 	if (ElapsedTime >= Desc.Duration) // play only once
 	{
 		Desc.bPlay = false;
-		this->Destroy();
+		this->DeActive();
+		OBJECT.ReserveDestroy(this);
 		return;
 	}
 
