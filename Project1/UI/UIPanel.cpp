@@ -149,8 +149,13 @@ FString UIPanel_SceneCamera::OpenSceneFileDialog()
 	if (SUCCEEDED(hr))
 	{
 		IShellItem* psiRoot = nullptr;
-		std::filesystem::path root = std::filesystem::current_path();
-		std::filesystem::path scenePath = root / "SceneData";
+		namespace fs = std::filesystem;
+		fs::path root = std::filesystem::current_path();
+		fs::path scenePath = root / "SceneData";
+		if (!fs::exists(scenePath))
+		{
+			fs::create_directories(scenePath);
+		}
 		FWString scenePathW = scenePath.wstring();
 
 		hr = SHCreateItemFromParsingName(
@@ -250,8 +255,11 @@ FString UIPanel_SceneCamera::SaveSceneFileDialog()
 				namespace fs = std::filesystem;
 				fs::path root = fs::current_path();
 				fs::path scenePath = root / "SceneData";
-
-				if (fs::exists(scenePath))
+				if (!fs::exists(scenePath))
+				{
+					fs::create_directories(scenePath);
+				}
+				else
 				{
 					int cur_max = 0;
 
@@ -349,14 +357,16 @@ FString UIPanel_SceneCamera::SaveSceneFileDialog()
 										}
 
 										CoTaskMemFree(pszFilePath);
-										psiResult->Release();
 									}
 								}
 							}
 						}
 					}
 				}
-				psiRoot->Release();
+				if (psiRoot)
+				{
+					psiRoot->Release();
+				}
 			}
 		}
 	}
