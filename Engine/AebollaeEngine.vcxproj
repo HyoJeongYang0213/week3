@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -14,8 +14,9 @@
     <ProjectGuid>{0DB858A2-F984-B3AD-229E-A1550ECAE83B}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Project1</RootNamespace>
+    <RootNamespace>AebollaeEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>AebollaeEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -44,14 +45,14 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)..\Build\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\Build\$(Configuration)\</IntDir>
-    <TargetName>Project1</TargetName>
+    <TargetName>AebollaeEngine</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)..\Build\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\Build\$(Configuration)\</IntDir>
-    <TargetName>Project1</TargetName>
+    <TargetName>AebollaeEngine</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -121,7 +122,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Project1\pch.h" />
+    <ClInclude Include="..\Engine\pch.h" />
     <ClInclude Include="Actor\AActor.h" />
     <ClInclude Include="Actor\ASkySphere.h" />
     <ClInclude Include="Actor\ASphere.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Render\Resource\Texture.h" />
     <ClInclude Include="Render\Resource\VertexBuffer.h" />
     <ClInclude Include="Render\Resource\VertexShader.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Resources\Geometry\Bulb.h" />
     <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
     <ClInclude Include="Resources\Geometry\GizmoVertex.h" />
@@ -207,7 +209,7 @@
     <ClInclude Include="UI\UIPanel.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Project1\pch.cpp">
+    <ClCompile Include="..\Engine\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Actor\AActor.cpp" />
@@ -353,6 +355,12 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mainVS</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mainVS</EntryPointName>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\aebollae_icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "ConsoleWindow.h"
 #include "EditorSettings.h"
+#include "../resource.h"
 
 GameManager* GameManager::Instance = nullptr;
 
@@ -68,14 +69,22 @@ void GameManager::Init(HINSTANCE hInstance)
 
 void GameManager::Initwindow(HINSTANCE hInstance)
 {
-	WCHAR WindowClass[] = L"3DGameEngine";
-	WCHAR Title[] = L"3DGameEngine";
+	WCHAR WindowClass[] = L"AebollaeEngine";
+	WCHAR Title[] = L"Aebollae Engine";
 
-	WNDCLASSW wndclass = { 0, WndProc, 0, 0, 0, 0, 0, 0, 0, WindowClass };
-	RegisterClassW(&wndclass);
+	WNDCLASSEXW wndclass = {};
+	wndclass.cbSize = sizeof(wndclass);
+	wndclass.lpfnWndProc = WndProc;
+	wndclass.hInstance = hInstance;
+	wndclass.lpszClassName = WindowClass;
+	wndclass.hIcon = static_cast<HICON>(LoadImageW(hInstance, MAKEINTRESOURCEW(IDI_ICON1),
+		IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), LR_SHARED));
+	wndclass.hIconSm = static_cast<HICON>(LoadImageW(hInstance, MAKEINTRESOURCEW(IDI_ICON1),
+		IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_SHARED));
+	RegisterClassExW(&wndclass);
 
 	m_mainWindow = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, WIN_WIDTH, WIN_HEIGHT,
+		(GetSystemMetrics(SM_CXSCREEN) - WIN_WIDTH) / 2, (GetSystemMetrics(SM_CYSCREEN) - WIN_HEIGHT) / 2, WIN_WIDTH, WIN_HEIGHT,
 		nullptr, nullptr, wndclass.hInstance, nullptr);
 
 	if (m_mainWindow)

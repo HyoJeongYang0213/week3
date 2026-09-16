@@ -81,7 +81,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Project1\pch.h" />
     <ClInclude Include="Actor\AActor.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -352,9 +351,10 @@
     <ClInclude Include="Resources\Geometry\PrimitiveVertex.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="..\Engine\pch.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Project1\pch.cpp" />
     <ClCompile Include="Actor\AActor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -518,6 +518,7 @@
     <ClCompile Include="Input\InputManager.cpp">
       <Filter>Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\Engine\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
@@ -566,5 +567,11 @@
     <FxCompile Include="Resources\Shader\SubUVPS.hlsl">
       <Filter>Resources\Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\aebollae_icon.ico" />
   </ItemGroup>
 </Project>
