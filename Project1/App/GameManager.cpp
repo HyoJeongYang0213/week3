@@ -90,7 +90,7 @@ void GameManager::InitImgui()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-	SetImguiStyle();
+	SetImGuiStyle();
 
 	ImGui_ImplWin32_Init((void*)m_mainWindow);
 	ImGui_ImplDX11_Init(&DEVICE.GetNativeDevice(), &CONTEXT.GetNativeContext());
@@ -146,7 +146,7 @@ void GameManager::Render()
 	RENDER.SwapBuffer();
 }
 
-void GameManager::SetImguiStyle()
+void GameManager::SetImGuiStyle()
 {
 	ImGuiStyle& Style = ImGui::GetStyle();
 	Style.ScaleAllSizes(1.3f);
@@ -160,6 +160,7 @@ void GameManager::SetImguiStyle()
 	const ImVec4 surface0 = ImVec4(0.200f, 0.207f, 0.286f, 0.3f); // #313244
 	const ImVec4 surface1 = ImVec4(0.247f, 0.254f, 0.337f, 0.3f); // #3f4056
 	const ImVec4 surface2 = ImVec4(0.290f, 0.301f, 0.388f, 0.3f); // #4a4d63
+	const ImVec4 surface2Opaque = ImVec4(0.290f, 0.301f, 0.388f, 0.9f); // #4a4d63
 	const ImVec4 overlay0 = ImVec4(0.396f, 0.403f, 0.486f, 1.0f); // #65677c
 	const ImVec4 overlay1 = ImVec4(0.498f, 0.518f, 0.612f, 1.0f); // #7f849c
 	const ImVec4 overlay2 = ImVec4(0.576f, 0.584f, 0.654f, 1.0f); // #9399b2
@@ -177,7 +178,7 @@ void GameManager::SetImguiStyle()
 	// Main window and backgrounds
 	Colors[ImGuiCol_WindowBg] = surface0;
 	Colors[ImGuiCol_ChildBg] = surface0;
-	Colors[ImGuiCol_PopupBg] = surface0;
+	Colors[ImGuiCol_PopupBg] = surface2Opaque;
 	Colors[ImGuiCol_Border] = surface1;
 	Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 	Colors[ImGuiCol_FrameBg] = base;
@@ -186,7 +187,7 @@ void GameManager::SetImguiStyle()
 	Colors[ImGuiCol_TitleBg] = mantle;
 	Colors[ImGuiCol_TitleBgActive] = surface0;
 	Colors[ImGuiCol_TitleBgCollapsed] = mantle;
-	Colors[ImGuiCol_MenuBarBg] = mantle;
+	Colors[ImGuiCol_MenuBarBg] = surface0;
 	Colors[ImGuiCol_ScrollbarBg] = surface0;
 	Colors[ImGuiCol_ScrollbarGrab] = surface2;
 	Colors[ImGuiCol_ScrollbarGrabHovered] = overlay0;
