@@ -256,7 +256,6 @@
     <ClInclude Include="Actor\Light\ADirectionalLight.h">
       <Filter>Actor\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Buffer\FBoundingBox.h" />
     <ClInclude Include="Actor\UBillboard.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -277,9 +276,6 @@
     </ClInclude>
     <ClInclude Include="Actor\Light\ADirectionalLight.h">
       <Filter>Actor\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\Buffer\FBoundingBox.h">
-      <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="Editor\EditorSettings.h">
       <Filter>Editor</Filter>
@@ -340,6 +336,8 @@
     </ClInclude>
     <ClInclude Include="Render\FontMeshGenerator.h" />
     <ClInclude Include="Actor\ATextActor.h" />
+    <ClInclude Include="Math\FIntPoint.h" />
+    <ClInclude Include="Input\InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Project1\pch.cpp" />
@@ -501,6 +499,7 @@
       <Filter>Render\Core</Filter>
     </ClCompile>
     <ClCompile Include="Render\FontMeshGenerator.cpp" />
+    <ClCompile Include="Input\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\DirectXTex\DirectXTex.inl">
