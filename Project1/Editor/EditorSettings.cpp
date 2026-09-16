@@ -56,6 +56,7 @@ void EditorSettings::Load()
 
 	cam.SetProjectionMode(EProjectionMode(ReadInt("Camera", "ProjectionMode", "0")));
 	cam.ViewMode = static_cast<EViewMode>(ReadInt("Camera", "ViewMode", "0"));
+	cam.SetOrthoWidth(ReadFloat("Camera", "OrthoWidth", "25.0"));
 
 	// Grid
 	Scene* defaultScene = SCENE.GetCurrentScene();
@@ -88,6 +89,7 @@ void EditorSettings::Save()
 
 	WriteInt("Camera", "ProjectionMode", int32(cam.GetProjectionMode()));
 	WriteInt("Camera", "ViewMode", static_cast<int>(cam.ViewMode));
+	WriteFloat("Camera", "OrthoWidth", cam.GetOrthoWidth());
 
 	// Grid
 	Scene* defaultScene = SCENE.GetCurrentScene();

@@ -103,6 +103,7 @@ void UIPanel_SceneCamera::Render()
         cam.SetSpeed(2.0f);
         cam.SetRotationSpeed(0.08f);
 		cam.SetWheelSpeed(1.0f);
+		cam.SetOrthoWidth(25.0f);
 	}
 	
 	Scene* scene = SCENE.GetCurrentScene();

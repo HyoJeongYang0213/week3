@@ -75,25 +75,32 @@ AActor* PickingManager::Pick()
 		}
 	}
 
-			//일반 액터 피킹 검사
+	// 일반 액터 피킹 검사
 	AActor* closest = nullptr;
 	float closestDist = FLT_MAX;
 
 	for (auto Object : OBJECT.GUObjectArray) 
 	{
 		AActor* Actor = Cast<AActor>(Object);
+
+		if (Actor == nullptr) continue;
+
 		FVector ActorOrigin = Actor->GetLocation();
 		FVector RayToActor = ActorOrigin - ray.Origin;
+
 		float DistanceRay = RayToActor.Cross(ray.Direction).Length();
+
 		if (RayToActor.Dot(ray.Direction) < 0)
 		{
 			continue;
 		}
+
 		if (DistanceRay <= BoundingSphereThreshold * Actor->GetScale().Length())
 		{
-			if (Actor == nullptr || Cast<AGizmo>(Actor) || Cast<AWorldAxes>(Actor)) continue;
+			if (Cast<AGizmo>(Actor) || Cast<AWorldAxes>(Actor)) continue;
 
 			float dist = 0.0f;
+
 			if (Actor->bIsPicked(ray, dist) && dist < closestDist)
 			{
 				closestDist = dist;
