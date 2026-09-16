@@ -5,6 +5,7 @@
 
 APointLight::APointLight(const FLinearColor& color) : ALight(color)
 {
+	SetPrimitive(EPrimitive::PointLight);
 }
 
 void APointLight::AddLines()
