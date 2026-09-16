@@ -633,32 +633,31 @@ void UIPanel_SceneManager::Render()
 	ImGui::Begin(GetName().c_str(), &bIsOpen);
 	if (ImGui::TreeNodeEx("Primitives", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		int32 Selected = -1;
-		int32 i = 0;
-		bool On = false;
 		for (UObject* Object : OBJECT.GUObjectArray)
 		{
 			AActor* Actor = Cast<AActor, UObject>(Object);
+
+			// isSelected 판단: 현재 기즈모가 붙어 있는 Actor가 이 Actor인가?
+			bool isSelected =
+				AGizmo::MainGizmo &&
+				AGizmo::MainGizmo->GetTargetActor() == Actor;
+
 			if (Actor->Primitive != EPrimitive::None && Actor->Primitive != EPrimitive::Gizmo)
 			{
-				if (ImGui::Selectable(Object->GetName().c_str(), Selected == i))
+				if (ImGui::Selectable(Object->GetName().c_str(), isSelected))
 				{
-					if (!On)
+					if (isSelected)
 					{
-						Selected = i;
 						PICK.pickedObjcect = Cast<AActor, UObject>(Object);
 						AGizmo::MainGizmo->SetTargetActor(PICK.pickedObjcect);
-						On = true;
+
 					}
 					else
 					{
-						Selected = -1;
 						PICK.pickedObjcect = nullptr;
 						AGizmo::MainGizmo->SetTargetActor(nullptr);
-						On = false;
 					}
 				}
-				i++;
 			}
 		}
 		ImGui::TreePop();
