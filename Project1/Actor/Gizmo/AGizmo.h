@@ -3,7 +3,6 @@
 #include "WeakObjectPtr.h"
 #include "AActor.h"
 #include "FVertexSimple.h"
-#include "Sphere.h"
 
 struct FRay;
 

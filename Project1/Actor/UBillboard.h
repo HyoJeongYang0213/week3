@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "AActor.h"
-#include "Sphere.h"
+
 
 class UBillboard : public AActor // UPrimitiveComponent
 {

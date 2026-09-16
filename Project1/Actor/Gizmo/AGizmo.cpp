@@ -2,6 +2,7 @@
 #include "AGizmo.h"
 #include "PickingManager.h"
 #include "ObjectManager.h"
+#include "GizmoVertex.h"
 
 
 AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)

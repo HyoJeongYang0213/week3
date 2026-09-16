@@ -40,7 +40,8 @@ void ACollider::Pressed() {}
 void ACollider::Released() {}
 
 #include "CircleGenerator.h"
-#include "Sphere.h"
+#include "SphereVertex.h"
+#include "PrimitiveVertex.h"
 
 
 ACube::ACube(const FLinearColor &inColor) : ACollider(inColor) {

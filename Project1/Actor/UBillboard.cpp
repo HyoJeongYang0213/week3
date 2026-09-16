@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "UBillboard.h"
+#include "PrimitiveVertex.h"
 
 UBillboard::UBillboard(const FString& InTextureName)
 {

@@ -7,6 +7,9 @@
 #include "VertexShader.h"
 #include "Texture.h"
 #include "Bulb.h"
+#include "PrimitiveVertex.h"
+#include "GizmoVertex.h"
+
 
 void RenderResources::RegisterDefaultResources()
 {

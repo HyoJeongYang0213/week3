@@ -194,7 +194,9 @@
     <ClInclude Include="Render\Resource\VertexShader.h" />
     <ClInclude Include="Resources\Geometry\Bulb.h" />
     <ClInclude Include="Resources\Geometry\CircleGenerator.h" />
-    <ClInclude Include="Resources\Geometry\Sphere.h" />
+    <ClInclude Include="Resources\Geometry\GizmoVertex.h" />
+    <ClInclude Include="Resources\Geometry\PrimitiveVertex.h" />
+    <ClInclude Include="Resources\Geometry\SphereVertex.h" />
     <ClInclude Include="Scenes\SaveLoadManager.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
