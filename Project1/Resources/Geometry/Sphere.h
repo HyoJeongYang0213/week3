@@ -98,12 +98,12 @@ inline const uint32 font_quad_indices[] = { 0, 1, 2, 2, 1, 3 };
 
 inline const TArray<FVertexData> triangle_vertices =
 {
-	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
-	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
-	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
-	{ 1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
-	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
-	{ 0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f } // Top vertex (red)
+	{  0.0f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
+	{ 0.0f, -1.0f, -1.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
+	{  0.0f, 1.0f, -1.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+	{ 0.0f, 1.0f, -1.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+	{ 0.0f, -1.0f, -1.0f,  0.0f, 0.0f, 1.0f, 1.0f },  // Bottom-left vertex (blue)
+	{ 0.0f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 1.0f } // Top vertex (red)
 	
 };
 
@@ -2762,24 +2762,24 @@ inline const TArray<uint32> quad_indices = { 0, 2, 1, 1, 2, 3 };
 inline const TArray<FVertexData> rectangle_vertices =
 {
     // Triangle A
-    { -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
-    {  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-    { -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+    { 0.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
+    {  0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+    { 0.0f,  -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
 
     // Triangle B
-    {  1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-    {  1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
-    { -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+    {  0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+    {  0.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
+    { 0.0f,  -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
 
 	// Triangle -A
-	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
-	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-	{ -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
+	{ 0.0f,  -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+	{ 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+	{ 0.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
 
 	// Triangle -B
-	{ -1.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
-	{ 1.0f,  1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
-	{ 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+	{ 0.0f,  -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
+	{ 0.0f,  1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f }, // Top-right (red)
+	{ 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
 	
 };
 
