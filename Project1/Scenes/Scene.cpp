@@ -82,6 +82,7 @@ void Scene::Render()
 
 	MeshRenderer.Render(FrameBuffer, TextData, false);
 
+	CONTEXT.ClearDepthStencil(RENDER.GetDepthStencilView());
 	RenderGizmo();
 }
 

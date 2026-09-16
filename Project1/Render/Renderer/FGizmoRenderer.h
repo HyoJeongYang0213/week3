@@ -40,7 +40,9 @@ inline void FGizmoRenderer::Render(const ConstantBuffer& FrameBuffer, const TArr
 		},
 		.Blend = BlendMode::None,
 		.Depth = {
-			.bEnable = false,
+			.bEnable = true,
+			.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
+			.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
 		},
 	};
 	auto& Pipeline = RENDER.GetOrCreatePipeline(PipelineDesc);

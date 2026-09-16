@@ -45,18 +45,9 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 	FVector gizmoPos = parentTransform.Location;
 
 	float dist = (gizmoPos - camPos).Length();
-	float scaleFactor = dist * 0.15f;
+	float scaleFactor = dist * 0.1f;
 
-	float baseThickness = (std::max)(0.7f * scaleFactor, 0.05f); //최소 0.05 이상
-	float axisLength = baseThickness;
-
-	if (mode && *mode == EGizmoMode::Scale && bSelected)
-	{
-		axisLength = baseThickness + currentDragDist;
-		axisLength = (std::max)(axisLength, baseThickness * 0.1f);
-	}
-
-	transform.SetScale(FVector(baseThickness, axisLength, baseThickness));
+	transform.SetScale(FVector(scaleFactor * 0.8f, scaleFactor, scaleFactor * 0.8f));
 
 	FMatrix S = FMatrix::Scale(transform.Scale);
 	FMatrix R = transform.Rotation.ToMatrix();
