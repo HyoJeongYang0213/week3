@@ -20,6 +20,7 @@
 constexpr int CURRENT_SCENE_VERSION = 1;
 
 #include <nlohmann/json.hpp>
+#include <ConsoleWindow.h>
 
 // 알파벳 순서가 아닌 input 순서로 push하기 위함
 using json = nlohmann::ordered_json;
@@ -210,11 +211,13 @@ void SaveLoadManager::SaveScene(const FString& path)
     
     if (!file.is_open())
     {
+        UE_LOG("[Error] Failed to Save objects!");
         assert(false && "Failed to Save objects!\n");
         return;
     }
     
     file << sceneJson.dump(4); // json 객체 -> string으로 변환 (4칸 들여쓰기)
+    UE_LOG("Success to Save objects!");
     file.close();
 }
 
@@ -236,6 +239,7 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
 
     if (!file.is_open())
     {
+        UE_LOG("[Error] Failed to Load objects!");
         assert(false && "Failed to Load objects!\n");
         OutputDebugStringA(("Failed to open: " + path + "\n").c_str());  // 추가
 
@@ -252,6 +256,7 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
     catch(const std::exception& e)
     {
         OutputDebugStringA(("Parse failed : " + string(e.what())).c_str());
+        UE_LOG("[Error] Parse failed : %s", string(e.what()).c_str());
         return loadedObjects; // {} 빈 배열 return
 
     }
@@ -261,8 +266,11 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
 
     // Format Version Check
     int version = sceneJson["Version"].get<int>();
-    if (version != CURRENT_SCENE_VERSION)
+    if (version != CURRENT_SCENE_VERSION) {
         OutputDebugStringA("Scene Version mismatch!");
+        UE_LOG("[Warning] Scene Version mismatch!");
+    }
+        
 
     // 함수 Load 및 람다 등록
     auto& registry = GetActorCreatorRegistry();
@@ -324,6 +332,8 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         label->SetTarget(actor);
         label->SetText(std::to_wstring(actor->GetID()));
     }
+    UE_LOG("Success to Load objects!");
+
     return loadedObjects;
 
 }

@@ -59,6 +59,7 @@ void GameManager::Init(HINSTANCE hInstance)
 	IMGUI.Initialize();
 
 	SCENE.AddScene("Default", new Scene());
+	UE_LOG("New Scene!");
 	SCENE.ChangeScene("Default");
 	
 	EditorSettings::Load();

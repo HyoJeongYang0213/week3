@@ -1,6 +1,7 @@
 #include "UObject.h"
 #include "ObjectManager.h"
 #include "pch.h"
+#include <ConsoleWindow.h>
 
 
 void *UObject::operator new(size_t size) {
@@ -22,7 +23,10 @@ void UObject::operator delete(void *ptr, size_t size) noexcept {
   free(ptr);
 }
 
-void UObject::Destroy() { OBJECT.Destroy(this); }
+void UObject::Destroy() { 
+    UE_LOG("%s is Destroyed!", GetName().c_str());
+    OBJECT.Destroy(this); 
+}
 
 void UObject::Update(float deltatime) {
   if (!bIsActive)
