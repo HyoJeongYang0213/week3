@@ -433,32 +433,27 @@ void UIPanel_SceneManager::Render()
     ImGui::Begin("Scene Manager");
     if(ImGui::TreeNodeEx("Primitives", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        int32 Selected = -1;
-        int32 i = 0;
-        bool On = false;
         for (UObject* Object : OBJECT.GUObjectArray)
         {
             AActor* Actor = Cast<AActor, UObject>(Object);
             if (Actor->Primitive != EPrimitive::None && Actor->Primitive != EPrimitive::Gizmo)
             {
-                if (ImGui::Selectable(Object->GetName().c_str(), Selected == i))
+                bool bIsSelected = (PICK.pickedObjcect == Object);
+                ImGui::PushID(Object);
+                if (ImGui::Selectable(Object->GetName().c_str(), bIsSelected))
                 {
-                    if (!On)
+                    if (bIsSelected)
                     {
-                        Selected = i;
-                        PICK.pickedObjcect = Cast<AActor, UObject>(Object);
-                        AGizmo::MainGizmo->SetTargetActor(PICK.pickedObjcect);
-                        On = true;
+                        PICK.pickedObjcect = nullptr;
+                        AGizmo::MainGizmo->SetTargetActor(nullptr);
                     }
                     else
                     {
-                        Selected = -1;
-                        PICK.pickedObjcect = nullptr;
-                        AGizmo::MainGizmo->SetTargetActor(nullptr);
-                        On = false;
+                        PICK.pickedObjcect = Actor;
+                        AGizmo::MainGizmo->SetTargetActor(Actor);
                     }
                 }
-                i++;
+                ImGui::PopID();
             }
         }
         ImGui::TreePop();
