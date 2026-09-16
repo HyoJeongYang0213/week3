@@ -59,9 +59,10 @@ void Scene::Render()
 	TArray<FMeshRenderData> TextData;
 	CollectRenderData(ObjectData, TextData);
 
+	MeshRenderer.Render(FrameBuffer, ObjectData);
+
 	LINEBATCH.Render(FrameBuffer);
 
-	MeshRenderer.Render(FrameBuffer, ObjectData);
 
 	if (CAMERA.ViewMode != EViewMode::Wireframe)
 	{
