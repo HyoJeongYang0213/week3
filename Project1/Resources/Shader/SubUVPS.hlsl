@@ -14,5 +14,6 @@ float4 mainPS(PS_INPUT input) : SV_TARGET
 {
 	float4 texColor = MainTexture.Sample(MainSampler, input.uv);
 	clip(texColor.g - 0.01f);
+    clip(texColor.a - 0.01f);
 	return texColor;
 }
