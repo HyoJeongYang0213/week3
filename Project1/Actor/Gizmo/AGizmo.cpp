@@ -75,7 +75,6 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 		FMatrix parentTrans = FMatrix::Translation(parentTransform.Location);
 		transform.SetWorldMatrix(localMat * parentTrans);
 	}
-
 	AActor::Update(DeltaTime);
 }
 
@@ -87,10 +86,10 @@ void AGizmoAxis::Picked()
 	FVector localDir(0.0f, 0.0f, 0.0f);
 	switch (Axis)
 	{
-	case EGizmoAxis::X: localDir = FVector(1.0f, 0.0f, 0.0f); break;
-	case EGizmoAxis::Y: localDir = FVector(0.0f, 1.0f, 0.0f); break;
-	case EGizmoAxis::Z: localDir = FVector(0.0f, 0.0f, 1.0f); break;
-	default: break;
+		case EGizmoAxis::X: localDir = FVector(1.0f, 0.0f, 0.0f); break;
+		case EGizmoAxis::Y: localDir = FVector(0.0f, 1.0f, 0.0f); break;
+		case EGizmoAxis::Z: localDir = FVector(0.0f, 0.0f, 1.0f); break;
+		default: break;
 	}
 
 	//로컬 모드이면 타겟의 회전을 반영하고, 월드 모드이면 월드 정방향 축 사용
@@ -101,24 +100,6 @@ void AGizmoAxis::Picked()
 	else
 	{
 		currentAxisDir = localDir;
-	}
-
-
-	switch (*mode)
-	{
-	case EGizmoMode::Translation:
-
-		break;
-	case EGizmoMode::Rotation:
-
-
-
-
-		break;
-	case EGizmoMode::Scale:
-		break;
-	default:
-		break;
 	}
 
 	//평면 법선 벡터 계산
@@ -148,7 +129,6 @@ void AGizmoAxis::Picked()
 		TargetActor->BeginGizmoScale();
 	}
 
-
 	//피킹 선택 상태 활성화
 	currentDragDist = 0.0f;
 	bSelected = true;
@@ -157,8 +137,6 @@ void AGizmoAxis::Picked()
 void AGizmoAxis::Pressed()
 {
 	if (!TargetActor) return;
-
-
 
 	FRay ray = PICK.ScreenToWorldRay();
 	float denom = planeNormal.Dot(ray.Direction);
@@ -189,10 +167,9 @@ void AGizmoAxis::Pressed()
 			
 			// currentAxisDir 기준으로 델타 회전 만들어서 곱함
 			FQuaternion deltaRot = FQuaternion::FromAxisAngle(currentAxisDir, alpha);
+
 			// 축에 맞게 회전값 적용
 			FQuaternion newRot = (deltaRot *dragStartActorRotation).Normalized();
-			
-
 			TargetActor->SetRotation(newRot);
 		}
 		else if (mode && *mode == EGizmoMode::Scale) //Scale일때
@@ -229,7 +206,6 @@ void AGizmoAxis::Pressed()
 			TargetActor->SetLocation(dragStartActorLocation + currentAxisDir * moveDist);
 		}
 	}
-
 }
 
 void AGizmoAxis::Released()
