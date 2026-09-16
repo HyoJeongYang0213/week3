@@ -74,7 +74,7 @@ void Camera::Update()
 	//카메라 이동 처리
 	float currentSpeed = speed * DELTA;
 
-	if (INPUT.GetKey('W')) MoveForward(-currentSpeed);
+	if (INPUT.GetKey('W')) MoveForward(currentSpeed);
 	if (INPUT.GetKey('S')) MoveForward(-currentSpeed);
 	if (INPUT.GetKey('D')) MoveRight(currentSpeed);
 	if (INPUT.GetKey('A')) MoveRight(-currentSpeed);
