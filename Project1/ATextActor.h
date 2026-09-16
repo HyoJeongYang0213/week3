@@ -88,7 +88,7 @@ public:
 
 	FString GetRenderMeshName() const override
 	{
-		return "Text/" + GetID();
+		return FString("Text/") + std::to_string(GetID());
 	}
 
 	const FontGeometry& GetGeometry() const { return Geometry; }
