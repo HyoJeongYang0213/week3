@@ -36,7 +36,7 @@ public:
 	ID3D11PixelShader& CreatePixelShader(PixelShaderType Type, const FWString& Path);
 
 	const Texture* GetTexture(const FString& Name);
-	const Texture& CreateTexture(const FString& Name, const FWString& FileName);
+	const Texture& CreateTexture(const FString& Name, const FWString& FileName, bool bSRGB = false);
 
 	ID3D11SamplerState& GetSamplerState(Sampler Type) const;
 

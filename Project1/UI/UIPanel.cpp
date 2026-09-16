@@ -40,7 +40,7 @@ void UIPanel_SceneCamera::Render()
 	ImGui::Begin(GetName().c_str(), &bIsOpen);
 
 	// 카메라 디버그 섹션
-	ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.4f, 1.0f), "[ Camera Controls ]");
+	ImGui::Text("[ Camera Controls ]");
 	Camera& cam = CAMERA;
 
 	ImGui::PushItemWidth(200.0f);
@@ -103,7 +103,7 @@ void UIPanel_SceneCamera::Render()
 
 	ImGui::PopItemWidth();
 
-	ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.8f, 1.0f), "[ Save & Load Scene ]");
+	ImGui::Text( "[ Save & Load Scene ]");
 
 	// NEW SCENE
 	if (ImGui::Button("New Scene", ImVec2(150.0f, 0.0f)))
@@ -585,17 +585,20 @@ void UIPanel_Picking::Render()
 			if (pickedActor->GetClass()->Name == "ASpotLight") {
 				ASpotLight *light = Cast<ASpotLight>(pickedActor);
 				float angle = light->GetAngle();
-				if (ImGui::SliderFloat("Angle", &angle, 1.0f, 60.0f))
+				ImGui::Text("Angle");
+				if (ImGui::SliderFloat("##Angle", &angle, 1.0f, 60.0f))
 					light->SetAngle(angle);
 				float length = light->GetLength();
-				if (ImGui::SliderFloat("Length", &length, 0.1f, 30.0f))
+				ImGui::Text("Length");
+				if (ImGui::SliderFloat("##Length", &length, 0.1f, 30.0f))
 					light->SetLength(length);
 			}
 
 			if (pickedActor->GetClass()->Name == "APointLight") {
 				APointLight* light = Cast<APointLight>(pickedActor);
 				float radius = light->GetRadius();
-				if (ImGui::SliderFloat("Radius", &radius, 1.0f, 40.0f))
+				ImGui::Text("Radius");
+				if (ImGui::SliderFloat("##Radius", &radius, 1.0f, 40.0f))
 					light->SetRadius(radius);
 			}
 
