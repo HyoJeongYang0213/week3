@@ -89,10 +89,6 @@ void GameManager::InitImgui()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-	wchar_t Buffer[256];
-	GetModuleFileNameW(nullptr, Buffer, 256);
-	FWString ExecutableDirectory = filesystem::path(Buffer).parent_path();
 	
 	ImGui::GetStyle().ScaleAllSizes(1.3f);
 	ImGui::GetStyle().FontScaleDpi = 1.3f;
