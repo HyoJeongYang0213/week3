@@ -23,7 +23,6 @@ public:
 	virtual void Update(float deltaTime) override
 	{
 		AActor::Update(deltaTime);
-
 	}
 
 	// 하늘 객체는 마우스 피킹 대상에서 제외
