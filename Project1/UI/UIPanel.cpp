@@ -654,8 +654,8 @@ void UIPanel_SceneManager::Render()
 					}
 					else
 					{
-						PICK.pickedObjcect = nullptr;
-						AGizmo::MainGizmo->SetTargetActor(nullptr);
+						PICK.pickedObjcect = Actor;
+						AGizmo::MainGizmo->SetTargetActor(Actor);
 					}
 				}
 			}
