@@ -70,6 +70,9 @@ public:
 	void SetOrthoWidth(float w) { OrthoWidth = w; }
 	float GetOrthWidth() { return OrthoWidth; }
 
+	void SetNear(float inNear) { NearZ = inNear; }
+	void SetFar(float inFar) { FarZ = inFar; }
+
 	void Update();
 
 	EViewMode ViewMode = EViewMode::Unlit;

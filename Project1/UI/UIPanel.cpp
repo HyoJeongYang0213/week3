@@ -87,6 +87,11 @@ void UIPanel_Camera::Render()
 	{
 		cam.SetLocation(FVector(3.336f, 3.282f, -4.715f));
 		cam.SetRotation(FQuaternion::FromEuler(0.391f, -0.468f, 0.0f));
+        cam.SetFOV(60.0f);
+        cam.SetNear(0.1f);
+        cam.SetFar(1000.0f);
+        cam.SetSpeed(2.0f);
+        cam.SetRotationSpeed(0.08f);
 	}
 	
     // 카메라 앞(Forward)벡터 출력 텍스트
