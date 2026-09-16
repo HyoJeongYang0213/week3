@@ -10,9 +10,9 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 {
 	Primitive = EPrimitive::Gizmo;
 	// ObjectManager를 통해 기즈모 화살표 메시 공유 및 Vertices 재활용
-	SetMesh(OBJECT.GetOrCreateMesh("GizmoLocation", arrow_vertices));
-	OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices);
-	OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices);
+	SetMesh(OBJECT.GetOrCreateMesh("GizmoLocation", arrow_vertices, arrow_indices));
+	OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices, rotate_ring_indices);
+	OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
 
 
 	transform.SetScale({ 0.7f, 0.7f, 0.7f });
