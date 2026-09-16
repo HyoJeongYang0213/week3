@@ -134,14 +134,5 @@ private:
 };
 
 inline FLinearColor Highlighting(const FLinearColor& color) {
-	float t = 0.5f;
-
-	FLinearColor result = color;
-
-	//백화 방지 색상 상한선 제한
-	result.r = std::clamp(color.r + (1.0f - color.r) * t, 0.0f, 0.85f);
-	result.g = std::clamp(color.g + (1.0f - color.g) * t, 0.0f, 0.85f);
-	result.b = std::clamp(color.b + (1.0f - color.b) * t, 0.0f, 0.85f);
-	result.a = color.a;
-	return result;
+	return FLinearColor::LatteYellow;
 }

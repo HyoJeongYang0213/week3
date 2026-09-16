@@ -248,9 +248,15 @@ void AGizmoAxis::Released()
 
 FLinearColor AGizmoAxis::GetDisplayColor() const
 {
-	return (bHovered || bSelected)
-		? Highlighting(srcColor)
-		: srcColor;
+	if (bHovered)
+	{
+		return FLinearColor::LatteYellow;
+	}
+	else if (bSelected)
+	{
+		return FLinearColor{ 0.8f, 0.8f, 0.0f, 1.0f };
+	}
+	return srcColor;
 }
 
 AGizmo::AGizmo()
