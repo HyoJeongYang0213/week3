@@ -256,6 +256,14 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
 
     }
 
+    // Format Version Check
+    if (!sceneJson.contains("Version") ||
+        sceneJson["Version"].get<int>() != CURRENT_SCENE_VERSION)
+    {
+        OutputDebugStringA("Scene Version mismatch!");
+        return loadedObjects; // {} 로드 중단, 빈 배열 return
+    }
+
     PICK.pickedObjcect = nullptr;
 
     if (AGizmo::MainGizmo)
@@ -265,11 +273,6 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
 
     // 기존 Scene에 있던 Objects Clear
     OBJECT.DestoryAllSceneActor();
-
-    // Format Version Check
-    int version = sceneJson["Version"].get<int>();
-    if (version != CURRENT_SCENE_VERSION)
-        OutputDebugStringA("Scene Version mismatch!");
 
     // 함수 Load 및 람다 등록
     auto& registry = GetActorCreatorRegistry();
