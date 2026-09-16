@@ -36,8 +36,7 @@ struct RasterizerDesc
 {
 	D3D11_FILL_MODE FillMode = D3D11_FILL_SOLID;
 	D3D11_CULL_MODE CullMode = D3D11_CULL_BACK;
-	bool bFrontCounterClockWise = false;
-
+	bool bFrontCounterClockWise = false;;
 	bool operator==(const RasterizerDesc&) const = default;
 };
 

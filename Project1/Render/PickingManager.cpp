@@ -5,33 +5,50 @@
 #include "AGizmo.h"
 #include "AWorldAxes.h"
 
-FRay PickingManager::ScreenToWorldRay(float mouseX, float mouseY, float screenW, float screenH) const
-{
-	float ndcX = 2.0f * mouseX / screenW - 1.0f;
-	float ndcY = -2.0f * mouseY / screenH + 1.0f;
-
-	FMatrix InvVP = CAMERA.GetViewProjectionMatrix(screenW / screenH).Inverse();
-
-	// 개념 코드: 4차원 행벡터 연산
-	FVector4 NearH = FVector4(ndcX, ndcY, 0.0f, 1.0f) * InvVP;
-	FVector4 FarH = FVector4(ndcX, ndcY, 1.0f, 1.0f) * InvVP;
-
-	FVector NearWorld = FVector{ NearH.X, NearH.Y, NearH.Z } / NearH.W;
-	FVector FarWorld = FVector{ FarH.X, FarH.Y, FarH.Z } / FarH.W;
-
-	return FRay{ NearWorld, (FarWorld - NearWorld).Normalized() };
-}
-
 FRay PickingManager::ScreenToWorldRay() const
 {
-	return ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
-		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
+	FIntPoint mousePos = INPUT.GetMousePosition();
+
+	float screenW = RENDER.GetViewport().Width;
+	float screenH = RENDER.GetViewport().Height;
+
+	// NDC -> View 
+	float ndcX = 2.0f * mousePos.X / screenW - 1.0f;
+	float ndcY = -2.0f * mousePos.Y / screenH + 1.0f;
+
+	FMatrix proj = CAMERA.GetProjectionMatrix(screenW / screenH);
+
+	float ViewX = ndcX / proj.M[0][0];
+	float ViewY = ndcY / proj.M[1][1];
+
+	FVector RayOrigin = CAMERA.Location;
+
+	FVector RayDirection;
+	if (CAMERA.GetProjectionMode() == EProjectionMode::Orthographic)
+	{
+		RayOrigin += CAMERA.GetRight() * ViewX + CAMERA.GetUp() * ViewY;
+		RayDirection = CAMERA.GetForward();
+	}
+	else if (CAMERA.GetProjectionMode() == EProjectionMode::Perspective)
+	{
+		FMatrix InvVP = CAMERA.GetViewProjectionMatrix(screenW / screenH).Inverse();
+
+		FVector4 NearH = FVector4(ndcX, ndcY, 0.0f, 1.0f) * InvVP;
+		FVector4 FarH = FVector4(ndcX, ndcY, 1.0f, 1.0f) * InvVP;
+
+		FVector NearWorld = FVector{ NearH.X, NearH.Y, NearH.Z } / NearH.W;
+		FVector FarWorld = FVector{ FarH.X, FarH.Y, FarH.Z } / FarH.W;
+
+		RayDirection = FarWorld - NearWorld;
+	}
+	RayDirection.Normalize();
+
+	return FRay{ RayOrigin, RayDirection };
 }
 
 AActor* PickingManager::Pick()
 {
-	FRay ray = PICK.ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
-		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
+	FRay ray = PICK.ScreenToWorldRay();
 
 	//기즈모 축 피킹 우선 검사
 	if (AGizmo::MainGizmo && AGizmo::MainGizmo->GetTargetActor())
@@ -60,19 +77,37 @@ AActor* PickingManager::Pick()
 		}
 	}
 
-	//일반 액터 피킹 검사
+	// 일반 액터 피킹 검사
 	AActor* closest = nullptr;
 	float closestDist = FLT_MAX;
 
-	for (auto object : OBJECT.GUObjectArray) {
-		AActor* actor = Cast<AActor>(object);
-		if (actor == nullptr || Cast<AGizmo>(actor) || Cast<AWorldAxes>(actor)) continue;
+	for (auto Object : OBJECT.GUObjectArray) 
+	{
+		AActor* Actor = Cast<AActor>(Object);
 
-		float dist = 0.0f;
-		if (actor->bIsPicked(ray, dist) && dist < closestDist)
+		if (Actor == nullptr) continue;
+
+		FVector ActorOrigin = Actor->GetLocation();
+		FVector RayToActor = ActorOrigin - ray.Origin;
+
+		float DistanceRay = RayToActor.Cross(ray.Direction).Length();
+
+		if (RayToActor.Dot(ray.Direction) < 0)
 		{
-			closestDist = dist;
-			closest = actor;
+			continue;
+		}
+
+		if (DistanceRay <= BoundingSphereThreshold * Actor->GetScale().Length())
+		{
+			if (Cast<AGizmo>(Actor) || Cast<AWorldAxes>(Actor)) continue;
+
+			float dist = 0.0f;
+
+			if (Actor->bIsPicked(ray, dist) && dist < closestDist)
+			{
+				closestDist = dist;
+				closest = Actor;
+			}
 		}
 	}
 
@@ -82,10 +117,8 @@ AActor* PickingManager::Pick()
 	}
 
 	pickedObjcect = closest;
-
 	return closest;
 }
-
 
 void PickingManager::Pressed()
 {
@@ -94,23 +127,22 @@ void PickingManager::Pressed()
 
 void PickingManager::Update()
 {
-	if (MOUSE_CLICK(0))
+	if (INPUT.GetMouseButtonDown(MouseButton::LEFT))
 	{
 		Pick();
 	}
-	else if (MOUSE_PRESS(0))
+	else if (INPUT.GetMouseButton(MouseButton::LEFT))
 	{
 		if (pickedObjcect)
 		{
 			pickedObjcect->Pressed();
 		}
 	}
-	else if (MOUSE_UP(0))
+	else if (INPUT.GetMouseButtonUp(MouseButton::LEFT))
 	{
 		if (pickedObjcect)
 		{
 			pickedObjcect->Released();
 		}
 	}
-	
 }

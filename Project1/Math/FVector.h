@@ -52,6 +52,17 @@ struct FVector
 	}
 
 	// 3D 외적
+	FVector Cross(const FVector& Other)
+	{
+		FVector Result(
+			this->Y * Other.Z - this->Z * Other.Y,
+			this->Z * Other.X - this->X * Other.Z,
+			this->X * Other.Y - this->Y * Other.X
+		);
+		return Result;
+	}
+
+	// 3D 외적
 	static FVector Cross3D(const FVector& a, const FVector& b)
 	{
 		return FVector(

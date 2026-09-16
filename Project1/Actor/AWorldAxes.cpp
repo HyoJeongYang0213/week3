@@ -2,6 +2,7 @@
 #include "AWorldAxes.h"
 #include "FVertexSimple.h"
 #include "FLineBatchRenderer.h"
+#include "PrimitiveVertex.h"
 
 AWorldAxes::AWorldAxes()
 {

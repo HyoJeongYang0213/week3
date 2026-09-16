@@ -59,6 +59,7 @@ public:
     return bIsPicked(worldRay, dummyDist);
   }
   bool IsSelected() const;
+  virtual bool IsEditorOnly() const { return false; }
 
   FBoundingBox GetWorldBoundingBox() const;
   void DrawingBox();

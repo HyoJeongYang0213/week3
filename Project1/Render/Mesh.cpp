@@ -19,11 +19,38 @@ bool Mesh::IsPicked(const FRay& worldRay, const Transform& transform, float& out
 	float closestDist = FLT_MAX;
 	bool bHit = false;
 
-	// 삼각형 충돌 검사
-	for (size_t i = 0; i + 2 < Vertices.size(); i += 3)
+	FVector VertexA;
+	FVector VertexB;
+	FVector VertexC;
+	uint32 LoopCount;
+
+	if (Indices.IsEmpty())
 	{
+		LoopCount = Vertices.Num();
+	}
+	else
+	{
+		LoopCount = Indices.Num();
+	}
+
+	// 삼각형 충돌 검사
+	for (size_t i = 0; i + 2 < LoopCount; i += 3)
+	{
+		if (Indices.IsEmpty())
+		{
+			VertexA = Vertices[i];
+			VertexB = Vertices[i + 1];
+			VertexC = Vertices[i + 2];
+		}
+		else
+		{
+			VertexA = Vertices[Indices[i]];
+			VertexB = Vertices[Indices[i + 1]];
+			VertexC = Vertices[Indices[i + 2]];
+		}
+
 		float dist = 0.0f;
-		if (RayIntersectTriangle(localOrigin, localDir, Vertices[i], Vertices[i + 1], Vertices[i + 2], dist))
+		if (RayIntersectTriangle(localOrigin, localDir, VertexA, VertexB, VertexC, dist))
 		{
 			if (dist > 0.0f && dist < closestDist)
 			{
@@ -32,6 +59,7 @@ bool Mesh::IsPicked(const FRay& worldRay, const Transform& transform, float& out
 			}
 		}
 	}
+
 
 	if (bHit)
 	{

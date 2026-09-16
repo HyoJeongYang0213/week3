@@ -2,6 +2,7 @@
 #include "AGizmo.h"
 #include "PickingManager.h"
 #include "ObjectManager.h"
+#include "GizmoVertex.h"
 
 
 AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
@@ -9,10 +10,9 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 {
 	Primitive = EPrimitive::Gizmo;
 	// ObjectManager를 통해 기즈모 화살표 메시 공유 및 Vertices 재활용
-	SetMesh(OBJECT.GetOrCreateMesh("GizmoLocation", arrow_vertices));
-	OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices);
-	OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices);
-
+	SetMesh(OBJECT.GetOrCreateMesh("GizmoLocation", arrow_vertices, arrow_indices));
+	OBJECT.GetOrCreateMesh("GizmoRotate", rotate_ring_vertices, rotate_ring_indices);
+	OBJECT.GetOrCreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
 
 	transform.SetScale({ 0.7f, 0.7f, 0.7f });
 	transform.SetLocation({ 0.0f, 0.0f, 0.0f });
@@ -45,7 +45,7 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 	FVector gizmoPos = parentTransform.Location;
 
 	float dist = (gizmoPos - camPos).Length();
-	float scaleFactor = dist * 0.1f;
+	float scaleFactor = dist * 0.15f;
 
 	float ScaleAxisFactor = scaleFactor;
 	if (mode && *mode == EGizmoMode::Scale && bSelected)
@@ -72,7 +72,6 @@ void AGizmoAxis::Update(float DeltaTime, const Transform& parentTransform)
 		FMatrix parentTrans = FMatrix::Translation(parentTransform.Location);
 		transform.SetWorldMatrix(localMat * parentTrans);
 	}
-
 	AActor::Update(DeltaTime);
 }
 
@@ -84,10 +83,10 @@ void AGizmoAxis::Picked()
 	FVector localDir(0.0f, 0.0f, 0.0f);
 	switch (Axis)
 	{
-	case EGizmoAxis::X: localDir = FVector(1.0f, 0.0f, 0.0f); break;
-	case EGizmoAxis::Y: localDir = FVector(0.0f, 1.0f, 0.0f); break;
-	case EGizmoAxis::Z: localDir = FVector(0.0f, 0.0f, 1.0f); break;
-	default: break;
+		case EGizmoAxis::X: localDir = FVector(1.0f, 0.0f, 0.0f); break;
+		case EGizmoAxis::Y: localDir = FVector(0.0f, 1.0f, 0.0f); break;
+		case EGizmoAxis::Z: localDir = FVector(0.0f, 0.0f, 1.0f); break;
+		default: break;
 	}
 
 	//로컬 모드이면 타겟의 회전을 반영하고, 월드 모드이면 월드 정방향 축 사용
@@ -98,24 +97,6 @@ void AGizmoAxis::Picked()
 	else
 	{
 		currentAxisDir = localDir;
-	}
-
-
-	switch (*mode)
-	{
-	case EGizmoMode::Translation:
-
-		break;
-	case EGizmoMode::Rotation:
-
-
-
-
-		break;
-	case EGizmoMode::Scale:
-		break;
-	default:
-		break;
 	}
 
 	//평면 법선 벡터 계산
@@ -145,7 +126,6 @@ void AGizmoAxis::Picked()
 		TargetActor->BeginGizmoScale();
 	}
 
-
 	//피킹 선택 상태 활성화
 	currentDragDist = 0.0f;
 	bSelected = true;
@@ -154,8 +134,6 @@ void AGizmoAxis::Picked()
 void AGizmoAxis::Pressed()
 {
 	if (!TargetActor) return;
-
-
 
 	FRay ray = PICK.ScreenToWorldRay();
 	float denom = planeNormal.Dot(ray.Direction);
@@ -186,10 +164,9 @@ void AGizmoAxis::Pressed()
 			
 			// currentAxisDir 기준으로 델타 회전 만들어서 곱함
 			FQuaternion deltaRot = FQuaternion::FromAxisAngle(currentAxisDir, alpha);
+
 			// 축에 맞게 회전값 적용
 			FQuaternion newRot = (deltaRot *dragStartActorRotation).Normalized();
-			
-
 			TargetActor->SetRotation(newRot);
 		}
 		else if (mode && *mode == EGizmoMode::Scale) //Scale일때
@@ -226,7 +203,6 @@ void AGizmoAxis::Pressed()
 			TargetActor->SetLocation(dragStartActorLocation + currentAxisDir * moveDist);
 		}
 	}
-
 }
 
 void AGizmoAxis::Released()
@@ -319,7 +295,7 @@ void AGizmo::Update(float DeltaTime)
 	AActor::Update(DeltaTime);
 
 	//키보드 L 누르면 bIsLocal 토글
-	if (KEY_DOWN(ImGuiKey_L))
+	if (INPUT.GetKeyDown('L'))
 	{
 		bIsLocal = !bIsLocal;
 		for (auto* axis : Axes)
@@ -328,8 +304,8 @@ void AGizmo::Update(float DeltaTime)
 		}
 	}
 
-	//키보드 1, 2, 3 누르면 기즈모 모드 전환 (1: Translation, 2: Rotation, 3: Scale;
-	if (KEY_DOWN(ImGuiKey_Space)) ChangeGizmoMode();
+	//키보드 Space 누르면 기즈모 모드 전환 (Translation → Rotation → Scale → Translation)
+	if (INPUT.GetKeyDown(VK_SPACE)) ChangeGizmoMode();
 
 	// 피킹된 타겟 액터가 있을 때만 위치 동기화 및 3개 축 업데이트
 	if (TargetActor)
@@ -359,7 +335,7 @@ void AGizmo::Update(float DeltaTime)
 			}
 		}
 
-		if (closestAxis && !MOUSE_PRESS(0))
+		if (closestAxis && !INPUT.GetMouseButton(MouseButton::LEFT))
 		{
 			closestAxis->SetHovered(true);
 		}

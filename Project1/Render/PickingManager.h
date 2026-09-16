@@ -19,7 +19,7 @@ public:
 	PickingManager(const PickingManager&) = delete;
 	PickingManager& operator=(const PickingManager&) = delete;
 
-	FRay ScreenToWorldRay(float mouseX, float mouseY, float screenW, float screenH) const;
+	FRay ScreenToWorldRay(float screenW, float screenH) const;
 	FRay ScreenToWorldRay() const;
 
 	AActor* Pick();
@@ -34,5 +34,7 @@ public:
 	TWeakObjectPtr<AActor> pickedObjcect;
 private:
 	PickingManager() {};
+
+	const float BoundingSphereThreshold = 1.0f;
 };
 

@@ -6,6 +6,7 @@
 
 ASpotLight::ASpotLight(const FLinearColor& color) : ALight(color)
 {
+	SetPrimitive(EPrimitive::SpotLight);
 }
 
 void ASpotLight::AddLines()

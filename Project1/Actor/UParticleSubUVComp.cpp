@@ -4,14 +4,12 @@
 UParticleSubUVComp::UParticleSubUVComp()
 {
 	Initialize();
-	Primitive = EPrimitive::SubUV;
 }
 
 UParticleSubUVComp::UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc)
 	: UBillboard(TextureName), Desc(InDesc)
 {
 	Initialize();
-	Primitive = EPrimitive::SubUV;
 }
 
 void UParticleSubUVComp::Update(float DeltaTime)
@@ -32,7 +30,8 @@ void UParticleSubUVComp::Update(float DeltaTime)
 	if (ElapsedTime >= Desc.Duration) // play only once
 	{
 		Desc.bPlay = false;
-		this->Destroy();
+		this->DeActive();
+		OBJECT.ReserveDestroy(this);
 		return;
 	}
 
@@ -50,8 +49,16 @@ FVector2 UParticleSubUVComp::GetSubUVOffset()
 	return FVector2(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
 }
 
+void UParticleSubUVComp::SetDesc(const ParticleSubUVDesc& Insc)
+{
+	Desc = Insc;
+	Initialize();
+	ElapsedTime = 0.f;
+}
+
 void UParticleSubUVComp::Initialize()
 {
+	SetPrimitive(EPrimitive::SubUV);
 	TotalFrame = Desc.LastIndex - Desc.FirstIndex;
 	CurrentFrameIndex = Desc.FirstIndex;
 	CellSizeU = 1.f / Desc.ColumnCnt;

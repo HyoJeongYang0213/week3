@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "FontMeshGenerator.h"
 #include "FVertexSImple.h"
-#include "Sphere.h"
+#include "PrimitiveVertex.h"
 
 namespace
 {
@@ -27,7 +27,7 @@ namespace
 	}
 }
 
-FontGeometry FontMeshGenerator::Generate(const std::wstring& text, float glyphAdvance)
+FontGeometry FontMeshGenerator::Generate(const FWString& text, float glyphAdvance)
 {
 	TArray<FVertexData> vertices;
 	TArray<uint32> indices;

@@ -56,7 +56,7 @@ inline TArray<FVertexData> CreateBulbVertices()
         {
             FVertexData V;
 
-            V.x = x;  V.y = y;  V.z = z;
+            V.x = z;  V.y = x;  V.z = y;
             V.r = 1.0f;  V.g = 1.0f;  V.b = 1.0f;  V.a = 1.0f;
             V.u = 0.0f;  V.v = 0.0f;
 
@@ -68,7 +68,7 @@ inline TArray<FVertexData> CreateBulbVertices()
                 nz /= Length;
             }
 
-            V.nx = nx;  V.ny = ny;  V.nz = nz;
+            V.nx = nz;  V.ny = nx;  V.nz = ny;
             return V;
         };
 

@@ -2,7 +2,7 @@
 
 #include "AActor.h"
 #include "CircleGenerator.h"
-#include "Sphere.h"
+#include "SphereVertex.h"
 
 
 class ACollider : public AActor {

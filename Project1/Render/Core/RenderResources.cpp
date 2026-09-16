@@ -6,6 +6,10 @@
 #include "RenderMesh.h"
 #include "VertexShader.h"
 #include "Texture.h"
+#include "Bulb.h"
+#include "PrimitiveVertex.h"
+#include "GizmoVertex.h"
+
 
 void RenderResources::RegisterDefaultResources()
 {
@@ -13,17 +17,19 @@ void RenderResources::RegisterDefaultResources()
 	GetModuleFileNameW(nullptr, Buffer, 256);
 	FWString ExecutableDirectory = filesystem::path(Buffer).parent_path();
 
-	CreateMesh("Cube", cube_vertices);
-	CreateMesh("Sphere", CreateSphereVertices(0.5f, 20, 20, false));
-	CreateMesh("Triangle", triangle_vertices);
-	CreateMesh("Rectangle", rectangle_vertices);
+	CreateMesh("Cube", cube_vertices, cube_indices);
+	CreateMesh("Sphere", sphere_vertices, sphere_indices);
+	CreateMesh("Triangle", triangle_vertices, trianlge_indices);
+	CreateMesh("Rectangle", rectangle_vertices, rectangle_indices);
 	CreateMesh("Circle", CircleGenerator::MakeCircle(32, 1.0f, 1.0f, 0.0f, 1.0f));
-	CreateMesh("GizmoLocation", arrow_vertices);
-	CreateMesh("GizmoRotate", rotate_ring_vertices);
-	CreateMesh("GizmoScale", scale_axis_vertices);
-	CreateMesh("SkySphere", skysphere_vertices);
+	CreateMesh("GizmoLocation", arrow_vertices, arrow_indices);
+	CreateMesh("GizmoRotate", rotate_ring_vertices, rotate_ring_indices);
+	CreateMesh("GizmoScale", scale_axis_vertices, scale_axis_indices);
+	auto skysphere_indices_reverse = skysphere_indices;
+	ranges::reverse(skysphere_indices_reverse);
+	CreateMesh("SkySphere", skysphere_vertices, skysphere_indices_reverse);
 	CreateMesh("Billboard", quad_vertices, quad_indices);
-	CreateMesh("LightBulb", CreateSphereVertices(0.5f, 20, 20, false));
+	CreateMesh("LightBulb", CreateBulbVertices());
 
 	VertexShaders.Resize(static_cast<int>(VertexShaderType::Count));
 	PixelShaders.Resize(static_cast<int>(PixelShaderType::Count));
@@ -42,7 +48,7 @@ void RenderResources::RegisterDefaultResources()
 	CreatePixelShader(PixelShaderType::Font, ExecutableDirectory + L"\\Shader\\FontPS.cso");
 	CreatePixelShader(PixelShaderType::SubUV, ExecutableDirectory + L"\\Shader\\SubUVPS.cso");
 
-	CreateTexture("SkyTexture", L"Resources\\Textures\\Sky.jpg", true); // TODO: 릴리즈 시 수정
+	CreateTexture("SkyTexture", L"Resources\\Textures\\sky.jpg", true); // TODO: 릴리즈 시 수정
 	CreateTexture("FontAtlas", L"Resources\\Textures\\Pretendard-Regular.dds"); // TODO: 릴리즈 시 수정
 	CreateTexture("Explosion", L"Resources\\Textures\\Explosion.PNG", true); // TODO: 릴리즈 시 
 	CreateTexture("Fire", L"Resources\\Textures\\fire.png"); // TODO: 릴리즈 시 수정

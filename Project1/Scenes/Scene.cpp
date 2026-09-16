@@ -25,6 +25,8 @@ Scene::Scene(): FrameBuffer(DEVICE.CreateConstantBuffer(sizeof(FrameConstants)))
 
 void Scene::Update(float DeltaTime)
 {
+	PICK.Update();
+
 	auto& Objects = OBJECT.GUObjectArray;
 	for (size_t i = 0; i < Objects.size(); ++i)
 	{
@@ -57,9 +59,10 @@ void Scene::Render()
 	TArray<FMeshRenderData> TextData;
 	CollectRenderData(ObjectData, TextData);
 
+	MeshRenderer.Render(FrameBuffer, ObjectData);
+
 	LINEBATCH.Render(FrameBuffer);
 
-	MeshRenderer.Render(FrameBuffer, ObjectData);
 
 	if (CAMERA.ViewMode != EViewMode::Wireframe)
 	{
@@ -124,16 +127,20 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 			}
 			else if (ASkySphere* SkySphere = Cast<ASkySphere>(objects[i]))
 			{
-				Transform SkyTransform = SkySphere->GetTransform();
-				SkyTransform.SetLocation(CAMERA.Location);
+				if (CAMERA.GetProjectionMode() == EProjectionMode::Perspective)
+				{
+					Transform SkyTransform = SkySphere->GetTransform();
+					SkyTransform.SetLocation(CAMERA.Location);
 
-				ObjectData.Add(FMeshRenderData{
-					.Mesh = *RESOURCES.GetMesh("SkySphere"),
-					.Material = SkyMaterial,
-					.World = SkyTransform.GetWorldMatrix(),
-					.Color = SkySphere->GetColor(),
-					.bSelected = false,
-					.bWireFrame = CAMERA.ViewMode == EViewMode::Wireframe });
+					ObjectData.Add(FMeshRenderData{
+						.Mesh = *RESOURCES.GetMesh("SkySphere"),
+						.Material = SkyMaterial,
+						.World = SkyTransform.GetWorldMatrix(),
+						.Color = SkySphere->GetColor(),
+						.bSelected = false,
+						.bWireFrame = CAMERA.ViewMode == EViewMode::Wireframe });
+				}
+
 			}
 			else if (AWorldAxes* WorldAxes = Cast<AWorldAxes>(objects[i]))
 			{
@@ -186,11 +193,11 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.Material = ParticleSubUVMaterial,
 					.World = ParticleSubUV->GetTransform().GetWorldMatrix(),
 					.Color = ParticleSubUV->GetColor(),
-					.bSelected = false,
+					.bSelected = ParticleSubUV->IsSelected(),
 					.bWireFrame = false,
 					.UVScale = ParticleSubUV->GetSubUVScale(),
 					.UVOffset = ParticleSubUV->GetSubUVOffset()
-					});
+				});
 			}
 			else if (UBillboard* Billboard = Cast<UBillboard>(objects[i]))
 			{
@@ -208,9 +215,9 @@ void Scene::CollectRenderData(TArray<FMeshRenderData>& ObjectData, TArray<FMeshR
 					.Material = BillboardMaterial,
 					.World = Billboard->GetTransform().GetWorldMatrix(),
 					.Color = Billboard->GetColor(),
-					.bSelected = false,
+					.bSelected = Billboard->IsSelected(),
 					.bWireFrame = false,
-					});
+				});
 			}
 		}
 	}

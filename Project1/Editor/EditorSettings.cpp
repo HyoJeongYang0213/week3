@@ -38,6 +38,7 @@ void EditorSettings::Load()
 	cam.SetFOVX(ReadFloat("Camera", "FOV", "60.0"));
 	cam.SetSpeed(ReadFloat("Camera", "MoveSpeed", "2.0"));
 	cam.SetRotationSpeed(ReadFloat("Camera", "MouseSensitivity", "0.2"));
+	cam.SetWheelSpeed(ReadFloat("Camera", "WheelSpeed", "1.0"));
 
 	FVector location(
 		ReadFloat("Camera", "PositionX", std::to_string(CAMERA.DefaultLocation.X).c_str()),
@@ -49,8 +50,9 @@ void EditorSettings::Load()
 	cam.Yaw = ReadFloat("Camera", "Yaw", std::to_string(CAMERA.DefaultYaw).c_str());
 	cam.Pitch = ReadFloat("Camera", "Pitch", std::to_string(CAMERA.DefaultPitch).c_str());
 
-	cam.SetProjectionMode(ReadInt("Camera", "ProjectionMode", "0"));
+	cam.SetProjectionMode(EProjectionMode(ReadInt("Camera", "ProjectionMode", "0")));
 	cam.ViewMode = static_cast<EViewMode>(ReadInt("Camera", "ViewMode", "0"));
+	cam.SetOrthoWidth(ReadFloat("Camera", "OrthoWidth", "25.0"));
 
 	// Grid
 	Scene* defaultScene = SCENE.GetCurrentScene();
@@ -69,6 +71,7 @@ void EditorSettings::Save()
 	WriteFloat("Camera", "FOV", cam.GetFOVX());
 	WriteFloat("Camera", "MoveSpeed", cam.GetSpeed());
 	WriteFloat("Camera", "MouseSensitivity", cam.GetRotationSpeed());
+	WriteFloat("Camera", "WheelSpeed", cam.GetWheelSpeed());
 
 	FVector location = cam.Location;
 	WriteFloat("Camera", "PositionX", location.X);
@@ -78,8 +81,9 @@ void EditorSettings::Save()
 	WriteFloat("Camera", "Yaw", cam.Yaw);
 	WriteFloat("Camera", "Pitch", cam.Pitch);
 
-	WriteInt("Camera", "ProjectionMode", cam.GetProjectionMode());
+	WriteInt("Camera", "ProjectionMode", int32(cam.GetProjectionMode()));
 	WriteInt("Camera", "ViewMode", static_cast<int>(cam.ViewMode));
+	WriteFloat("Camera", "OrthoWidth", cam.GetOrthoWidth());
 
 	// Grid
 	Scene* defaultScene = SCENE.GetCurrentScene();

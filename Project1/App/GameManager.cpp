@@ -12,6 +12,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	INPUT.ProcessMessage(message, wParam, lParam);
 	bool imguiHandled = ImGui_ImplWin32_WndProcHandler(hwnd, message, wParam, lParam);
 
 	switch (message)
@@ -59,6 +60,7 @@ void GameManager::Init(HINSTANCE hInstance)
 	IMGUI.Initialize();
 
 	SCENE.AddScene("Default", new Scene());
+	UE_LOG("New Scene!");
 	SCENE.ChangeScene("Default");
 	
 	EditorSettings::Load();
@@ -109,6 +111,8 @@ void GameManager::mainLoop()
 
 	// 렌더링 실행
 	Render();
+
+	INPUT.EndFrame();
 }
 
 void GameManager::Update()
@@ -120,7 +124,7 @@ void GameManager::Update()
 void GameManager::Render()
 {
 	// 프레임 버퍼 클리어 및 뷰포트 설정
-	constexpr float ClearColor[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	constexpr float ClearColor[] = { 0.8f, 0.8f, 0.9f, 1.0f };
 	CONTEXT.SetRenderTarget(RENDER.GetBackBufferRTV(), &RENDER.GetDepthStencilView());
 	CONTEXT.SetViewport(RENDER.GetViewport());
 	CONTEXT.ClearRenderTarget(RENDER.GetBackBufferRTV(), ClearColor);

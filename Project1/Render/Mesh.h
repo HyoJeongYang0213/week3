@@ -11,23 +11,33 @@ class Mesh
 public:
 	Mesh() = default;
 
-	Mesh(const std::span<const FVector>& InVertices)
+	Mesh(const std::span<const FVector>& InVertices, const std::span<const uint32>& InIndices = {})
 	{
-		Vertices.clear();
+		Vertices.Empty();
 		for (const auto& Vertex : InVertices)
 		{
-			Vertices.push_back(Vertex);
+			Vertices.Add(Vertex);
+		}
+		Indices.Empty();
+		for (const auto& Index : InIndices)
+		{
+			Indices.Add(Index);
 		}
 
 		ComputeLocalBoundingBox();
 	}
 
-	Mesh(const std::span<const FVertexData>& InVertices)
+	Mesh(const std::span<const FVertexData>& InVertices, const std::span<const uint32>& InIndices = {})
 	{
-		Vertices.clear();
+		Vertices.Empty();
 		for (const auto& Vertex : InVertices)
 		{
-			Vertices.push_back(FVector(Vertex.x, Vertex.y, Vertex.z));
+			Vertices.Add(FVector(Vertex.x, Vertex.y, Vertex.z));
+		}
+		Indices.Empty();
+		for (const auto& Index : InIndices)
+		{
+			Indices.Add(Index);
 		}
 
 		ComputeLocalBoundingBox();
@@ -38,7 +48,8 @@ public:
 	void ComputeLocalBoundingBox();
 
 public:
-	TArray<FVector> Vertices;
+	TArray<FVector> Vertices = {};
+	TArray<int32> Indices = {};
 
 private:
 	FBoundingBox BoundingBox{};
