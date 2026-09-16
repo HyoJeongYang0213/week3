@@ -9,6 +9,7 @@
 #include "ADirectionalLight.h"
 #include "APointLight.h"
 #include "ASpotLight.h"
+#include "UParticleSubUVComp.h"
 
 // file input stream
 #include <fstream>
@@ -77,8 +78,6 @@ TMap<string, SaveLoadManager::CreatorFunc>& SaveLoadManager::GetActorCreatorRegi
                 return actor;
             };
 
-        // -----------------------------------
-        // 각도, 길이 관련은 안되어있다!!
         // "DirectionalLight" 
         registry["DirectionalLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
             {
@@ -102,6 +101,15 @@ TMap<string, SaveLoadManager::CreatorFunc>& SaveLoadManager::GetActorCreatorRegi
                 actor->SetRotation(rot);
                 return actor;
             };
+
+        // "SebUV"
+        registry["SubUV"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+
+                AActor* actor = FObjectFactory::SpawnActor<UParticleSubUVComp>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
     };
     return registry;
 }
@@ -120,6 +128,7 @@ string SaveLoadManager::EPrimitiveToStr(EPrimitive prim)
         case EPrimitive::DirectionalLight: return "DirectionalLight";
         case EPrimitive::PointLight: return "PointLight";
         case EPrimitive::SpotLight: return "SpotLight";
+        case EPrimitive::SubUV: return "SubUV";
         default : return "None";
     }
 }
@@ -152,7 +161,7 @@ void SaveLoadManager::SaveScene(const FString& path)
         if (actor->IsEditorOnly()) continue;
 
         EPrimitive type = actor->GetPrimitive();
-        if (type == EPrimitive::None || type == EPrimitive::SubUV) continue;
+        if (type == EPrimitive::None) continue;
         
         FVector location = actor->GetLocation();    // location 저장
         FVector euler = FQuaternion::ToEuler(actor->GetRotation());    // rotation 저장
@@ -167,6 +176,7 @@ void SaveLoadManager::SaveScene(const FString& path)
         // objJson["Class"]    = string(actor->GetObjClassName()); // ACube, ASphere ...
         objJson["Type"]     = EPrimitiveToStr(type);           // Sphere -> "Sphere", Cube -> "Cube"
         objJson["Color"] = { color.r, color.g, color.b, color.a };
+        
         if (APointLight* point = Cast<APointLight>(actor)) {
             objJson["Radius"] = point->GetRadius();
         }
@@ -176,6 +186,18 @@ void SaveLoadManager::SaveScene(const FString& path)
         }
         else if (ADirectionalLight* direct = Cast<ADirectionalLight>(actor)) {
             objJson["Length"] = direct->GetLength();
+        }
+        
+        if (UParticleSubUVComp* subUV = Cast<UParticleSubUVComp>(actor)) {
+            ParticleSubUVDesc desc = subUV->GetDesc();
+            objJson["Texture"] = subUV->GetTextureName();
+            objJson["ColumnCnt"] = desc.ColumnCnt;
+            objJson["RowCnt"] = desc.RowCnt;
+            objJson["FirstIndex"] = desc.FirstIndex;
+            objJson["LastIndex"] = desc.LastIndex;
+            objJson["PlayRate"] = desc.PlayRate;
+            objJson["Duration"] = desc.Duration;
+            objJson["bIsLoop"] = desc.bIsLoop;
         }
 
         objectsJson[std::to_string(index)] = objJson; // 0 -> "0", 1 -> "1" ...
@@ -279,6 +301,20 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         }
         else if (ADirectionalLight* direct = Cast<ADirectionalLight>(actor)) {
             if (objJson.contains("Length")) direct->SetLength(objJson["Length"].get<float>());
+        }
+
+        if (UParticleSubUVComp* subUV = Cast<UParticleSubUVComp>(actor)) {
+            ParticleSubUVDesc desc = subUV->GetDesc();
+            if (objJson.contains("Texture")) subUV->SetTextureName(objJson["Texture"].get<FString>());
+            
+            if (objJson.contains("ColumnCnt")) desc.ColumnCnt = objJson["ColumnCnt"].get<int32>();
+            if (objJson.contains("RowCnt")) desc.RowCnt = objJson["RowCnt"].get<int32>();
+            if (objJson.contains("FirstIndex")) desc.FirstIndex = objJson["FirstIndex"].get<int32>();
+            if (objJson.contains("LastIndex")) desc.LastIndex = objJson["LastIndex"].get<int32>();
+            if (objJson.contains("PlayRate")) desc.PlayRate = objJson["PlayRate"].get<float>();
+            if (objJson.contains("Duration")) desc.Duration = objJson["Duration"].get<float>();
+            if (objJson.contains("bIsLoop")) desc.bIsLoop = objJson["bIsLoop"].get<bool>();
+            subUV->SetDesc(desc);
         }
 
         loadedObjects.push_back(actor);

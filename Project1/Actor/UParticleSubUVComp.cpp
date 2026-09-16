@@ -50,6 +50,13 @@ FVector2D UParticleSubUVComp::GetSubUVOffset()
 	return FVector2D(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
 }
 
+void UParticleSubUVComp::SetDesc(const ParticleSubUVDesc& Insc)
+{
+	Desc = Insc;
+	Initialize();
+	ElapsedTime = 0.f;
+}
+
 void UParticleSubUVComp::Initialize()
 {
 	TotalFrame = Desc.LastIndex - Desc.FirstIndex;
