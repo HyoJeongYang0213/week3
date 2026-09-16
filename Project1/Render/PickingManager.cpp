@@ -5,28 +5,38 @@
 #include "AGizmo.h"
 #include "AWorldAxes.h"
 
-FRay PickingManager::ScreenToWorldRay(float mouseX, float mouseY, float screenW, float screenH) const
+FRay PickingManager::ScreenToWorldRay(float MouseX, float MouseY, float ScreenW, float ScreenH) const
 {
 	// NDC -> View 
-	float ndcX = 2.0f * mouseX / screenW - 1.0f;
-	float ndcY = -2.0f * mouseY / screenH + 1.0f;
+	float ndcX = 2.0f * MouseX / ScreenW - 1.0f;
+	float ndcY = -2.0f * MouseY / ScreenH + 1.0f;
 
-	FMatrix proj = CAMERA.GetProjectionMatrix(screenW / screenH);
 
-	float viewX = ndcX / proj.M[0][0];
-	float viewY = ndcY / proj.M[1][1];
+	FMatrix proj = CAMERA.GetProjectionMatrix(ScreenW / ScreenH);
 
-	FMatrix view = CAMERA.GetViewMatrix();
-	FMatrix invView = view.InverseAffine();
+	float ViewX = ndcX / proj.M[0][0];
+	float ViewY = ndcY / proj.M[1][1];
 
-	// View -> World
-	FVector viewDirection(viewX, viewY, 1.0f);
-	FVector worldDirection = TransformDirection(viewDirection, invView);
-	worldDirection.Normalize();
+	FMatrix ViewMatrix = CAMERA.GetViewMatrix();
+	FMatrix InvViewMatrix = ViewMatrix.InverseAffine();
 
-	FVector worldOrigin = CAMERA.GetLocation();
+	FVector RayOrigin = CAMERA.GetLocation();
+	FVector RayDirection;
 
-	return FRay{ worldOrigin, worldDirection };
+	if (CAMERA.GetProjectionMode() == EProjectionMode::Orthographic)
+	{
+		RayOrigin += CAMERA.GetRight() * ViewX + CAMERA.GetUp() * ViewY;
+		RayDirection = CAMERA.GetForward();
+	}
+	else if (CAMERA.GetProjectionMode() == EProjectionMode::Perspective)
+	{
+		// View -> World
+		FVector ViewDirection(ViewX, ViewY, 1.0f);
+		RayDirection = TransformDirection(ViewDirection, InvViewMatrix);
+	}
+	RayDirection.Normalize();
+
+	return FRay{ RayOrigin, RayDirection };
 }
 
 FRay PickingManager::ScreenToWorldRay() const
