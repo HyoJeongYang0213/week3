@@ -6,6 +6,10 @@
 #include "AActor.h"
 #include "ATextActor.h"
 #include "UEngineStatics.h"
+#include "ADirectionalLight.h"
+#include "APointLight.h"
+#include "ASpotLight.h"
+#include "UParticleSubUVComp.h"
 
 // file input stream
 #include <fstream>
@@ -35,45 +39,78 @@ TMap<string, SaveLoadManager::CreatorFunc>& SaveLoadManager::GetActorCreatorRegi
     if (registry.empty())
     {
         // "Cube" -> 상자 생성
-        registry["Cube"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor *
-        {
-            AActor* actor = FObjectFactory::SpawnColider<ACube>(loc, sc);
-            actor->SetRotation(rot);
-            return actor;
-        };
-        
+        registry["Cube"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ACube>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
         // "Sphere" -> 구 생성
-        registry["Sphere"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor *
-        {
-            AActor* actor = FObjectFactory::SpawnColider<ASphere>(loc, sc);
-            actor->SetRotation(rot);
-            return actor;
-        };
+        registry["Sphere"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ASphere>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
 
         // "Circle" -> 원 생성
-        registry["Circle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor *
-        {
-            AActor* actor = FObjectFactory::SpawnColider<ACircle>(loc, sc);
-            actor->SetRotation(rot);
-            return actor;
-        };
+        registry["Circle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ACircle>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
 
         // "Rectangle" -> 사각형 생성
-        registry["Rectangle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor *
-        {
-            AActor* actor = FObjectFactory::SpawnColider<ARectangle>(loc, sc);
-            actor->SetRotation(rot);
-            return actor;
-        };
+        registry["Rectangle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ARectangle>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
 
         // "Triangle" -> 삼각형 생성
-        registry["Triangle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor *
-        {
-            AActor* actor = FObjectFactory::SpawnColider<ATriangle>(loc, sc);
-            actor->SetRotation(rot);
-            return actor;
-        };
-    }
+        registry["Triangle"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnColider<ATriangle>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "DirectionalLight" 
+        registry["DirectionalLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnActor<ADirectionalLight>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "SpotLight" 
+        registry["SpotLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnActor<ASpotLight>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "PointLight" 
+        registry["PointLight"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+                AActor* actor = FObjectFactory::SpawnActor<APointLight>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+
+        // "SebUV"
+        registry["SubUV"] = [](FVector loc, FQuaternion rot, FVector sc) -> AActor*
+            {
+
+                AActor* actor = FObjectFactory::SpawnActor<UParticleSubUVComp>(loc, sc);
+                actor->SetRotation(rot);
+                return actor;
+            };
+    };
     return registry;
 }
 
@@ -88,9 +125,15 @@ string SaveLoadManager::EPrimitiveToStr(EPrimitive prim)
         case EPrimitive::Rectangle : return "Rectangle";
         case EPrimitive::Triangle : return "Triangle";
         case EPrimitive::Gizmo : return "Gizmo";
+        case EPrimitive::DirectionalLight: return "DirectionalLight";
+        case EPrimitive::PointLight: return "PointLight";
+        case EPrimitive::SpotLight: return "SpotLight";
+        case EPrimitive::SubUV: return "SubUV";
         default : return "None";
     }
 }
+
+
 
 ////////////////////////////
 /////////// SAVE ///////////
@@ -113,14 +156,16 @@ void SaveLoadManager::SaveScene(const FString& path)
 
     for (UObject* obj : OBJECT.GUObjectArray)
     {
-        AActor* actor = dynamic_cast<ACollider*>(obj);
+        AActor* actor = dynamic_cast<AActor*>(obj);
         if (!actor) continue;
+        if (actor->IsEditorOnly()) continue;
+
+        EPrimitive type = actor->GetPrimitive();
+        if (type == EPrimitive::None) continue;
         
         FVector location = actor->GetLocation();    // location 저장
         FVector euler = FQuaternion::ToEuler(actor->GetRotation());    // rotation 저장
         FVector scale = actor->GetScale();          // scale 저장
-        EPrimitive type = actor->GetPrimitive();    // type 저장
-        if (type == EPrimitive::Gizmo) continue; // Gizmo면 pass
         FLinearColor color = actor->GetColor();     // color 저장
         
         json objJson;
@@ -131,6 +176,29 @@ void SaveLoadManager::SaveScene(const FString& path)
         // objJson["Class"]    = string(actor->GetObjClassName()); // ACube, ASphere ...
         objJson["Type"]     = EPrimitiveToStr(type);           // Sphere -> "Sphere", Cube -> "Cube"
         objJson["Color"] = { color.r, color.g, color.b, color.a };
+        
+        if (APointLight* point = Cast<APointLight>(actor)) {
+            objJson["Radius"] = point->GetRadius();
+        }
+        else if (ASpotLight * spot = Cast<ASpotLight>(actor)) {
+            objJson["Angle"] = spot->GetAngle();
+            objJson["Length"] = spot->GetLength();
+        }
+        else if (ADirectionalLight* direct = Cast<ADirectionalLight>(actor)) {
+            objJson["Length"] = direct->GetLength();
+        }
+        
+        if (UParticleSubUVComp* subUV = Cast<UParticleSubUVComp>(actor)) {
+            ParticleSubUVDesc desc = subUV->GetDesc();
+            objJson["Texture"] = subUV->GetTextureName();
+            objJson["ColumnCnt"] = desc.ColumnCnt;
+            objJson["RowCnt"] = desc.RowCnt;
+            objJson["FirstIndex"] = desc.FirstIndex;
+            objJson["LastIndex"] = desc.LastIndex;
+            objJson["PlayRate"] = desc.PlayRate;
+            objJson["Duration"] = desc.Duration;
+            objJson["bIsLoop"] = desc.bIsLoop;
+        }
 
         objectsJson[std::to_string(index)] = objJson; // 0 -> "0", 1 -> "1" ...
         ++index;
@@ -149,6 +217,8 @@ void SaveLoadManager::SaveScene(const FString& path)
     file << sceneJson.dump(4); // json 객체 -> string으로 변환 (4칸 들여쓰기)
     file.close();
 }
+
+
 
 ////////////////////////////
 /////////// LOAD ///////////
@@ -187,7 +257,7 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
     }
 
     // 기존 Scene에 있던 Objects Clear
-    OBJECT.DestroyAllColliders();
+    OBJECT.DestoryAllSceneActor();
 
     // Format Version Check
     int version = sceneJson["Version"].get<int>();
@@ -221,6 +291,31 @@ TArray<UObject*> SaveLoadManager::LoadScene(const FString& path)
         
         AActor* actor = it->second(loc, rat, sc);
         actor->SetColor(lc);
+
+        if (APointLight* point = Cast<APointLight>(actor)) {
+            if (objJson.contains("Radius")) point->SetRadius(objJson["Radius"].get<float>());
+        }
+        else if (ASpotLight* spot = Cast<ASpotLight>(actor)) {
+            if (objJson.contains("Angle")) spot->SetAngle(objJson["Angle"].get<float>());
+            if (objJson.contains("Length")) spot->SetLength(objJson["Length"].get<float>());
+        }
+        else if (ADirectionalLight* direct = Cast<ADirectionalLight>(actor)) {
+            if (objJson.contains("Length")) direct->SetLength(objJson["Length"].get<float>());
+        }
+
+        if (UParticleSubUVComp* subUV = Cast<UParticleSubUVComp>(actor)) {
+            ParticleSubUVDesc desc = subUV->GetDesc();
+            if (objJson.contains("Texture")) subUV->SetTextureName(objJson["Texture"].get<FString>());
+            
+            if (objJson.contains("ColumnCnt")) desc.ColumnCnt = objJson["ColumnCnt"].get<int32>();
+            if (objJson.contains("RowCnt")) desc.RowCnt = objJson["RowCnt"].get<int32>();
+            if (objJson.contains("FirstIndex")) desc.FirstIndex = objJson["FirstIndex"].get<int32>();
+            if (objJson.contains("LastIndex")) desc.LastIndex = objJson["LastIndex"].get<int32>();
+            if (objJson.contains("PlayRate")) desc.PlayRate = objJson["PlayRate"].get<float>();
+            if (objJson.contains("Duration")) desc.Duration = objJson["Duration"].get<float>();
+            if (objJson.contains("bIsLoop")) desc.bIsLoop = objJson["bIsLoop"].get<bool>();
+            subUV->SetDesc(desc);
+        }
 
         loadedObjects.push_back(actor);
 

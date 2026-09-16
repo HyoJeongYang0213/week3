@@ -35,6 +35,8 @@ bool AActor::IsSelected() const {
 
 FBoundingBox AActor::GetWorldBoundingBox() const
 {
+	if (mesh == nullptr) return FBoundingBox{};
+
 	FBoundingBox box = mesh->GetBoundingBox();
 	
 	FVector localedges[8];

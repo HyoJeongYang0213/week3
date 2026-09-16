@@ -7,6 +7,10 @@
 
 struct FRay;
 
+
+// ---------------------------
+//			AGizmoAxis
+// ---------------------------
 // AActor를 상속받아 IsPicked(정점 피킹) 및 트랜스폼/버퍼를 그대로 활용하는 기즈모 축 액터
 class AGizmoAxis : public AActor
 {
@@ -58,6 +62,8 @@ public:
 	}
 	bool GetHovered() const { return bHovered; }
 
+	virtual bool IsEditorOnly() const override { return true; }
+
 	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
 	bool GetIsLocal() const { return bIsLocal; }
 
@@ -82,6 +88,10 @@ private:
 	EGizmoMode* mode;
 };
 
+
+// ---------------------------
+//			AGizmo
+// ---------------------------
 
 // 씬에 단 하나 생성되어 피킹된 액터에 부착되는 통합 기즈모 액터
 class AGizmo : public AActor
@@ -119,6 +129,8 @@ public:
 
 	bool GetIsLocal() const { return bIsLocal; }
 	void SetIsLocal(bool inIsLocal) { bIsLocal = inIsLocal; }
+
+	virtual bool IsEditorOnly() const override { return true; }
 
 private:
 	TWeakObjectPtr<AActor> TargetActor;

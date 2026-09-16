@@ -60,6 +60,17 @@ void ObjectManager::DestroyAllActors() {
   }
 }
 
+void ObjectManager::DestoryAllSceneActor()
+{
+    for (int32 i = static_cast<int32>(GUObjectArray.size()) - 1; i >= 0; --i) {
+        // 커스텀 캐스트 사용
+        if (AActor* Actor = Cast<AActor>(GUObjectArray[i])) {
+            if (Actor->IsEditorOnly() == true) continue;
+            Actor->Destroy();
+        }
+    }
+}
+
 void ObjectManager::DestroyAllColliders() {
   for (int32 i = static_cast<int32>(GUObjectArray.size()) - 1; i >= 0; --i) {
     if (ACollider *col = Cast<ACollider>(GUObjectArray[i])) {

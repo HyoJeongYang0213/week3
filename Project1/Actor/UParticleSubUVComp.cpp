@@ -4,14 +4,14 @@
 UParticleSubUVComp::UParticleSubUVComp()
 {
 	Initialize();
-	Primitive = EPrimitive::SubUV;
+	SetPrimitive(EPrimitive::SubUV);
 }
 
 UParticleSubUVComp::UParticleSubUVComp(const FString& TextureName, ParticleSubUVDesc InDesc)
 	: UBillboard(TextureName), Desc(InDesc)
 {
 	Initialize();
-	Primitive = EPrimitive::SubUV;
+	SetPrimitive(EPrimitive::SubUV);
 }
 
 void UParticleSubUVComp::Update(float DeltaTime)
@@ -48,6 +48,13 @@ FVector2D UParticleSubUVComp::GetSubUVScale()
 FVector2D UParticleSubUVComp::GetSubUVOffset()
 {
 	return FVector2D(CellSizeU * ColumnIndex, CellSizeV * RowIndex);
+}
+
+void UParticleSubUVComp::SetDesc(const ParticleSubUVDesc& Insc)
+{
+	Desc = Insc;
+	Initialize();
+	ElapsedTime = 0.f;
 }
 
 void UParticleSubUVComp::Initialize()

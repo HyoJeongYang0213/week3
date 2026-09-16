@@ -24,6 +24,8 @@ public:
 	virtual void Update(float DeltaTime) override;
 	FVector2D GetSubUVScale();
 	FVector2D GetSubUVOffset();
+	void SetDesc(const ParticleSubUVDesc& Insc);
+	const ParticleSubUVDesc & GetDesc() { return Desc; }
 
 private:
 	void Initialize();
