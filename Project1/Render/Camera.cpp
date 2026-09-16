@@ -60,7 +60,7 @@ FMatrix Camera::GetViewMatrix() const
 
 FMatrix Camera::GetProjectionMatrix(float aspectRatio) const
 {
-	if (ProjectionMode == Orthographic) {
+	if (ProjectionMode == EProjectionMode::Orthographic) {
 		return FMatrix::Orthographic(OrthoWidth, OrthoWidth/aspectRatio, NearZ, FarZ);
 	}
 	else {
@@ -73,8 +73,17 @@ void Camera::Update()
 {
 	//카메라 이동 처리
 	float currentSpeed = speed * DELTA;
-	if (KEY_PRESS(ImGuiKey_W)) MoveForward(currentSpeed);
-	if (KEY_PRESS(ImGuiKey_S)) MoveForward(-currentSpeed);
+	float ZoomSpeed = currentSpeed * 0.1f;
+	if (ProjectionMode == EProjectionMode::Perspective)
+	{
+		if (KEY_PRESS(ImGuiKey_W)) MoveForward(currentSpeed);
+		if (KEY_PRESS(ImGuiKey_S)) MoveForward(-currentSpeed);
+	}
+	else if (ProjectionMode == EProjectionMode::Orthographic)
+	{
+		if (KEY_PRESS(ImGuiKey_W)) UpdateOrthoWidth(ZoomSpeed);
+		if (KEY_PRESS(ImGuiKey_S)) UpdateOrthoWidth(-ZoomSpeed);
+	}
 	if (KEY_PRESS(ImGuiKey_D)) MoveRight(currentSpeed);
 	if (KEY_PRESS(ImGuiKey_A)) MoveRight(-currentSpeed);
 	if (KEY_PRESS(ImGuiKey_Q)) MoveWorldUp(-currentSpeed);
@@ -85,4 +94,19 @@ void Camera::Update()
 		ImVec2 delta = ImGui::GetIO().MouseDelta;
 		Rotate(delta.x * rotationSpeed, delta.y * rotationSpeed);
 	}
+}
+
+void Camera::UpdateOrthoWidth(float ZoomSpeed)
+{
+	if (MinOrthoWidth >= OrthoWidth)
+	{
+		OrthoWidth = MinOrthoWidth;
+		return;
+	}
+	else if (OrthoWidth >= MaxOrthoWidth)
+	{
+		OrthoWidth = MaxOrthoWidth;
+		return;
+	}
+	OrthoWidth *= (1 - ZoomSpeed);
 }

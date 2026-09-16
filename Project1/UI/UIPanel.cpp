@@ -46,9 +46,9 @@ void UIPanel_Camera::Render()
 	Camera& cam = CAMERA;
 
     // 카메라 직교투영 여부 선택 체크박스
-    bool isOrtho = (cam.GetProjectionMode() == Orthographic);
+    bool isOrtho = (cam.GetProjectionMode() == EProjectionMode::Orthographic);
     if (ImGui::Checkbox("Orthographic", &isOrtho)) {
-        cam.SetProjectionMode(isOrtho ? Orthographic : Perspective);
+        cam.SetProjectionMode(isOrtho ? EProjectionMode::Orthographic : EProjectionMode::Perspective);
     }
 
     // 에디터 뷰 모드 선택 콤보박스

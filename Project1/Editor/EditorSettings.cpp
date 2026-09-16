@@ -53,7 +53,7 @@ void EditorSettings::Load()
 	);
 	cam.SetRotation(FQuaternion::FromEuler(rotation.x, rotation.y, rotation.z));
 
-	cam.SetProjectionMode(ReadInt("Camera", "ProjectionMode", "0"));
+	cam.SetProjectionMode(EProjectionMode(ReadInt("Camera", "ProjectionMode", "0")));
 	cam.ViewMode = static_cast<EViewMode>(ReadInt("Camera", "ViewMode", "0"));
 
 	// Grid
@@ -84,7 +84,7 @@ void EditorSettings::Save()
 	WriteFloat("Camera", "Yaw", rotation.y);
 	WriteFloat("Camera", "Roll", rotation.z);
 
-	WriteInt("Camera", "ProjectionMode", cam.GetProjectionMode());
+	WriteInt("Camera", "ProjectionMode", int32(cam.GetProjectionMode()));
 	WriteInt("Camera", "ViewMode", static_cast<int>(cam.ViewMode));
 
 	// Grid
