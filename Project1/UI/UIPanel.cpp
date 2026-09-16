@@ -21,6 +21,7 @@
 
 #include <windows.h>
 #include <shobjidl.h>
+#include <ConsoleWindow.h>
 
 void UIPanel_Debug::Render()
 {
@@ -121,6 +122,7 @@ void UIPanel_SceneCamera::Render()
 		{
 			AGizmo::MainGizmo->SetTargetActor(nullptr);
 		}
+		UE_LOG("New Scene!");
 	}
 
 	// SAVE
@@ -488,6 +490,10 @@ void UIPanel_Spawn::Render()
 				default :
 					break;
 			}
+			if (spawnedActor) {
+				UE_LOG("%s Spawned!", spawnedActor->GetFName().ToString().c_str());
+			}
+
 			if (spawnedActor && items[selected_item] != "SubUV")
 			{
 				// 스폰된 액터 1칸 위에 UUID 라벨 흰색으로 표시
