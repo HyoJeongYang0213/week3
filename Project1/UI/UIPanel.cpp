@@ -69,13 +69,16 @@ void UIPanel_SceneCamera::Render()
 		CAMERA.ShowFlags = CAMERA.ShowFlags ^ EEngineShowFlags::SF_BillboardText;
 	}
 
+	ImGui::Separator();
+
+	ImGui::Text("[ Camera Options ]");
+
     // 카메라 시야각 조절 슬라이더
     if (cam.GetProjectionMode() == EProjectionMode::Perspective)
     {
         float fov = cam.GetFOVX();
         if (ImGui::SliderFloat("FOV", &fov, 10.0f, 150.0f))
             cam.SetFOVX(fov);
-        ImGui::Text("FOV: %.3f", cam.GetFOVX());
     }
     else
     {
@@ -122,6 +125,8 @@ void UIPanel_SceneCamera::Render()
 	Scene* scene = SCENE.GetCurrentScene();
 
 	ImGui::PopItemWidth();
+
+	ImGui::Separator();
 
 	ImGui::Text( "[ Save & Load Scene ]");
 
