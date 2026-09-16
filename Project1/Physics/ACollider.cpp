@@ -44,7 +44,7 @@ void ACollider::Released() {}
 
 
 ACube::ACube(const FLinearColor &inColor) : ACollider(inColor) {
-  SetMesh(OBJECT.GetOrCreateMesh("Cube", cube_vertices));
+  SetMesh(OBJECT.GetOrCreateMesh("Cube", cube_vertices, cube_indices));
   Primitive = EPrimitive::Cube;
 }
 
@@ -57,12 +57,12 @@ ASphere::ASphere(const FLinearColor &inColor) : ACollider(inColor) {
 }
 
 ATriangle::ATriangle(const FLinearColor &inColor) : ACollider(inColor) {
-  SetMesh(OBJECT.GetOrCreateMesh("Triangle", triangle_vertices));
+  SetMesh(OBJECT.GetOrCreateMesh("Triangle", triangle_vertices, trianlge_indices));
   Primitive = EPrimitive::Triangle;
 }
 
 ARectangle::ARectangle(const FLinearColor &inColor) : ACollider(inColor) {
-  SetMesh(OBJECT.GetOrCreateMesh("Rectangle", rectangle_vertices));
+  SetMesh(OBJECT.GetOrCreateMesh("Rectangle", rectangle_vertices, rectangle_indices));
   Primitive = EPrimitive::Rectangle;
 }
 

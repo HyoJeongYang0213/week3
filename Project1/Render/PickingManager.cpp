@@ -50,70 +50,68 @@ AActor* PickingManager::Pick()
 	FRay ray = PICK.ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
 		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
 
-	for (auto Object : OBJECT.GUObjectArray)
+	//기즈모 축 피킹 우선 검사
+	if (AGizmo::MainGizmo && AGizmo::MainGizmo->GetTargetActor())
+	{
+		AGizmoAxis* closestAxis = nullptr;
+		float closestDist = FLT_MAX;
+
+		for (AGizmoAxis* axis : AGizmo::MainGizmo->GetAxes())
+		{
+			float axisDist = 0.0f;
+			if (axis->bIsPicked(ray, axisDist))
+			{
+				if (axisDist > 0.0f && axisDist < closestDist)
+				{
+					closestDist = axisDist;
+					closestAxis = axis;
+				}
+			}
+		}
+
+		if (closestAxis)
+		{
+			closestAxis->Picked();
+			pickedObjcect = closestAxis;
+			return closestAxis;
+		}
+	}
+
+			//일반 액터 피킹 검사
+	AActor* closest = nullptr;
+	float closestDist = FLT_MAX;
+
+	for (auto Object : OBJECT.GUObjectArray) 
 	{
 		AActor* Actor = Cast<AActor>(Object);
 		FVector ActorOrigin = Actor->GetLocation();
-		FVector RayOriginToActorOrigin = ActorOrigin - ray.Origin;
-		float DistanceRay = RayOriginToActorOrigin.Cross(ray.Direction).Length();
+		FVector RayToActor = ActorOrigin - ray.Origin;
+		float DistanceRay = RayToActor.Cross(ray.Direction).Length();
+		if (RayToActor.Dot(ray.Direction) < 0)
+		{
+			continue;
+		}
 		if (DistanceRay <= BoundingSphereThreshold * Actor->GetScale().Length())
 		{
-			//기즈모 축 피킹 우선 검사
-			if (AGizmo::MainGizmo && AGizmo::MainGizmo->GetTargetActor())
+			if (Actor == nullptr || Cast<AGizmo>(Actor) || Cast<AWorldAxes>(Actor)) continue;
+
+			float dist = 0.0f;
+			if (Actor->bIsPicked(ray, dist) && dist < closestDist)
 			{
-				AGizmoAxis* closestAxis = nullptr;
-				float closestDist = FLT_MAX;
-
-				for (AGizmoAxis* axis : AGizmo::MainGizmo->GetAxes())
-				{
-					float axisDist = 0.0f;
-					if (axis->bIsPicked(ray, axisDist))
-					{
-						if (axisDist > 0.0f && axisDist < closestDist)
-						{
-							closestDist = axisDist;
-							closestAxis = axis;
-						}
-					}
-				}
-
-				if (closestAxis)
-				{
-					closestAxis->Picked();
-					pickedObjcect = closestAxis;
-					return closestAxis;
-				}
+				closestDist = dist;
+				closest = Actor;
 			}
-
-			//일반 액터 피킹 검사
-			AActor* closest = nullptr;
-			float closestDist = FLT_MAX;
-
-			for (auto object : OBJECT.GUObjectArray) {
-				AActor* actor = Cast<AActor>(object);
-				if (actor == nullptr || Cast<AGizmo>(actor) || Cast<AWorldAxes>(actor)) continue;
-
-				float dist = 0.0f;
-				if (actor->bIsPicked(ray, dist) && dist < closestDist)
-				{
-					closestDist = dist;
-					closest = actor;
-				}
-			}
-
-			if (AGizmo::MainGizmo)
-			{
-				AGizmo::MainGizmo->SetTargetActor(closest);
-			}
-
-			pickedObjcect = closest;
-
-			return closest;
 		}
 	}
-	pickedObjcect = nullptr;
 
-	return nullptr;
+	if (AGizmo::MainGizmo)
+	{
+		AGizmo::MainGizmo->SetTargetActor(closest);
+	}
+
+	pickedObjcect = closest;
+
+	return closest;
 }
 
 
