@@ -155,11 +155,11 @@ void GameManager::SetImGuiStyle()
 	ImVec4* Colors = Style.Colors;
 	// Catppuccin Mocha Palette
 	// --------------------------------------------------------
-	const ImVec4 base = ImVec4(0.117f, 0.117f, 0.172f, 0.3f); // #1e1e2e
-	const ImVec4 mantle = ImVec4(0.109f, 0.109f, 0.156f, 0.3f); // #181825
-	const ImVec4 surface0 = ImVec4(0.200f, 0.207f, 0.286f, 0.3f); // #313244
-	const ImVec4 surface1 = ImVec4(0.247f, 0.254f, 0.337f, 0.3f); // #3f4056
-	const ImVec4 surface2 = ImVec4(0.290f, 0.301f, 0.388f, 0.3f); // #4a4d63
+	const ImVec4 base = ImVec4(0.117f, 0.117f, 0.172f, 0.4f); // #1e1e2e
+	const ImVec4 mantle = ImVec4(0.109f, 0.109f, 0.156f, 0.4f); // #181825
+	const ImVec4 surface0 = ImVec4(0.200f, 0.207f, 0.286f, 0.4f); // #313244
+	const ImVec4 surface1 = ImVec4(0.247f, 0.254f, 0.337f, 0.4f); // #3f4056
+	const ImVec4 surface2 = ImVec4(0.290f, 0.301f, 0.388f, 0.4f); // #4a4d63
 	const ImVec4 surface2Opaque = ImVec4(0.290f, 0.301f, 0.388f, 0.9f); // #4a4d63
 	const ImVec4 overlay0 = ImVec4(0.396f, 0.403f, 0.486f, 1.0f); // #65677c
 	const ImVec4 overlay1 = ImVec4(0.498f, 0.518f, 0.612f, 1.0f); // #7f849c

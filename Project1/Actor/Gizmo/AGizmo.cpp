@@ -20,15 +20,15 @@ AGizmoAxis::AGizmoAxis(EGizmoMode& mode, EGizmoAxis inAxis)
 	switch (Axis)
 	{
 	case EGizmoAxis::X:
-		Color = FLinearColor::Red;
+		Color = FLinearColor::LatteRed;
 		transform.SetRotationEuler({ 0.0f, 0.0f, -DirectX::XM_PIDIV2 });
 		break;
 	case EGizmoAxis::Y:
-		Color = FLinearColor::Green;
+		Color = FLinearColor::LatteGreen;
 		transform.SetRotationEuler({ 0.0f, 0.0f, 0.0f });
 		break;
 	case EGizmoAxis::Z:
-		Color = FLinearColor::Blue;
+		Color = FLinearColor::LatteBlue;
 		transform.SetRotationEuler({ -DirectX::XM_PIDIV2, 0.0f, 0.0f });
 		break;
 	default:
