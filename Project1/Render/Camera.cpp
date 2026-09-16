@@ -76,24 +76,27 @@ void Camera::Update()
 	float ZoomSpeed = currentSpeed * 0.2f;
 	if (ProjectionMode == EProjectionMode::Perspective)
 	{
-		if (KEY_PRESS(ImGuiKey_W)) MoveForward(currentSpeed);
-		if (KEY_PRESS(ImGuiKey_S)) MoveForward(-currentSpeed);
+		if (INPUT.GetKey('W')) MoveForward(currentSpeed);
+		if (INPUT.GetKey('S')) MoveForward(-currentSpeed);
 	}
 	else if (ProjectionMode == EProjectionMode::Orthographic)
 	{
-		if (KEY_PRESS(ImGuiKey_W)) UpdateOrthoWidth(ZoomSpeed);
-		if (KEY_PRESS(ImGuiKey_S)) UpdateOrthoWidth(-ZoomSpeed);
+		if (INPUT.GetKey('W')) UpdateOrthoWidth(ZoomSpeed);
+		if (INPUT.GetKey('S')) UpdateOrthoWidth(-ZoomSpeed);
 	}
-	if (KEY_PRESS(ImGuiKey_D)) MoveRight(currentSpeed);
-	if (KEY_PRESS(ImGuiKey_A)) MoveRight(-currentSpeed);
-	if (KEY_PRESS(ImGuiKey_Q)) MoveWorldUp(-currentSpeed);
-	if (KEY_PRESS(ImGuiKey_E)) MoveWorldUp(currentSpeed);
+	if (INPUT.GetKey('D')) MoveRight(currentSpeed);
+	if (INPUT.GetKey('A')) MoveRight(-currentSpeed);
+	if (INPUT.GetKey('Q')) MoveWorldUp(-currentSpeed);
+	if (INPUT.GetKey('E')) MoveWorldUp(currentSpeed);
 
 	//카메라 회전 처리
-	if (MOUSE_PRESS(1)) {
-		ImVec2 delta = ImGui::GetIO().MouseDelta;
-		Rotate(delta.x * rotationSpeed, delta.y * rotationSpeed);
+	if (INPUT.GetMouseButton(MouseButton::RIGHT)) {
+		FIntPoint delta = INPUT.GetMouseDelta();
+		Rotate(delta.X * rotationSpeed, delta.Y * rotationSpeed);
 	}
+	// 카메라 줌인/줌아웃 처리
+	float wheelDelta = INPUT.GetMouseWheelDelta();
+	if (wheelDelta) MoveForward(wheelDelta * wheelSpeed);
 }
 
 void Camera::UpdateOrthoWidth(float ZoomSpeed)
@@ -110,3 +113,4 @@ void Camera::UpdateOrthoWidth(float ZoomSpeed)
 	}
 	OrthoWidth *= (1 - ZoomSpeed);
 }
+

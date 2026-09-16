@@ -85,6 +85,7 @@ public:
 	void DestroyAllObjects();
 	void DestroyAllActors();
 	void DestroyAllActor() { DestroyAllActors(); }
+	void DestoryAllSceneActor();
 
 	void ReserveDestroy(UObject* target);
 	void ProcessPendingDestroy();

@@ -9,7 +9,9 @@ enum class EPrimitive
 	Circle,
 	Rectangle,
 	Triangle,
-	Light,
+	PointLight,
+	SpotLight,
+	DirectionalLight,
 	Gizmo,
 	SubUV,
 	None

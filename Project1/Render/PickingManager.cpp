@@ -5,14 +5,19 @@
 #include "AGizmo.h"
 #include "AWorldAxes.h"
 
-FRay PickingManager::ScreenToWorldRay(float MouseX, float MouseY, float ScreenW, float ScreenH) const
+FRay PickingManager::ScreenToWorldRay() const
 {
+	FIntPoint mousePos = INPUT.GetMousePosition();
+
+	float screenW = RENDER.GetViewport().Width;
+	float screenH = RENDER.GetViewport().Height;
+
 	// NDC -> View 
-	float ndcX = 2.0f * MouseX / ScreenW - 1.0f;
-	float ndcY = -2.0f * MouseY / ScreenH + 1.0f;
+	float ndcX = 2.0f * mousePos.X / screenW - 1.0f;
+	float ndcY = -2.0f * mousePos.Y / screenH + 1.0f;
 
 
-	FMatrix proj = CAMERA.GetProjectionMatrix(ScreenW / ScreenH);
+	FMatrix proj = CAMERA.GetProjectionMatrix(screenW / screenH);
 
 	float ViewX = ndcX / proj.M[0][0];
 	float ViewY = ndcY / proj.M[1][1];
@@ -39,16 +44,9 @@ FRay PickingManager::ScreenToWorldRay(float MouseX, float MouseY, float ScreenW,
 	return FRay{ RayOrigin, RayDirection };
 }
 
-FRay PickingManager::ScreenToWorldRay() const
-{
-	return ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
-		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
-}
-
 AActor* PickingManager::Pick()
 {
-	FRay ray = PICK.ScreenToWorldRay(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y,
-		RENDER.GetViewport().Width, RENDER.GetViewport().Height);
+	FRay ray = PICK.ScreenToWorldRay();
 
 	//기즈모 축 피킹 우선 검사
 	if (AGizmo::MainGizmo && AGizmo::MainGizmo->GetTargetActor())
@@ -110,10 +108,8 @@ AActor* PickingManager::Pick()
 	}
 
 	pickedObjcect = closest;
-
 	return closest;
 }
-
 
 void PickingManager::Pressed()
 {
@@ -122,23 +118,22 @@ void PickingManager::Pressed()
 
 void PickingManager::Update()
 {
-	if (MOUSE_CLICK(0))
+	if (INPUT.GetMouseButtonDown(MouseButton::LEFT))
 	{
 		Pick();
 	}
-	else if (MOUSE_PRESS(0))
+	else if (INPUT.GetMouseButton(MouseButton::LEFT))
 	{
 		if (pickedObjcect)
 		{
 			pickedObjcect->Pressed();
 		}
 	}
-	else if (MOUSE_UP(0))
+	else if (INPUT.GetMouseButtonUp(MouseButton::LEFT))
 	{
 		if (pickedObjcect)
 		{
 			pickedObjcect->Released();
 		}
 	}
-	
 }

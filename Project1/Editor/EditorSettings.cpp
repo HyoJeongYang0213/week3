@@ -38,6 +38,7 @@ void EditorSettings::Load()
 	cam.SetFOV(ReadFloat("Camera", "FOV", "60.0"));
 	cam.SetSpeed(ReadFloat("Camera", "MoveSpeed", "2.0"));
 	cam.SetRotationSpeed(ReadFloat("Camera", "MouseSensitivity", "0.2"));
+	cam.SetWheelSpeed(ReadFloat("Camera", "WheelSpeed", "1.0"));
 
 	FVector location(
 		ReadFloat("Camera", "PositionX", "3.336"),
@@ -73,6 +74,7 @@ void EditorSettings::Save()
 	WriteFloat("Camera", "FOV", cam.GetFOV());
 	WriteFloat("Camera", "MoveSpeed", cam.GetSpeed());
 	WriteFloat("Camera", "MouseSensitivity", cam.GetRotationSpeed());
+	WriteFloat("Camera", "WheelSpeed", cam.GetWheelSpeed());
 
 	FVector location = cam.GetLocation();
 	WriteFloat("Camera", "PositionX", location.x);

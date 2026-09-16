@@ -1,36 +1,30 @@
-#pragma once
+﻿#pragma once
 
 #include "Containers.h"
 #include "IUIPanel.h"
 
 #include <string>
 
-// FPS
-class UIPanel_FPS : public IUIPanel
+// 디버그 정보
+class UIPanel_Debug : public IUIPanel
 {
 public:
     void Render() override;
+
+	FString GetName() const override { return "Engine Debug Info"; }
 };
 
-// 메모리 스탯창
-class UIPanel_Memory : public IUIPanel
+// 씬 카메라 창
+class UIPanel_SceneCamera : public IUIPanel
 {
 public:
     void Render() override;
-};
 
-// 카메라 디버깅 창
-class UIPanel_Camera : public IUIPanel
-{
-public:
-    void Render() override;
-};
+	FString GetName() const override { return "Scene & Camera"; }
 
-// 그리드 관련 창
-class UIPanel_Grid : public IUIPanel
-{
-public:
-    void Render() override;
+private:
+    FString OpenSceneFileDialog();
+    FString SaveSceneFileDialog();
 };
 
 // 스폰 창
@@ -38,17 +32,8 @@ class UIPanel_Spawn : public IUIPanel
 {
 public:
     void Render() override;
-};
 
-// 세이브/로드창
-class UIPanel_SaveLoad : public IUIPanel
-{
-public:
-    void Render() override;
-
-private:
-    FString OpenSceneFileDialog();
-    FString SaveSceneFileDialog();
+	FString GetName() const override { return "Spawn Primitives"; }
 };
 
 // 씬 매니저 창 
@@ -56,6 +41,8 @@ class UIPanel_SceneManager : public IUIPanel
 {
 public:
     void Render() override;
+
+	FString GetName() const override { return "Scene Manager"; }
 };
 
 // picking actor 속성창
@@ -63,6 +50,9 @@ class UIPanel_Picking : public IUIPanel
 {
 public:
     void Render() override;
+
+	FString GetName() const override { return "Inspector"; }
+
 private:
     float s_euler[3] = { 0.0f, 0.0f, 0.0f };    // euler 회전각 x, y, z
     string s_lastActorID;                       // 마지막으로 선택된 actor ID

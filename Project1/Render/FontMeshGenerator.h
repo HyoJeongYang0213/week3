@@ -10,5 +10,5 @@ struct FontGeometry
 
 namespace FontMeshGenerator
 {
-	FontGeometry Generate(const std::wstring& text, float glyphAdvance);
+	FontGeometry Generate(const FWString& text, float glyphAdvance);
 };

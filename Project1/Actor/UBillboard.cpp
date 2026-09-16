@@ -2,7 +2,12 @@
 #include "UBillboard.h"
 #include "PrimitiveVertex.h"
 
-UBillboard::UBillboard(const FString& InTextureName)
+UBillboard::UBillboard()
+{
+	SetMesh(OBJECT.GetOrCreateMesh("Billboard", quad_vertices));
+}
+
+UBillboard::UBillboard(const FString& InTextureName) : UBillboard()
 {
 	TextureName = InTextureName;
 	SetMesh(OBJECT.GetOrCreateMesh("Billboard", quad_vertices, quad_indices));
