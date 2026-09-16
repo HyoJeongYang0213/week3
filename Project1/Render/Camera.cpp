@@ -94,9 +94,21 @@ void Camera::Update()
 		FIntPoint delta = INPUT.GetMouseDelta();
 		Rotate(delta.X * rotationSpeed, delta.Y * rotationSpeed);
 	}
+
 	// 카메라 줌인/줌아웃 처리
 	float wheelDelta = INPUT.GetMouseWheelDelta();
-	if (wheelDelta) MoveForward(wheelDelta * wheelSpeed);
+
+	if (wheelDelta)
+	{
+		if (ProjectionMode == EProjectionMode::Perspective)
+		{
+			MoveForward(wheelDelta * wheelSpeed);
+		}
+		else
+		{
+			UpdateOrthoWidth(wheelDelta * wheelSpeed * 0.1f);
+		}
+	}
 }
 
 void Camera::UpdateOrthoWidth(float ZoomSpeed)
