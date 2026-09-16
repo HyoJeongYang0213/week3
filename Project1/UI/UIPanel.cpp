@@ -187,7 +187,7 @@ void UIPanel_Spawn::Render()
                     firesubuvdesc.bIsLoop = true;
 
                     spawnedActor = FObjectFactory::SpawnActor<UParticleSubUVComp>("Fire", firesubuvdesc);
-                    spawnedActor->SetScale(FVector(0.2f, 0.2f, 0.2f));
+                    spawnedActor->SetScale(FVector(0.5f, 0.5f, 0.5f));
                     spawnedActor->SetLocation(randomLoc);
                     break;
                 }

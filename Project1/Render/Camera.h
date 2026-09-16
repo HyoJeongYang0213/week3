@@ -83,8 +83,8 @@ private:
 
 	EProjectionMode ProjectionMode = EProjectionMode::Perspective;
 	
-	float OrthoWidth = 10.0f;
-	float MinOrthoWidth = 1.f;
+	float OrthoWidth = 50.0f;
+	float MinOrthoWidth = 5.0f;
 	float MaxOrthoWidth = 100.f;
 
 	float fov = 60.0f;

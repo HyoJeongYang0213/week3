@@ -34,5 +34,7 @@ public:
 	TWeakObjectPtr<AActor> pickedObjcect;
 private:
 	PickingManager() {};
+
+	const float BoundingSphereThreshold = 1.0f;
 };
 

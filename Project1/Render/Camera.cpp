@@ -73,7 +73,7 @@ void Camera::Update()
 {
 	//카메라 이동 처리
 	float currentSpeed = speed * DELTA;
-	float ZoomSpeed = currentSpeed * 0.1f;
+	float ZoomSpeed = currentSpeed * 0.2f;
 	if (ProjectionMode == EProjectionMode::Perspective)
 	{
 		if (KEY_PRESS(ImGuiKey_W)) MoveForward(currentSpeed);
@@ -98,12 +98,12 @@ void Camera::Update()
 
 void Camera::UpdateOrthoWidth(float ZoomSpeed)
 {
-	if (MinOrthoWidth >= OrthoWidth)
+	if (MinOrthoWidth > OrthoWidth)
 	{
 		OrthoWidth = MinOrthoWidth;
 		return;
 	}
-	else if (OrthoWidth >= MaxOrthoWidth)
+	else if (OrthoWidth > MaxOrthoWidth)
 	{
 		OrthoWidth = MaxOrthoWidth;
 		return;

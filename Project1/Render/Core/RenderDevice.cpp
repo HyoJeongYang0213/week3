@@ -147,6 +147,8 @@ GraphicsPipeline RenderDevice::CreateGraphicsPipeline(
 		.FillMode = Rasterizer.FillMode,
 		.CullMode = Rasterizer.CullMode,
 		.FrontCounterClockwise = Rasterizer.bFrontCounterClockWise,
+		.MultisampleEnable = Rasterizer.MultisampleEnable,
+		.AntialiasedLineEnable = Rasterizer.AntialiasedLineEnable,
 	};
 	Device->CreateRasterizerState(&RasterizerDesc, &Result.RasterizerState);
 
